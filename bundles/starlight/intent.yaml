@@ -1,0 +1,41 @@
+# Intent claims for the STARLIGHT bundle.
+# Validates content-collection conventions for any Starlight (Astro) docs site
+# that uses the standard `src/content/docs/` layout.
+#
+# All IDs prefixed INT-STARLIGHT-NNN per REF-Intent-Bundle namespacing.
+
+INT-STARLIGHT-001:
+  statement: "Every doc page has a non-empty `title` frontmatter field"
+  rationale: "Starlight uses title for nav, page heading, and OG metadata; missing title yields broken UI"
+  criticality: critical
+  scope: unit
+
+INT-STARLIGHT-002:
+  statement: "Every doc page has a non-empty `id` frontmatter field"
+  rationale: "Stable per-doc identifier for cross-linking and navigation; required by the content collection schema"
+  criticality: critical
+  scope: unit
+
+INT-STARLIGHT-003:
+  statement: "Doc page `id` values are unique across the entire docs collection"
+  rationale: "Duplicate IDs break cross-link resolution and content-collection queries"
+  criticality: critical
+  scope: integration
+
+INT-STARLIGHT-004:
+  statement: "Every doc page has a `type` frontmatter field with value in {Overview, Guide, Standard, Reference}"
+  rationale: "Type drives nav grouping and template selection; unknown values produce orphan pages"
+  criticality: high
+  scope: unit
+
+INT-STARLIGHT-005:
+  statement: "Every doc page has a `status` frontmatter field with value in {Draft, Active, Deprecated}"
+  rationale: "Status drives visibility filters and review queues"
+  criticality: high
+  scope: unit
+
+INT-STARLIGHT-006:
+  statement: "Every doc page has an `updated` frontmatter field formatted as YYYY-MM-DD"
+  rationale: "Drives staleness detection and 'last updated' display in the rendered site"
+  criticality: high
+  scope: unit
