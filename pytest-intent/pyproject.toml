@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pytest-intent"
+version = "0.1.0"
+description = "Python+pytest implementation of CSD's Intent Specification annotation pattern. Provides @intent decorator + meta-tests enforcing intent.yaml schema and intent-test coverage."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Rafael Pires"},
+]
+keywords = ["pytest", "intent", "csd", "testing", "specification", "tdd"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Testing",
+]
+dependencies = [
+    "PyYAML>=6.0",
+    "pytest>=7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/rafael-pires/pytest-intent"
+Documentation = "https://github.com/rafael-pires/pytest-intent#readme"
+Repository = "https://github.com/rafael-pires/pytest-intent"
+Issues = "https://github.com/rafael-pires/pytest-intent/issues"
+"CSD methodology" = "https://github.com/rafael-pires/csd"
+
+[project.entry-points."pytest11"]
+pytest_intent = "pytest_intent.plugin"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pytest_intent*"]
+exclude = ["tests*", "examples*"]

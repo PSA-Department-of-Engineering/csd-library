@@ -1,0 +1,11 @@
+INT-001:
+  statement: "User IDs are non-empty strings"
+  rationale: "Empty user IDs would break authentication and audit logs"
+  criticality: critical
+  scope: unit
+
+INT-002:
+  statement: "User IDs match the canonical format ^u_[a-z0-9]{8}$"
+  rationale: "Format consistency is required for downstream parsing in billing and analytics"
+  criticality: high
+  scope: unit
