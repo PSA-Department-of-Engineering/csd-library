@@ -3,19 +3,19 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pytest-intent"
-version = "0.2.0"
-description = "The @intent decorator for pytest — links a test function to one or more CSD intent claims (INT-NNN). Spec validation and cross-runtime coverage live in the standalone `csd-intent` CLI."
+name = "csd-intent"
+version = "0.1.0"
+description = "Cross-runtime audit tool for CSD intent specifications. Validates intent.yaml against CSD-INTENT-01 and verifies each claim is attested by at least one test across pytest, vitest, Playwright, or any other runner using the standard intent() marker."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
     {name = "Rafael Pires"},
 ]
-keywords = ["pytest", "intent", "csd", "testing", "specification", "tdd"]
+keywords = ["csd", "intent", "testing", "specification", "audit", "cross-language"]
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "Framework :: Pytest",
+    "Environment :: Console",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -27,7 +27,7 @@ classifiers = [
     "Topic :: Software Development :: Testing",
 ]
 dependencies = [
-    "pytest>=7.0",
+    "PyYAML>=6.0",
 ]
 
 [project.optional-dependencies]
@@ -37,15 +37,18 @@ dev = [
     "mypy>=1.0",
 ]
 
+[project.scripts]
+csd-intent = "csd_intent.cli:main"
+
 [project.urls]
-Homepage = "https://github.com/rafael-pires/pytest-intent"
-Documentation = "https://github.com/rafael-pires/pytest-intent#readme"
-Repository = "https://github.com/rafael-pires/pytest-intent"
-Issues = "https://github.com/rafael-pires/pytest-intent/issues"
+Homepage = "https://github.com/rafael-pires/csd-library"
+Documentation = "https://github.com/rafael-pires/csd-library#readme"
 "CSD methodology" = "https://github.com/rafael-pires/csd"
-"csd-intent (audit CLI)" = "https://github.com/rafael-pires/csd-library/tree/main/csd-intent"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["pytest_intent*"]
+include = ["csd_intent*"]
 exclude = ["tests*", "examples*"]
+
+[tool.setuptools.package-data]
+csd_intent = ["py.typed"]

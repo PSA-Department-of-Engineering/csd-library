@@ -1,11 +1,21 @@
 INT-001:
-  statement: "User IDs are non-empty strings"
-  rationale: "Empty user IDs would break authentication and audit logs"
+  version: 1.0.0
+  status: active
+  statement: "User IDs MUST be non-empty strings."
+  rationale: "Empty user IDs would break authentication and audit logs."
+  test:
+    scope: unit
+    component: UserIdValidator
+    type: invariant
   criticality: critical
-  scope: unit
 
 INT-002:
-  statement: "User IDs match the canonical format ^u_[a-z0-9]{8}$"
-  rationale: "Format consistency is required for downstream parsing in billing and analytics"
+  version: 1.0.0
+  status: active
+  statement: "User IDs MUST match the canonical format ^u_[a-z0-9]{8}$."
+  rationale: "Format consistency is required for downstream parsing in billing and analytics."
+  test:
+    scope: unit
+    component: UserIdValidator
+    type: contract
   criticality: high
-  scope: unit

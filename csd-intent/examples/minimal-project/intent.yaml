@@ -1,0 +1,21 @@
+INT-001:
+  version: 1.0.0
+  status: active
+  statement: "Calculator MUST return the sum of two integers."
+  rationale: "Headline behavior."
+  test:
+    scope: unit
+    component: Calculator
+    type: behavior
+  criticality: high
+
+INT-002:
+  version: 1.0.0
+  status: draft
+  statement: "Calculator SHOULD handle floating-point addition without precision loss above 1e-9."
+  rationale: "Pre-implementation — captures intent; will be promoted to active once the implementation lands."
+  test:
+    scope: unit
+    component: Calculator
+    type: behavior
+  criticality: medium

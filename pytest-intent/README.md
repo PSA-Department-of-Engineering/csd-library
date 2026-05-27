@@ -1,43 +1,14 @@
 # pytest-intent
 
-**Python+pytest implementation of CSD's Intent Specification annotation pattern.**
+**The `@intent` decorator for pytest — links a test function to one or more CSD intent claims.**
 
-> CSD (Cognitive Software Delivery) is a language-agnostic methodology that lives at `D:/rc/CSD/`. *This package is one specific implementation* of CSD's intent-test annotation idea, scoped to Python projects using pytest. Other languages would need their own implementations.
+> CSD (Cognitive Software Delivery) is a language-agnostic methodology. This package is one specific implementation, scoped to Python projects using pytest.
 
-## What this package IS
+## What this package is
 
-- A small Python library (~150 LOC) installable into any pytest project.
-- Provides:
-  - **`@intent("INT-NNN")` decorator** — links a test function to one or more claims in `intent.yaml`. Multi-claim per test supported (`@intent("INT-001", "INT-002")`); multi-test per claim also supported.
-  - **`intent_schema` meta-test** — checks every claim in `intent.yaml` has the required fields with valid values.
-  - **`intent_coverage` meta-test** — checks every claim has ≥ 1 decorated test, every decorated test references a real claim. Uses AST walk (no module import — robust to fixture/import errors).
-
-## What this package is NOT
-
-- Not a test generator. You write your own tests; this annotates them.
-- Not a data validator. Tests do that work; this validates the *test ↔ intent* relationship.
-- Not a methodology. CSD is the methodology; this is plumbing for one Python+pytest expression of it.
-- Not yet a pytest plugin. v0.1 requires a 1-line import in `tests/test_meta.py`. Plugin auto-registration is on the v0.2 roadmap.
-
-## Hidden assumptions (be aware)
-
-- Project is Python ≥ 3.10 with pytest installed.
-- Test files follow `tests/test_*.py` discovery pattern.
-- `intent.yaml` lives at the pack/project root (where `pack_root` fixture resolves).
-- A `pack_root` (or equivalent) fixture exists in the project's conftest pointing at the directory containing `intent.yaml`.
-
-## Install
-
-```bash
-pip install -e D:/rc/CSD-Library/pytest-intent
-```
-
-(Local-only for now. PyPI publication only if/when external users appear.)
-
-## Usage
+A tiny library (~40 LOC) that exposes a single decorator:
 
 ```python
-# tests/test_my_claims.py
 from pytest_intent import intent
 
 @intent("INT-001")
@@ -49,33 +20,39 @@ def test_referential_integrity(data_dir):
     ...
 ```
 
-```python
-# tests/test_meta.py — two-line file enabling the framework:
-from pytest_intent.meta_tests import test_intent_schema, test_intent_coverage  # noqa
+That's the entire public surface.
+
+## What it is NOT
+
+- **Not a validator.** Schema checks (CSD-INTENT-01), orphan detection (test references unknown claim), and cross-runtime coverage all live in the standalone [`csd-intent`](https://github.com/rafael-pires/csd-library/tree/main/csd-intent) CLI — point it at any project to audit.
+- **Not a pytest plugin.** Just a decorator. No fixtures, no entry points, no autoloading. Drop the import in your tests and you're done.
+- **Not a generator.** You write your tests; this annotates them.
+
+## Why split the decorator from the auditor?
+
+- **One concern per package.** The decorator runs inside pytest; the auditor is cross-language and runs standalone (CI step, pre-commit, ad-hoc).
+- **No coupling.** Other test runners (vitest-intent, playwright-intent) expose the same `intent()` marker shape. The auditor reads all of them, regardless of which decorator package put the marker there.
+- **Tiny install.** `pytest-intent` has no dependency on PyYAML or anything beyond pytest. The auditor pulls those in only when you actually need to audit.
+
+## Install
+
+```bash
+pip install pytest-intent
+# or locally:
+pip install -e D:/workspace/csd-library/pytest-intent
 ```
 
-```python
-# Project's conftest.py needs:
-@pytest.fixture(scope="session")
-def pack_root() -> Path:
-    return Path(__file__).resolve().parent.parent  # or wherever intent.yaml lives
+## Companion: csd-intent
+
+To validate your `intent.yaml` against CSD-INTENT-01 and check that every claim has a test:
+
+```bash
+pip install csd-intent
+csd-intent /path/to/your/project
 ```
 
-That's the entire surface area.
+See [csd-intent README](../csd-intent/README.md) for full options.
 
-## Why a package and not per-project copies
+## License
 
-- Single source of truth for the schema definition (one place to update if CSD's schema evolves)
-- Consistent test patterns across Data Packs, Estimation Kit projects, vault, etc.
-- Drift between projects is impossible — they all import the same checks
-- Fits the playbook's no-duplication principle (`AI-PLAYBOOK.md` Top Violation #12)
-
-## Roadmap
-
-v0.2 candidates (none implemented yet):
-- pytest plugin auto-registration via `pytest11` entry point — eliminate the `tests/test_meta.py` boilerplate
-- HTML coverage report (intent claims × tests, with last-run timestamps)
-- Intent quality lints (claims with vague rationale, missing scope, etc.)
-- Multi-test linkage in YAML (`tests:` list per claim, complementing the decorator)
-
-Do not add v0.2 features speculatively — wait until they're needed.
+MIT.
