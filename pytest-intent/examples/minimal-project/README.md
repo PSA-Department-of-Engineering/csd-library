@@ -6,29 +6,37 @@ The smallest realistic project showing pytest-intent end-to-end.
 
 ```
 minimal-project/
-├── intent.yaml         # 2 claims about a hypothetical "user-id" guarantee
-├── conftest.py         # pack_root fixture
+├── intent.yaml         # 2 claims (CSD-INTENT-01 canonical shape)
 └── tests/
     ├── __init__.py
-    ├── test_user_id.py # @intent-decorated tests for the claims
-    └── test_meta.py    # one-line wiring for the meta-tests
+    └── test_user_id.py # @intent-decorated tests for the claims
 ```
 
-## Run
+No `test_meta.py`, no `conftest.py`. The `@intent` decorator does its job
+(annotating test functions); auditing is somebody else's job.
+
+## Run the tests
 
 ```bash
-pip install -e ../..        # install pytest-intent
-pip install pytest pyyaml   # already deps but explicit
+pip install -e ../..        # install pytest-intent (just the decorator)
 cd <this dir>
 pytest -v
 ```
 
-Expected output: 2 claim tests pass, 2 meta-tests pass (intent_schema + intent_coverage). Total: 4 passed.
+Expected: 2 tests pass.
+
+## Audit the spec + coverage
+
+```bash
+pip install csd-intent      # the standalone auditor
+csd-intent .
+```
+
+Expected: `intent.yaml (...): 2 claims, 2 attested. CLEAN.`
 
 ## What this demonstrates
 
 - `@intent("INT-NNN")` decorator on test functions
-- Multi-claim per test (`@intent("INT-001", "INT-002")` example)
-- `intent.yaml` schema: statement / rationale / criticality / scope, no extra fields
-- Meta-tests catching schema and coverage drift
-- The `pack_root` fixture pattern projects must define
+- Multi-claim per test (`@intent("INT-001", "INT-002")`)
+- `intent.yaml` in CSD-INTENT-01 canonical shape
+- Clean separation: decorator does annotation; `csd-intent` does validation + coverage

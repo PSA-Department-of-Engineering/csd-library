@@ -1,24 +1,24 @@
 {
-  "name": "vitest-intent",
-  "version": "0.2.0",
-  "description": "The intent() wrapper for vitest — links a test to one or more CSD intent claims (INT-NNN). Spec validation and cross-runtime coverage live in the standalone `csd-intent` CLI.",
+  "name": "playwright-intent",
+  "version": "0.1.0",
+  "description": "The intent() wrapper for Playwright — links an e2e test to one or more CSD intent claims (INT-NNN). Spec validation and cross-runtime coverage live in the standalone `csd-intent` CLI.",
   "keywords": [
-    "vitest",
+    "playwright",
     "intent",
     "csd",
     "testing",
     "specification",
-    "tdd"
+    "e2e"
   ],
   "license": "MIT",
   "author": "Rafael Pires",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rafael-pires/vitest-intent"
+    "url": "https://github.com/rafael-pires/playwright-intent"
   },
-  "homepage": "https://github.com/rafael-pires/vitest-intent#readme",
+  "homepage": "https://github.com/rafael-pires/playwright-intent#readme",
   "bugs": {
-    "url": "https://github.com/rafael-pires/vitest-intent/issues"
+    "url": "https://github.com/rafael-pires/playwright-intent/issues"
   },
   "type": "module",
   "main": "./dist/index.js",
@@ -33,8 +33,7 @@
     "dist",
     "src",
     "README.md",
-    "LICENSE",
-    "CHANGELOG.md"
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc",
@@ -43,9 +42,10 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "vitest": ">=1.0.0"
+    "@playwright/test": ">=1.40.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.48.0",
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
