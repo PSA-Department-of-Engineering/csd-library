@@ -38,12 +38,12 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/rafael-pires/pytest-intent"
-Documentation = "https://github.com/rafael-pires/pytest-intent#readme"
-Repository = "https://github.com/rafael-pires/pytest-intent"
-Issues = "https://github.com/rafael-pires/pytest-intent/issues"
+Homepage = "https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/pytest-intent"
+Documentation = "https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/pytest-intent#readme"
+Repository = "https://github.com/PSA-Department-of-Engineering/csd-library"
+Issues = "https://github.com/PSA-Department-of-Engineering/csd-library/issues"
 "CSD methodology" = "https://github.com/rafael-pires/csd"
-"csd-intent (audit CLI)" = "https://github.com/rafael-pires/csd-library/tree/main/csd-intent"
+"csd-intent (audit CLI)" = "https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/csd-intent"
 
 [tool.setuptools.packages.find]
 where = ["."]

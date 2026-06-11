@@ -1,5 +1,5 @@
 {
-  "name": "vitest-intent",
+  "name": "@psa-department-of-engineering/vitest-intent",
   "version": "0.2.0",
   "description": "The intent() wrapper for vitest — links a test to one or more CSD intent claims (INT-NNN). Spec validation and cross-runtime coverage live in the standalone `csd-intent` CLI.",
   "keywords": [
@@ -14,11 +14,15 @@
   "author": "Rafael Pires",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rafael-pires/vitest-intent"
+    "url": "git+https://github.com/PSA-Department-of-Engineering/csd-library.git",
+    "directory": "vitest-intent"
   },
-  "homepage": "https://github.com/rafael-pires/vitest-intent#readme",
+  "homepage": "https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/vitest-intent#readme",
   "bugs": {
-    "url": "https://github.com/rafael-pires/vitest-intent/issues"
+    "url": "https://github.com/PSA-Department-of-Engineering/csd-library/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "type": "module",
   "main": "./dist/index.js",
