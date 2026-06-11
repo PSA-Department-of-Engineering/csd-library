@@ -41,9 +41,9 @@ dev = [
 csd-intent = "csd_intent.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/rafael-pires/csd-library"
-Documentation = "https://github.com/rafael-pires/csd-library#readme"
-"CSD methodology" = "https://github.com/rafael-pires/csd"
+Homepage = "https://github.com/PSA-Department-of-Engineering/csd-library"
+Documentation = "https://github.com/PSA-Department-of-Engineering/csd-library#readme"
+"CSD methodology" = "https://github.com/PSA-Department-of-Engineering/cognitive-software-delivery"
 
 [tool.setuptools.packages.find]
 where = ["."]

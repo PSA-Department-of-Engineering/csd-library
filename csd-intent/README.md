@@ -1,7 +1,7 @@
 # csd-intent
 
 Cross-runtime audit tool for CSD intent specifications. Validates `intent.yaml`
-against [CSD-INTENT-01](https://github.com/rafael-pires/csd) and confirms every
+against [CSD-INTENT-01](https://github.com/PSA-Department-of-Engineering/cognitive-software-delivery) and confirms every
 claim is attested by at least one test marker across **any** test runner —
 pytest, vitest, Playwright, Jest, or anything that uses the standard `intent()`
 / `@intent()` marker shape.
@@ -26,9 +26,11 @@ project (Python via AST, TS/JS via regex), reads `intent.yaml`, and answers:
 ## Install
 
 ```bash
-pip install csd-intent
-# or locally:
-pip install -e D:/workspace/csd-library/csd-intent
+# Private install, pinned to a release tag:
+pip install "csd-intent @ git+https://github.com/PSA-Department-of-Engineering/csd-library.git@csd-intent-v0.1.0#subdirectory=csd-intent"
+
+# Local dev against a csd-library checkout:
+pip install -e path/to/csd-library/csd-intent
 ```
 
 ## Use
@@ -76,7 +78,7 @@ UNATTESTED (2):
 ## CSD-INTENT-01 conformance
 
 The schema check validates each claim against the canonical fields per
-[CSD-INTENT-01 §4.1](https://github.com/rafael-pires/csd):
+[CSD-INTENT-01 §4.1](https://github.com/PSA-Department-of-Engineering/cognitive-software-delivery):
 
 ```yaml
 INT-NNN:

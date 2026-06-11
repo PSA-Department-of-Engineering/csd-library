@@ -1,5 +1,5 @@
 {
-  "name": "playwright-intent",
+  "name": "@psa-department-of-engineering/playwright-intent",
   "version": "0.1.0",
   "description": "The intent() wrapper for Playwright — links an e2e test to one or more CSD intent claims (INT-NNN). Spec validation and cross-runtime coverage live in the standalone `csd-intent` CLI.",
   "keywords": [
@@ -14,11 +14,15 @@
   "author": "Rafael Pires",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rafael-pires/playwright-intent"
+    "url": "git+https://github.com/PSA-Department-of-Engineering/csd-library.git",
+    "directory": "playwright-intent"
   },
-  "homepage": "https://github.com/rafael-pires/playwright-intent#readme",
+  "homepage": "https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/playwright-intent#readme",
   "bugs": {
-    "url": "https://github.com/rafael-pires/playwright-intent/issues"
+    "url": "https://github.com/PSA-Department-of-Engineering/csd-library/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "type": "module",
   "main": "./dist/index.js",
