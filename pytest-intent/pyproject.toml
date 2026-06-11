@@ -42,7 +42,7 @@ Homepage = "https://github.com/PSA-Department-of-Engineering/csd-library/tree/ma
 Documentation = "https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/pytest-intent#readme"
 Repository = "https://github.com/PSA-Department-of-Engineering/csd-library"
 Issues = "https://github.com/PSA-Department-of-Engineering/csd-library/issues"
-"CSD methodology" = "https://github.com/rafael-pires/csd"
+"CSD methodology" = "https://github.com/PSA-Department-of-Engineering/cognitive-software-delivery"
 "csd-intent (audit CLI)" = "https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/csd-intent"
 
 [tool.setuptools.packages.find]

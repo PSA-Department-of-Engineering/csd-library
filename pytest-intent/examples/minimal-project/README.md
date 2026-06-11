@@ -28,7 +28,7 @@ Expected: 2 tests pass.
 ## Audit the spec + coverage
 
 ```bash
-pip install csd-intent      # the standalone auditor
+pip install -e ../../../csd-intent  # the standalone auditor (local source)
 csd-intent .
 ```
 

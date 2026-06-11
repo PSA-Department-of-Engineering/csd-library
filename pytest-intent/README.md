@@ -24,7 +24,7 @@ That's the entire public surface.
 
 ## What it is NOT
 
-- **Not a validator.** Schema checks (CSD-INTENT-01), orphan detection (test references unknown claim), and cross-runtime coverage all live in the standalone [`csd-intent`](https://github.com/rafael-pires/csd-library/tree/main/csd-intent) CLI — point it at any project to audit.
+- **Not a validator.** Schema checks (CSD-INTENT-01), orphan detection (test references unknown claim), and cross-runtime coverage all live in the standalone [`csd-intent`](https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/csd-intent) CLI — point it at any project to audit.
 - **Not a pytest plugin.** Just a decorator. No fixtures, no entry points, no autoloading. Drop the import in your tests and you're done.
 - **Not a generator.** You write your tests; this annotates them.
 
@@ -37,9 +37,11 @@ That's the entire public surface.
 ## Install
 
 ```bash
-pip install pytest-intent
-# or locally:
-pip install -e D:/workspace/csd-library/pytest-intent
+# Private install, pinned to a release tag:
+pip install "pytest-intent @ git+https://github.com/PSA-Department-of-Engineering/csd-library.git@pytest-intent-v0.2.0#subdirectory=pytest-intent"
+
+# Local dev against a csd-library checkout:
+pip install -e path/to/csd-library/pytest-intent
 ```
 
 ## Companion: csd-intent
@@ -47,7 +49,7 @@ pip install -e D:/workspace/csd-library/pytest-intent
 To validate your `intent.yaml` against CSD-INTENT-01 and check that every claim has a test:
 
 ```bash
-pip install csd-intent
+pip install "csd-intent @ git+https://github.com/PSA-Department-of-Engineering/csd-library.git@csd-intent-v0.1.0#subdirectory=csd-intent"
 csd-intent /path/to/your/project
 ```
 
