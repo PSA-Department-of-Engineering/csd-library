@@ -24,17 +24,16 @@ Python+pytest impl: not yet shipped. A Starlight site is JS/TS — pytest is the
 ## Apply
 
 ```bash
-python D:/rc/playbook/skills/apply-intent-bundle/apply.py \
+python ../../ai-coding-prompts/skills/apply-intent-bundle/apply.py \
   --bundle starlight \
   --target <path-to-starlight-project>
 ```
 
 The target must already have:
 - `package.json` with `vitest-intent` and `vitest` as devDependencies
-- `tests/meta.test.ts` calling `registerIntentMetaTests`
 - The Starlight content layout: `src/content/docs/`
 
-`bootstrap-starlight` Skill (when run with default flags) creates that layout AND applies this bundle.
+The bundle's vitest impl (`impls/vitest/starlight.test.ts`) is a normal vitest test using `intent()` markers — vitest discovers it directly; schema + coverage auditing is the standalone `csd-intent` CLI's job (no in-suite meta-test needed). `bootstrap-starlight` Skill (default flags) creates that layout AND applies this bundle.
 
 ## Assumptions
 
