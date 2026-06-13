@@ -8,7 +8,7 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, relative } from "node:path";
 
-import { intent } from "vitest-intent";
+import { intent } from "@psa-department-of-engineering/vitest-intent";
 
 const DOCS_DIR = join(process.cwd(), "src", "content", "docs");
 const VALID_TYPES = new Set(["Overview", "Guide", "Standard", "Reference"]);

@@ -10,7 +10,7 @@ A tiny TypeScript library (~70 LOC) that exposes a single helper:
 
 ```typescript
 import { expect } from '@playwright/test';
-import { intent } from 'playwright-intent';
+import { intent } from '@psa-department-of-engineering/playwright-intent';
 
 intent('INT-SB-E01', 'clicking Pull all refreshes status', async ({ page }) => {
     await page.goto('http://localhost:5173');
@@ -44,10 +44,23 @@ That's the entire public surface. `intent()` is a thin wrapper around Playwright
 
 ## Install
 
+Published privately to GitHub Packages under the org scope. Map the scope once (in `.npmrc`), then install by the scoped name:
+
 ```bash
-npm install --save-dev @playwright/test playwright-intent
+echo '@psa-department-of-engineering:registry=https://npm.pkg.github.com' >> .npmrc
+# auth: a read:packages PAT → //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+
+npm install --save-dev @playwright/test @psa-department-of-engineering/playwright-intent
 npx playwright install   # one-time browser install (~300MB)
 ```
+
+Local dev against a `csd-library` checkout (no registry/auth):
+
+```bash
+npm install --save-dev --install-links ../path/to/csd-library/playwright-intent
+```
+
+`--install-links` makes npm pack the package per its `files` allowlist instead of symlinking the checkout. Without it, the checkout's dev copy of `@playwright/test` is pulled in and Playwright throws *"Requiring @playwright/test second time"*.
 
 Peer dependency: `@playwright/test >= 1.40`.
 

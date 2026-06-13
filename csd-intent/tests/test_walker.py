@@ -56,7 +56,7 @@ def test_js_regex_picks_up_intent_call(tmp_path: Path) -> None:
     src = tmp_path / "src"
     src.mkdir()
     (src / "thing.test.ts").write_text(
-        "import { intent } from 'vitest-intent';\n\n"
+        "import { intent } from '@psa-department-of-engineering/vitest-intent';\n\n"
         "intent('INT-FE-001', 'renders', () => { /* ... */ });\n"
         'intent("INT-FE-002", "another", async () => { /* ... */ });\n',
         encoding="utf-8",
@@ -70,7 +70,7 @@ def test_js_regex_picks_up_array_form(tmp_path: Path) -> None:
     src = tmp_path / "src"
     src.mkdir()
     (src / "multi.test.tsx").write_text(
-        "import { intent } from 'vitest-intent';\n"
+        "import { intent } from '@psa-department-of-engineering/vitest-intent';\n"
         "intent(['INT-A', 'INT-B'], 'two claims', () => {});\n",
         encoding="utf-8",
     )
