@@ -1,0 +1,22 @@
+# csd-library release: a thin caller of the org's reusable library workflow. The
+# release logic lives once in PSA-Department-of-Engineering/ci, so it cannot drift.
+#
+# On push to main, release-please maintains a per-package release PR (npm + Python)
+# from Conventional Commits; merging that PR cuts the tag + GitHub release and
+# publishes the npm packages to GitHub Packages. Day-to-day work still pushes
+# straight to main — the only PR in the flow is release-please's bot-authored
+# release PR. See docs/adr/0002-release-automation.md.
+name: release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    uses: PSA-Department-of-Engineering/ci/.github/workflows/library.yml@main
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: write
+    secrets: inherit
