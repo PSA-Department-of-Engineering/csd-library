@@ -4,12 +4,11 @@ All notable changes to vitest-intent. Format follows [Keep a Changelog](https://
 
 ## [Unreleased]
 
-Planned for v0.2:
-- Auto-registration of meta-tests via vitest plugin (no manual `registerIntentMetaTests` boilerplate)
-- HTML coverage report (intent claims × tests, with last-run timestamps)
-- Better error messages — suggest claim ID on typo via Levenshtein distance
-- Examples directory with realistic projects
-- ESLint config
+## [0.2.0] — 2026-06-11
+
+### Changed
+- **BREAKING** — removed the in-suite meta-tests: `registerIntentMetaTests` and the `vitest-intent/meta-tests` subpath are gone. Schema validation (CSD-INTENT-01), orphan detection, and intent↔test coverage now live in the standalone, cross-runtime `csd-intent` CLI, run out of band. The public surface is now `intent()` / `validateIntentArgs` only.
+- Published privately to GitHub Packages as `@psa-department-of-engineering/vitest-intent` (previously consumed as an unscoped `file:` sibling dependency).
 
 ## [0.1.0] — 2026-04-26
 
