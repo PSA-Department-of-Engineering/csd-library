@@ -1,0 +1,60 @@
+# Intent claims for csd-intent itself: the auditor dogfoods the CSD-INTENT-01 spec
+# it enforces. CI runs `csd-intent . --fail-on schema`, so this file is held to the
+# same schema csd-intent checks in every other project. The behaviours below are
+# exercised by tests/ today; linking each claim to its test via a marker (full
+# attestation) is a tracked follow-up.
+
+INT-CSD-001:
+  version: 1.0.0
+  status: active
+  statement: "intent.yaml is validated against CSD-INTENT-01: required fields, enum values, semver version, and the INT-* id pattern."
+  rationale: "Schema validity is the foundation; every other check assumes well-formed claims."
+  test:
+    scope: unit
+    component: SchemaValidator
+    type: contract
+  criticality: critical
+
+INT-CSD-002:
+  version: 1.0.0
+  status: active
+  statement: "A test marker that references a claim id not declared in intent.yaml is reported as an orphan."
+  rationale: "Markers drift from the spec; orphan detection catches references to renamed or removed claims."
+  test:
+    scope: unit
+    component: Auditor
+    type: behavior
+  criticality: high
+
+INT-CSD-003:
+  version: 1.0.0
+  status: active
+  statement: "Active claims with no attesting test are reported as unattested; draft and deprecated claims are exempt."
+  rationale: "Coverage is the point of the tool; draft is pre-implementation and deprecated expects no test."
+  test:
+    scope: unit
+    component: Auditor
+    type: behavior
+  criticality: high
+
+INT-CSD-004:
+  version: 1.0.0
+  status: active
+  statement: "Attestations are collected across runtimes: Python via AST (@intent on test_* functions) and JS/TS via the intent() call in *.test.* and *.spec.* files."
+  rationale: "CSD intent is cross-runtime; one auditor must see pytest, vitest, and Playwright in a single pass."
+  test:
+    scope: unit
+    component: Walker
+    type: behavior
+  criticality: high
+
+INT-CSD-005:
+  version: 1.0.0
+  status: active
+  statement: "The --fail-on policy (schema | orphan | unattested | any | none) selects which violation kinds set a non-zero exit code."
+  rationale: "CI needs to choose how strict the gate is without parsing the tool's output."
+  test:
+    scope: integration
+    component: CLI
+    type: contract
+  criticality: high
