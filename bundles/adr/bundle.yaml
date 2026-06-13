@@ -1,0 +1,8 @@
+name: ADR
+version: 0.1.0
+description: "Lifecycle invariants for Architecture Decision Records published as Starlight docs pages under src/content/docs/decisions/. Validates ADR status values, id uniqueness, and that supersede links resolve. Composes onto a Starlight site that already has the STARLIGHT bundle."
+applies_to:
+  - bootstrap-starlight
+supported_runners:
+  - vitest
+maintainer: "Rafael Pires"

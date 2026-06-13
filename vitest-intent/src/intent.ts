@@ -3,7 +3,7 @@
  * binds a CSD intent claim ID to a test case.
  *
  * Usage:
- *   import { intent } from 'vitest-intent';
+ *   import { intent } from '@psa-department-of-engineering/vitest-intent';
  *
  *   intent('INT-FOO-001', 'thing must be true', () => {
  *     expect(thing).toBe(true);

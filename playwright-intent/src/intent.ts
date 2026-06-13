@@ -3,7 +3,7 @@
  * binds a CSD intent claim ID to an e2e test.
  *
  * Usage:
- *   import { intent } from 'playwright-intent';
+ *   import { intent } from '@psa-department-of-engineering/playwright-intent';
  *
  *   intent('INT-SB-E01', 'clicking Pull all refreshes status', async ({ page }) => {
  *     await page.goto('http://localhost:5173');

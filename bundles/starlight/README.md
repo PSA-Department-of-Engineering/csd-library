@@ -30,7 +30,7 @@ python ../../ai-coding-prompts/skills/apply-intent-bundle/apply.py \
 ```
 
 The target must already have:
-- `package.json` with `vitest-intent` and `vitest` as devDependencies
+- `package.json` with `@psa-department-of-engineering/vitest-intent` and `vitest` as devDependencies
 - The Starlight content layout: `src/content/docs/`
 
 The bundle's vitest impl (`impls/vitest/starlight.test.ts`) is a normal vitest test using `intent()` markers — vitest discovers it directly; schema + coverage auditing is the standalone `csd-intent` CLI's job (no in-suite meta-test needed). `bootstrap-starlight` Skill (default flags) creates that layout AND applies this bundle.

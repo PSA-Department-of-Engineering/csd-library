@@ -1,0 +1,35 @@
+# Intent claims for the ADR bundle (CSD-INTENT-01 schema).
+# Attested by impls/vitest/adr.test.ts, for Architecture Decision Records
+# published as Starlight docs pages under src/content/docs/decisions/.
+# Composes onto the STARLIGHT bundle (ADR pages are also valid docs pages).
+
+INT-ADR-001:
+  version: 1.0.0
+  status: active
+  statement: "Every ADR page MUST have an `adr_status` frontmatter field with value in {Proposed, Decided, Superseded, Deprecated, Pending}."
+  rationale: "The ADR lifecycle status drives review and supersession; an unknown or missing status breaks the decision log's meaning."
+  test:
+    scope: unit
+    component: Decisions
+    type: contract
+  criticality: high
+INT-ADR-002:
+  version: 1.0.0
+  status: active
+  statement: "ADR page `id` values MUST be unique across the decisions collection."
+  rationale: "Duplicate ADR ids break cross-references and the supersede graph."
+  test:
+    scope: integration
+    component: Decisions
+    type: invariant
+  criticality: critical
+INT-ADR-003:
+  version: 1.0.0
+  status: active
+  statement: "Every `supersedes` and `superseded_by` reference on an ADR page MUST resolve to an existing ADR page."
+  rationale: "A supersede link to a non-existent ADR is a broken decision graph; the lifecycle relies on these resolving."
+  test:
+    scope: integration
+    component: Decisions
+    type: invariant
+  criticality: high
