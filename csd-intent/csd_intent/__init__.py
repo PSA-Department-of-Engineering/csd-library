@@ -14,17 +14,23 @@ Public API:
 
 from __future__ import annotations
 
+from importlib.metadata import PackageNotFoundError, version
+
 from .audit import AuditReport, AuditViolation, audit
 from .schema import check_schema, parse_intent_yaml
 from .walker import collect_attestations
 
+try:
+    __version__ = version("csd-intent")
+except PackageNotFoundError:
+    __version__ = "0.0.0+unknown"
+
 __all__ = [
     "AuditReport",
     "AuditViolation",
+    "__version__",
     "audit",
     "check_schema",
     "collect_attestations",
     "parse_intent_yaml",
 ]
-
-__version__ = "0.1.0"
