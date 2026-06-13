@@ -63,6 +63,11 @@ A single-node homelab behind a Cloudflare tunnel would become a hard dependency 
 
 ## Rollout
 
-- `vitest-intent` 0.2.0 → first publish to GitHub Packages (`@psa-department-of-engineering/vitest-intent`).
-- `pytest-intent` 0.2.0 → first `pytest-intent-v0.2.0` tag.
-- `csd-intent` 0.1.0 → same git-tag pattern, to follow.
+All four packages published and install-verified (2026-06-11):
+
+- `@psa-department-of-engineering/vitest-intent` 0.2.0 → GitHub Packages, tag `vitest-intent-v0.2.0`.
+- `@psa-department-of-engineering/playwright-intent` 0.1.0 → GitHub Packages, tag `playwright-intent-v0.1.0`.
+- `pytest-intent` 0.2.0 → git tag `pytest-intent-v0.2.0`.
+- `csd-intent` 0.1.0 → git tag `csd-intent-v0.1.0`.
+
+Consumers migrated off `file:`/`-e`: git-switchboard, SolveOS (night-approver + homelab-platform applied in working tree, pending commit alongside in-progress work). The `bootstrap-*` generators and the `apply-intent-bundle` validator emit/accept the published installs.
