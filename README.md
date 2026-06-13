@@ -8,19 +8,23 @@ The Playbook (`ai-coding-prompts/`) stays separate too — it covers many topics
 
 ```
 csd-library/
-├── README.md          ← you are here
-├── pytest-intent/     ← publishable Python runtime: @intent(...) decorators + meta-tests
-├── vitest-intent/     ← publishable TypeScript runtime: same model for vitest
-└── bundles/           ← reusable Intent Bundles (claims + enforcement) consuming the runtimes
-    └── starlight/     ← STARLIGHT bundle: 6 claims for Starlight docs sites
+├── README.md            ← you are here
+├── pytest-intent/       ← publishable Python runtime: the @intent(...) decorator for pytest
+├── csd-intent/          ← publishable Python CLI: cross-runtime intent.yaml auditor
+├── vitest-intent/       ← publishable TypeScript runtime: intent() for vitest
+├── playwright-intent/   ← publishable TypeScript runtime: intent() for Playwright e2e
+└── bundles/             ← reusable Intent Bundles (claims + enforcement) consuming the runtimes
+    └── starlight/       ← STARLIGHT bundle: 6 claims for Starlight docs sites
 ```
 
 ## How the pieces relate
 
 | Piece              | What                                                          | Consumed by |
 |--------------------|---------------------------------------------------------------|-------------|
-| `pytest-intent`    | Python+pytest runtime: ships `@intent("INT-NNN")`, schema and coverage meta-tests | Any Python project that wants CSD-style intent testing |
-| `vitest-intent`    | TS+vitest runtime: same shape as pytest-intent for JS/TS      | Any TS/JS project that wants the same |
+| `pytest-intent`    | Python+pytest runtime: the `@intent("INT-NNN")` decorator | Any Python project that wants CSD-style intent testing |
+| `csd-intent`       | Standalone Python CLI: validates `intent.yaml` and checks every claim is attested across pytest / vitest / Playwright | Any CSD project, in CI or locally, for auditing |
+| `vitest-intent`    | TS+vitest runtime: the `intent()` wrapper, same shape as pytest-intent | Any TS/JS project that wants the same |
+| `playwright-intent`| TS+Playwright runtime: the `intent()` wrapper for browser e2e | Any frontend project doing CSD-style e2e |
 | `bundles/<topic>/` | Packaged claim set + per-runner test impls (`impls/pytest/`, `impls/vitest/`, …) | The `apply-intent-bundle` skill drops these into target projects |
 
 `bundles/` consumes the runtimes (its impls call into `pytest-intent` / `vitest-intent`). The runtimes themselves don't depend on the bundles.
@@ -47,6 +51,21 @@ This repo and the playbook are designed to be cloned as siblings:
 ```
 
 Skills and references in the playbook point here via `../csd-library/...`.
+
+## Releasing
+
+Releases are automated with [release-please](https://github.com/googleapis/release-please) through the org's shared CI (`PSA-Department-of-Engineering/ci` → `library.yml`). The decision, and why it diverges from the services' auto-cut model, is recorded in [ADR-0002](docs/adr/0002-release-automation.md); per-package distribution targets are [ADR-0001](docs/adr/0001-private-package-distribution.md).
+
+How a release happens:
+
+1. Land work on `main` as usual, with Conventional Commits scoped by package (`feat(pytest-intent): …`) so only that package's version moves. Day-to-day commits go straight to `main`; no PR is required.
+2. release-please maintains one **release PR per package**, accumulating the version bump + CHANGELOG from those commits. This is the only PR in the flow.
+3. The repo's tests (`.github/workflows/test.yml`) run on that PR. Merge it when you want to cut the release; the merge is the release gate.
+4. On merge, release-please tags `<pkg>-vX.Y.Z`, creates the GitHub release, and:
+   - **npm** (`vitest-intent`, `playwright-intent`): publishes to GitHub Packages.
+   - **Python** (`pytest-intent`, `csd-intent`): nothing more to push — the tag *is* the release; consumers `pip install` it (see ADR-0001).
+
+Versioning is per-package SemVer; `release-please-config.json` and `.release-please-manifest.json` at the repo root hold the package map and current versions. Two one-time GitHub settings are needed: allow Actions to create pull requests (Settings → Actions → General), and mark the `tests` checks required on `main` so a release PR cannot merge red.
 
 ## Naming and growth policy
 
