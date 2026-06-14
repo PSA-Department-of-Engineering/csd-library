@@ -65,6 +65,15 @@ How a release happens:
    - **npm** (`vitest-intent`, `playwright-intent`): publishes to GitHub Packages.
    - **Python** (`pytest-intent`, `csd-intent`): nothing more to push — the tag *is* the release; consumers `pip install` it (see ADR-0001).
 
+Because those bumps are computed from the commit messages, a committed `.pre-commit-config.yaml` ships a bypassable local `commit-msg` hook that checks each message is a Conventional Commit before it lands. Install it once per clone (the `.git/hooks` install is not committed, only the config is):
+
+```bash
+pip install pre-commit
+pre-commit install --install-hooks
+```
+
+A non-conforming message is rejected; `git commit --no-verify` bypasses it when needed.
+
 Versioning is per-package SemVer; `release-please-config.json` and `.release-please-manifest.json` at the repo root hold the package map and current versions. Two one-time GitHub settings are needed: allow Actions to create pull requests (Settings → Actions → General), and mark the `tests` checks required on `main` so a release PR cannot merge red.
 
 ## Naming and growth policy
