@@ -1,0 +1,185 @@
+/* @psa-department-of-engineering/starlight-theme - the shared docs-site stylesheet.
+   Wire it once via Starlight customCss:
+     customCss: ['@psa-department-of-engineering/starlight-theme/styles.css']
+   This file is the single source of truth for the theme; do not copy it per site.
+   See REF-StarlightDocs section 8.1 ("consume the shared theme package"). */
+
+/* ============================================================================
+   Dark theme: mirror Claude's app palette
+   ============================================================================
+   Starlight's stock dark theme is a cool, blue-tinted gray (hue 224). Claude's
+   desktop dark mode is warmer and calmer: a warm charcoal background, cream text,
+   and a terracotta accent. We mirror that by overriding only the dark-mode *base*
+   tokens. Starlight derives every semantic token from these (--sl-color-text, -bg,
+   -bg-nav/-sidebar, -hairline, and the link/accent colors are all var() refs to
+   the ramp below), so the whole dark UI, and the Mermaid layer further down which
+   reads the same tokens, shifts warm from this one place. Light mode is left on
+   Starlight's defaults.
+
+   Anchors: warm charcoal background (~#262624, like claude.ai), Pampas cream text
+   (#F4F3EE), terracotta accent (~oklch(0.70 0.14 45), the Crail / Claude-orange
+   family). Values kept at Starlight's own lightness steps, re-hued warm, so every
+   contrast ratio it ships with is preserved. */
+:root[data-theme='dark'] {
+  /* Warm neutral ramp (hue ~40, low saturation): --sl-color-white is the cream
+     ink, --sl-color-black the warm charcoal page background. */
+  --sl-color-white: hsl(40, 33%, 96%);
+  --sl-color-gray-1: hsl(40, 18%, 87%);
+  --sl-color-gray-2: hsl(40, 11%, 72%);
+  --sl-color-gray-3: hsl(40, 8%, 53%);
+  --sl-color-gray-4: hsl(40, 7%, 37%);
+  --sl-color-gray-5: hsl(40, 8%, 25%);
+  --sl-color-gray-6: hsl(40, 9%, 16%);
+  --sl-color-black: hsl(40, 9%, 12%);
+
+  /* Terracotta accent: links, active sidebar item, focus rings. accent-high is
+     the lighter tint Starlight uses for link text on the dark background. */
+  --sl-color-accent-low: hsl(16, 40%, 22%);
+  --sl-color-accent: hsl(16, 62%, 60%);
+  --sl-color-accent-high: hsl(20, 68%, 80%);
+}
+
+/* ============================================================================
+   Mermaid palette
+   ============================================================================
+   astro-mermaid runs with autoTheme: light maps to the stock 'default' Mermaid
+   theme, dark to 'dark'. Those stock palettes (beige #ffffde subgraphs, lavender
+   #ECECFF nodes, beige #fff5ad notes) read as generic and clash with the site.
+   A single mermaidConfig spans both modes, so any fixed themeVariables would be
+   wrong in one of them.
+
+   So we restyle the rendered SVG here, once, against Starlight's --sl-color-*
+   tokens. Those tokens invert between light and dark on their own (--sl-color-white
+   is always the strongest ink, --sl-color-black always the page background, and the
+   grays scale consistently), so this one rule set adapts to both themes with no
+   per-mode duplication. Defining it once in this shared package is the "consume the
+   shared theme package" rule of REF-StarlightDocs section 8.1: a single global layer
+   in one place, not per-diagram hand-styling and not a per-site copy.
+
+   autoTheme is kept so anything not mapped below (error states, tooltips, neo
+   shadows) still picks sane light/dark defaults.
+
+   Why !important: Mermaid scopes its own rules by the SVG's random id
+   (#mermaid-xxxx .node rect { ... }), whose id selector outranks any plain class
+   selector we can write, and a few shapes also carry inline styles. !important on
+   the leaf element wins over both, regardless of that specificity gap. */
+
+.mermaid {
+  /* Two-step surface hierarchy, both relative to the page background:
+     raised shapes (nodes, participant boxes) sit one step toward the ink;
+     recessed containers (subgraphs, notes, activations) stay near the page. */
+  --mmd-node: var(--sl-color-gray-5); /* raised fill   */
+  --mmd-node-border: var(--sl-color-gray-4); /* crisp border, makes nodes pop */
+  --mmd-surface: var(--sl-color-gray-6); /* recessed fill */
+  --mmd-surface-border: var(--sl-color-gray-5); /* soft container outline */
+  --mmd-edge: var(--sl-color-gray-3); /* mid-contrast in both modes */
+  --mmd-ink: var(--sl-color-white); /* primary labels: max contrast */
+  --mmd-ink-soft: var(--sl-color-text); /* secondary text (edges, notes) */
+}
+
+/* ---- Flowchart: nodes (rect / stadium / cylinder / circle / diamond) ------- */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon,
+.mermaid .node path {
+  fill: var(--mmd-node) !important;
+  stroke: var(--mmd-node-border) !important;
+}
+
+/* ---- Flowchart: subgraph containers --------------------------------------- */
+.mermaid .cluster rect {
+  fill: var(--mmd-surface) !important;
+  stroke: var(--mmd-surface-border) !important;
+}
+
+/* ---- Flowchart: edges + arrowheads ---------------------------------------- */
+.mermaid .edgePath .path,
+.mermaid .flowchart-link {
+  stroke: var(--mmd-edge) !important;
+}
+.mermaid .marker,
+.mermaid marker path,
+.mermaid .arrowheadPath {
+  fill: var(--mmd-edge) !important;
+  stroke: var(--mmd-edge) !important;
+}
+
+/* ---- Flowchart: node + subgraph labels (target the leaf text/span) -------- */
+.mermaid .nodeLabel,
+.mermaid .node .label,
+.mermaid .node text {
+  color: var(--mmd-ink) !important;
+  fill: var(--mmd-ink) !important;
+}
+.mermaid .cluster-label,
+.mermaid .cluster-label p,
+.mermaid .cluster-label span,
+.mermaid .cluster-label text {
+  color: var(--mmd-ink) !important;
+  fill: var(--mmd-ink) !important;
+  font-weight: 600;
+}
+
+/* ---- Flowchart: edge labels. soft ink on a solid page-bg mask so the
+        line underneath does not cut through the text ----------------------- */
+.mermaid .edgeLabel,
+.mermaid .edgeLabel p,
+.mermaid span.edgeLabel {
+  color: var(--mmd-ink-soft) !important;
+  fill: var(--mmd-ink-soft) !important;
+  background-color: var(--sl-color-bg) !important;
+}
+.mermaid .edgeLabel rect,
+.mermaid .labelBkg {
+  fill: var(--sl-color-bg) !important;
+  background-color: var(--sl-color-bg) !important;
+  opacity: 1 !important;
+}
+
+/* ---- Sequence: participant boxes + loop/alt label boxes (raised) ---------- */
+.mermaid .actor,
+.mermaid .labelBox {
+  fill: var(--mmd-node) !important;
+  stroke: var(--mmd-node-border) !important;
+}
+/* .actor also matches <text class="actor">; restore ink + drop the box stroke */
+.mermaid text.actor,
+.mermaid text.actor > tspan {
+  fill: var(--mmd-ink) !important;
+  stroke: none !important;
+}
+
+/* ---- Sequence: notes + activation bars (recessed) ------------------------- */
+.mermaid .note,
+.mermaid .activation0,
+.mermaid .activation1,
+.mermaid .activation2 {
+  fill: var(--mmd-surface) !important;
+  stroke: var(--mmd-surface-border) !important;
+}
+
+/* ---- Sequence: lifelines, loop outlines (structural) + message lines ------ */
+.mermaid .actor-line,
+.mermaid .loopLine {
+  stroke: var(--mmd-node-border) !important;
+}
+.mermaid .loopLine {
+  fill: var(--mmd-node-border) !important;
+}
+.mermaid .messageLine0,
+.mermaid .messageLine1 {
+  stroke: var(--mmd-edge) !important;
+}
+
+/* ---- Sequence: message / note / loop / label text ------------------------- */
+.mermaid .messageText,
+.mermaid .noteText,
+.mermaid .noteText > tspan,
+.mermaid .labelText,
+.mermaid .labelText > tspan,
+.mermaid .loopText,
+.mermaid .loopText > tspan {
+  fill: var(--mmd-ink-soft) !important;
+  stroke: none !important;
+}
