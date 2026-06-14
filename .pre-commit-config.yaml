@@ -1,0 +1,19 @@
+# Conventional Commits enforcement for this repo (ADR-0002, release automation).
+#
+# A bypassable local commit-msg hook: a commit message that is not a Conventional
+# Commit is rejected, but `git commit --no-verify` still lets it through. release-please
+# reads these messages to compute each package's SemVer bump and CHANGELOG (ADR-0002);
+# scope the commit by package (`feat(pytest-intent): ...`) so only that package moves.
+# This hook is the fast local guard against a malformed or unscoped message.
+#
+# One-time setup per clone (the .git/hooks install is NOT committed, only this config is):
+#   pip install pre-commit          # or: pipx install pre-commit
+#   pre-commit install --install-hooks
+#
+default_install_hook_types: [commit-msg]
+repos:
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
