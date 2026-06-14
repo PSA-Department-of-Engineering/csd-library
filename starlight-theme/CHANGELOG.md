@@ -2,6 +2,13 @@
 
 All notable changes to starlight-theme. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## 1.0.0 (2026-06-14)
+
+
+### Features
+
+* **starlight-theme:** add shared Starlight theme package ([5d501da](https://github.com/PSA-Department-of-Engineering/csd-library/commit/5d501da87be452c8b52d33fae2bcd882e4ade346))
+
 ## [Unreleased]
 
 ## [0.1.0]
