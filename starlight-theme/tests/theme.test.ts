@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, test } from "vitest";
 
-import { mermaidConfig, VERSION } from "../src/index.js";
+import { mermaidConfig } from "../src/index.js";
 
 describe("mermaidConfig", () => {
   test("carries only theme-neutral layout + font choices", () => {
@@ -49,11 +49,5 @@ describe("styles.css", () => {
     expect(mermaidLayer.length).toBeGreaterThan(0);
     expect(mermaidLayer).not.toMatch(/:\s*#[0-9a-fA-F]{3,6}\b/);
     expect(mermaidLayer).not.toMatch(/:\s*(hsl|rgb|rgba|oklch)\(/);
-  });
-});
-
-describe("VERSION", () => {
-  test("is exported as a string", () => {
-    expect(typeof VERSION).toBe("string");
   });
 });

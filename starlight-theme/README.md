@@ -74,7 +74,6 @@ That is the whole integration. The `bootstrap-starlight` skill scaffolds new sit
 | `@psa-department-of-engineering/starlight-theme/styles.css` | The stylesheet, for Starlight `customCss`. |
 | `import { mermaidConfig } from '@psa-department-of-engineering/starlight-theme'` | The theme-neutral `astro-mermaid` config object. |
 | `import type { StarlightThemeMermaidConfig } from '@psa-department-of-engineering/starlight-theme'` | The type of `mermaidConfig`. |
-| `import { VERSION } from '@psa-department-of-engineering/starlight-theme'` | The package version string. |
 
 ## License
 
