@@ -7,9 +7,15 @@ from enum import Enum
 from pathlib import Path
 
 from .schema import check_schema, parse_intent_yaml
-from .walker import collect_attestations
+from .walker import collect_attestations, find_nested_intent_projects
 
-__all__ = ["AuditReport", "AuditViolation", "ViolationKind", "audit"]
+__all__ = [
+    "AuditReport",
+    "AuditViolation",
+    "ViolationKind",
+    "audit",
+    "audit_tree",
+]
 
 
 class ViolationKind(str, Enum):
@@ -144,3 +150,24 @@ def audit(
         )
 
     return report
+
+
+def audit_tree(project_dir: Path) -> list[AuditReport]:
+    """Discover and audit every intent project at or below ``project_dir``.
+
+    The starting ``project_dir`` is audited as the root project (its marker scan is
+    bounded by any nested project subtrees). Each subdirectory that carries its own
+    ``intent.yaml`` is then audited as an independent project against the markers in
+    its own subtree (bounded, in turn, by any still-deeper nested projects). The result
+    is a complete, non-overlapping partition of the tree into projects.
+
+    Returns one :class:`AuditReport` per project, root first, then nested projects in a
+    deterministic (sorted) order. This is the auto-discovery path used by the CLI when no
+    explicit ``--intent`` / ``--tests-dir`` override is given. For the explicit
+    single-project case, call :func:`audit` directly.
+    """
+    project_dir = project_dir.resolve()
+    reports = [audit(project_dir)]
+    for nested in find_nested_intent_projects(project_dir):
+        reports.append(audit(nested))
+    return reports
