@@ -41,10 +41,10 @@ INT-STARLIGHT-003:
   criticality: critical
 
 INT-STARLIGHT-004:
-  version: 1.0.0
+  version: 1.1.0
   status: active
-  statement: "Every doc page MUST have a `type` frontmatter field with value in {Overview, Guide, Standard, Reference}."
-  rationale: "Type drives nav grouping and template selection; unknown values produce orphan pages."
+  statement: "Every doc page MUST have a `type` frontmatter field with value in {Overview, Guide, Standard, Reference, Template, Intent, Flow}."
+  rationale: "Type drives nav grouping and template selection; unknown values produce orphan pages. Template and Intent match REF-Documentation 7.3; Flow covers sequence-diagram pages."
   test:
     scope: unit
     component: ContentCollection
@@ -72,3 +72,47 @@ INT-STARLIGHT-006:
     component: ContentCollection
     type: contract
   criticality: high
+
+INT-STARLIGHT-007:
+  version: 1.0.0
+  status: active
+  statement: "Every doc page MUST open with non-empty introductory prose before its first level-2 heading. A single leading navigation line or bold-only line before the prose is allowed; what matters is that some non-empty, non-heading prose exists before the first level-2 heading."
+  rationale: "A page that jumps straight into sections gives the reader no orientation; a short intro states what the page is and how its parts fit before the first `## ` heading."
+  test:
+    scope: unit
+    component: PageStructure
+    type: invariant
+  criticality: high
+
+INT-STARLIGHT-008:
+  version: 1.0.0
+  status: active
+  statement: "Every doc page MUST contain at least one level-2 heading."
+  rationale: "Level-2 headings are the page's sections; a page with none is an undifferentiated wall of text with no nav anchors or scannable structure."
+  test:
+    scope: unit
+    component: PageStructure
+    type: invariant
+  criticality: medium
+
+INT-STARLIGHT-009:
+  version: 1.0.0
+  status: active
+  statement: "A page with `type: Flow` MUST contain a Mermaid `sequenceDiagram` and a steps section (a level-2 heading named Steps OR an ordered list)."
+  rationale: "A Flow tells a dynamic story; the sequence diagram is the picture and the steps are the narration. One without the other is half a flow."
+  test:
+    scope: unit
+    component: PageStructure
+    type: contract
+  criticality: high
+
+INT-STARLIGHT-010:
+  version: 1.0.0
+  status: active
+  statement: "A page with `type: Guide` MUST contain a numbered procedure: an ordered list OR at least two headings that begin with a number (for example `## 1. ...`)."
+  rationale: "A Guide is a how-to; the reader needs ordered steps to follow, expressed either as an ordered list or as numbered section headings."
+  test:
+    scope: unit
+    component: PageStructure
+    type: contract
+  criticality: medium
