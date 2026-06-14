@@ -22,5 +22,3 @@
 
 export { mermaidConfig } from "./mermaid-config.js";
 export type { StarlightThemeMermaidConfig } from "./mermaid-config.js";
-
-export const VERSION = "0.1.0";
