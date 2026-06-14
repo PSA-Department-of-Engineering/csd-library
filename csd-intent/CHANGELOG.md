@@ -11,6 +11,23 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Added
+- Nested-project awareness. A subdirectory that carries its own `intent.yaml` is now
+  treated as a separate project boundary: the outer marker scan no longer descends into
+  it, so a nested project's `intent()` / `@intent` markers no longer orphan against the
+  outer project's claims. `csd-intent <dir>` discovers nested intent projects and audits
+  each as its own project (each `intent.yaml` against the markers in its own subtree,
+  bounded by any still-deeper nested projects), prints a per-project summary, and exits
+  non-zero if any project has violations.
+- Public API: `audit_tree(project_dir) -> list[AuditReport]` and
+  `find_nested_intent_projects(root) -> list[Path]`.
+
+### Changed
+- `collect_attestations` gained a `respect_nested_projects` parameter (default `True`)
+  that enables the project-boundary walk. Passing `--intent` or `--tests-dir` keeps the
+  explicit single-project behaviour (no auto-discovery). A repo with no nested
+  `intent.yaml` behaves exactly as before, including output format and exit codes.
+
 ## [0.1.0] - 2026-05-26
 
 ### Added
