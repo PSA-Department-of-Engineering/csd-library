@@ -63,7 +63,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: [vitest-intent, playwright-intent]
+        package: [vitest-intent, playwright-intent, starlight-theme]
     defaults:
       run:
         working-directory: ${{ matrix.package }}

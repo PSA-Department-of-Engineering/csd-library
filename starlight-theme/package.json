@@ -1,0 +1,61 @@
+{
+  "name": "@psa-department-of-engineering/starlight-theme",
+  "version": "0.1.0",
+  "description": "The shared Starlight look for every docs site: a warm dark palette override plus a token-based Mermaid contrast layer (stylesheet), and the matching astro-mermaid mermaidConfig. One source of truth, consumed via Starlight customCss + a config import.",
+  "keywords": [
+    "starlight",
+    "astro",
+    "theme",
+    "mermaid",
+    "docs",
+    "css",
+    "csd"
+  ],
+  "license": "MIT",
+  "author": "Rafael Pires",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PSA-Department-of-Engineering/csd-library.git",
+    "directory": "starlight-theme"
+  },
+  "homepage": "https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/starlight-theme#readme",
+  "bugs": {
+    "url": "https://github.com/PSA-Department-of-Engineering/csd-library/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./styles.css": "./styles.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "styles.css",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

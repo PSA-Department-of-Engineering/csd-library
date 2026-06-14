@@ -13,6 +13,7 @@ csd-library/
 ├── csd-intent/          ← publishable Python CLI: cross-runtime intent.yaml auditor
 ├── vitest-intent/       ← publishable TypeScript runtime: intent() for vitest
 ├── playwright-intent/   ← publishable TypeScript runtime: intent() for Playwright e2e
+├── starlight-theme/     ← publishable TypeScript/CSS package: the shared Starlight look (stylesheet + mermaidConfig)
 └── bundles/             ← reusable Intent Bundles (claims + enforcement) consuming the runtimes
     └── starlight/       ← STARLIGHT bundle: 6 claims for Starlight docs sites
 ```
@@ -25,7 +26,10 @@ csd-library/
 | `csd-intent`       | Standalone Python CLI: validates `intent.yaml` and checks every claim is attested across pytest / vitest / Playwright | Any CSD project, in CI or locally, for auditing |
 | `vitest-intent`    | TS+vitest runtime: the `intent()` wrapper, same shape as pytest-intent | Any TS/JS project that wants the same |
 | `playwright-intent`| TS+Playwright runtime: the `intent()` wrapper for browser e2e | Any frontend project doing CSD-style e2e |
+| `starlight-theme`  | Shared Starlight look: a token-based stylesheet (warm dark palette + Mermaid contrast layer) plus the `astro-mermaid` `mermaidConfig` object | Any Starlight docs site, via `customCss` + a config import |
 | `bundles/<topic>/` | Packaged claim set + per-runner test impls (`impls/pytest/`, `impls/vitest/`, …) | The `apply-intent-bundle` skill drops these into target projects |
+
+`starlight-theme` is a *runtime-styling* package (the look) and is independent of the STARLIGHT *intent bundle* under `bundles/starlight/` (the frontmatter + page-structure contract). A docs site can adopt either, both, or neither; the theme is consumed as an npm dependency, while the bundle is copied in by `apply-intent-bundle`.
 
 `bundles/` consumes the runtimes (its impls call into `pytest-intent` / `vitest-intent`). The runtimes themselves don't depend on the bundles.
 

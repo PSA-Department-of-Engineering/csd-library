@@ -11,6 +11,10 @@
       "release-type": "node",
       "component": "playwright-intent"
     },
+    "starlight-theme": {
+      "release-type": "node",
+      "component": "starlight-theme"
+    },
     "pytest-intent": {
       "release-type": "python",
       "component": "pytest-intent",
