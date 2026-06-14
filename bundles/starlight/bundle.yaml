@@ -1,6 +1,6 @@
 name: STARLIGHT
-version: 0.1.0
-description: "Frontmatter + content-collection invariants for a Starlight (Astro) docs site. Validates required frontmatter on every doc, ID uniqueness, and reasonable date hygiene."
+version: 0.2.0
+description: "Frontmatter + content-collection + page-structure invariants for a Starlight (Astro) docs site. Validates required frontmatter on every doc, ID uniqueness, reasonable date hygiene, and generic page structure (intro prose, level-2 headings, type-specific Flow and Guide shapes)."
 applies_to:
   - bootstrap-starlight
 supported_runners:
