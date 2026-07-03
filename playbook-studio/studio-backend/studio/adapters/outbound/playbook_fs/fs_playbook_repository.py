@@ -255,12 +255,40 @@ class FsPlaybookRepository:
     def _parse_skill(self, path: Path) -> SkillDoc:
         raw = path.read_text(encoding="utf-8")
         fm, _ = _split_frontmatter(raw)
+        skill_dir = path.parent
+        files = sorted(
+            f.relative_to(skill_dir).as_posix()
+            for f in skill_dir.rglob("*")
+            if f.is_file() and "__pycache__" not in f.parts
+        )
+        files.sort(key=lambda f: (f != "SKILL.md", f))
         return SkillDoc(
-            name=str(fm.get("name") or path.parent.name),
+            name=str(fm.get("name") or skill_dir.name),
             description=str(fm.get("description", "")),
             refs=tuple(str(r) for r in (fm.get("refs") or [])),
             raw=raw,
+            files=tuple(files),
         )
+
+    def _skill_file_path(self, name: str, rel_path: str) -> Path:
+        skill_dir = (self._root / "skills" / name).resolve()
+        candidate = (skill_dir / rel_path).resolve()
+        if skill_dir not in candidate.parents and candidate != skill_dir:
+            raise InvalidRefInputError(f"path escapes the skill folder: {rel_path!r}")
+        return candidate
+
+    def read_skill_file(self, *, name: str, rel_path: str) -> str:
+        path = self._skill_file_path(name, rel_path)
+        if not path.is_file():
+            raise EntityNotFoundError("skill file", f"{name}/{rel_path}")
+        return path.read_text(encoding="utf-8", errors="replace")
+
+    def write_skill_file(self, *, name: str, rel_path: str, content: str) -> None:
+        path = self._skill_file_path(name, rel_path)
+        if not path.is_file():
+            raise EntityNotFoundError("skill file", f"{name}/{rel_path}")
+        path.write_text(content, encoding="utf-8", newline="\n")
+        logger.info("Wrote skill file %s/%s (%d chars)", name, rel_path, len(content))
 
     def _parse_ref(self, path: Path) -> RefDoc:
         raw = path.read_text(encoding="utf-8")

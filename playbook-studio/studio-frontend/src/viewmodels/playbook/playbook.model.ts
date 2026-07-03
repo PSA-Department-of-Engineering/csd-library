@@ -9,6 +9,19 @@ export const selectViolationsSection = (
 export const selectOtherSections = (doc: PlaybookResponse | null): PlaybookSectionResponse[] =>
     doc?.sections.filter((s) => !s.title.toLowerCase().startsWith('top violations')) ?? [];
 
+/** Task-routing rows (task column) whose REF column mentions the given REF. */
+export function selectRoutingRowsFor(doc: PlaybookResponse | null, refName: string): string[] {
+    const routing = doc?.sections.find((s) => s.title.toLowerCase().startsWith('task routing'));
+    if (!routing) {
+        return [];
+    }
+    return routing.body
+        .split('\n')
+        .filter((line) => line.startsWith('|') && line.includes(refName))
+        .map((line) => line.split('|')[1]?.trim() ?? '')
+        .filter((task) => task.length > 0 && !/^-+$/.test(task));
+}
+
 export interface ViolationItem {
     number: number;
     title: string;

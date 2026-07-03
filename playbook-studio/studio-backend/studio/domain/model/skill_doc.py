@@ -15,3 +15,4 @@ class SkillDoc:
     description: str
     refs: tuple[str, ...]
     raw: str
+    files: tuple[str, ...]

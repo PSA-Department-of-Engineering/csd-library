@@ -4,6 +4,8 @@ import type { RefSectionResponse } from '@/models';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils';
 import { useGraph } from '@/viewmodels/graph';
+import { useNav } from '@/viewmodels/nav';
+import { selectRoutingRowsFor, usePlaybook } from '@/viewmodels/playbook';
 import { useRefDetail } from '@/viewmodels/refdetail';
 import { DomainBadge } from '@/views/atoms/DomainBadge';
 import { Spinner } from '@/views/atoms/Spinner';
@@ -65,11 +67,16 @@ export const RefReader = () => {
     const cancelEdit = useRefDetail((state) => state.cancelEdit);
     const save = useRefDetail((state) => state.save);
 
+    const playbookDoc = usePlaybook((state) => state.doc);
+    const playbookLoad = usePlaybook((state) => state.load);
+    const setView = useNav((state) => state.setView);
+
     useEffect(() => {
         if (selectedRef !== null) {
             void load(selectedRef);
         }
-    }, [selectedRef, load]);
+        void playbookLoad();
+    }, [selectedRef, load, playbookLoad]);
 
     if (selectedRef === null) {
         return <p className="text-sm text-muted-foreground">Pick a REF from the sidebar.</p>;
@@ -224,6 +231,42 @@ export const RefReader = () => {
                             Connections
                         </p>
                         <EgoGraph refName={ref.name} />
+                    </div>
+                    <div className="rounded-lg border bg-card/60 p-3">
+                        <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/70">
+                            Routing
+                        </p>
+                        {(() => {
+                            const rows = selectRoutingRowsFor(playbookDoc, ref.name);
+                            if (rows.length === 0) {
+                                return (
+                                    <div>
+                                        <p className="text-xs text-amber-300">
+                                            Not in the playbook routing table: no task will load
+                                            this REF.
+                                        </p>
+                                        <button
+                                            onClick={() => setView('playbook')}
+                                            className="mt-1.5 text-xs text-primary hover:underline"
+                                        >
+                                            Add a Task Routing row
+                                        </button>
+                                    </div>
+                                );
+                            }
+                            return (
+                                <ul className="flex flex-col gap-1">
+                                    {rows.map((task) => (
+                                        <li
+                                            key={task}
+                                            className="text-xs leading-snug text-muted-foreground"
+                                        >
+                                            {task}
+                                        </li>
+                                    ))}
+                                </ul>
+                            );
+                        })()}
                     </div>
                     <div className="rounded-lg border bg-card/60 p-3">
                         <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/70">
