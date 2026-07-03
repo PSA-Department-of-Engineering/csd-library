@@ -74,6 +74,8 @@ function parseFrontmatter(text: string): Record<string, string> | null {
 function loadAdrs(): Adr[] {
   const adrs: Adr[] = [];
   for (const file of walkMarkdown(DECISIONS_DIR)) {
+    // The decisions index is a navigation page, not an ADR; skip it.
+    if (basename(file, extname(file)).toLowerCase() === "index") continue;
     let text: string;
     try {
       text = readFileSync(file, "utf-8");
