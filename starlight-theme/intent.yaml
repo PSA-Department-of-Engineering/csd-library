@@ -1,0 +1,62 @@
+# Intent claims for the shared Starlight theme (CSD-INTENT-01 canonical schema).
+#
+# The package exposes two consumable surfaces: the exported `mermaidConfig` and
+# `styles.css`. The claims below pin the split of responsibilities between them:
+# layout/typography in the config, every colour decision in the stylesheet
+# against Starlight tokens. tests/theme.test.ts carries the intent() markers;
+# csd-intent reconciles markers <-> claims.
+
+INT-SLT-001:
+  version: 1.0.0
+  status: active
+  statement: "The exported mermaidConfig MUST carry only theme-neutral layout and typography choices (flowchart geometry, font family and size)."
+  rationale: "Diagram geometry is shared across sites; anything visual beyond layout belongs to the stylesheet so sites restyle without forking the config."
+  test:
+    scope: unit
+    component: MermaidConfig
+    type: contract
+  criticality: high
+
+INT-SLT-002:
+  version: 1.0.0
+  status: active
+  statement: "The exported mermaidConfig MUST NOT contain colour values in any form (hex, hsl, rgb, rgba, oklch)."
+  rationale: "Colour set in the config bypasses the token layer and cannot react to the active Starlight theme."
+  test:
+    scope: unit
+    component: MermaidConfig
+    type: invariant
+  criticality: critical
+
+INT-SLT-003:
+  version: 1.0.0
+  status: active
+  statement: "styles.css MUST override the dark base ramp under :root[data-theme='dark'], including the --sl-color-accent scale."
+  rationale: "The warm dark palette is the shared look; sites consume it by importing the stylesheet, not by redefining ramps locally."
+  test:
+    scope: unit
+    component: Stylesheet
+    type: contract
+  criticality: high
+
+INT-SLT-004:
+  version: 1.0.0
+  status: active
+  statement: "styles.css MUST map the Mermaid diagram layer (--mmd-* variables) to Starlight --sl-color-* tokens."
+  rationale: "Token indirection keeps diagrams legible in both themes and re-skins them automatically when the palette changes."
+  test:
+    scope: unit
+    component: Stylesheet
+    type: contract
+  criticality: high
+
+INT-SLT-005:
+  version: 1.0.0
+  status: active
+  statement: "The Mermaid layer of styles.css MUST NOT declare hardcoded colour values; the dark-palette block is the single place colours are defined."
+  rationale: "A hardcoded colour in the diagram layer silently diverges from the palette on the next re-hue."
+  test:
+    scope: unit
+    component: Stylesheet
+    type: invariant
+  criticality: critical
