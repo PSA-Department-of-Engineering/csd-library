@@ -1,4 +1,4 @@
-"""@intent decorator — links a test function to one or more INT-NNN claims.
+"""@intent decorator - links a test function to one or more INT-NNN claims.
 
 Mirrors CSD's annotation pattern from CSD-TEST-03 §2.2 (Java's `@IntentTest`).
 """

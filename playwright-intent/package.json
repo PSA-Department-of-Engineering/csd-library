@@ -1,7 +1,7 @@
 {
   "name": "@psa-department-of-engineering/playwright-intent",
   "version": "1.0.0",
-  "description": "The intent() wrapper for Playwright — links an e2e test to one or more CSD intent claims (INT-NNN). Spec validation and cross-runtime coverage live in the standalone `csd-intent` CLI.",
+  "description": "The intent() wrapper for Playwright - links an e2e test to one or more CSD intent claims (INT-NNN). Spec validation and cross-runtime coverage live in the standalone `csd-intent` CLI.",
   "keywords": [
     "playwright",
     "intent",

@@ -1,5 +1,5 @@
 /**
- * playwright-intent — the `intent()` wrapper that links a Playwright e2e test
+ * playwright-intent - the `intent()` wrapper that links a Playwright e2e test
  * to a CSD intent claim.
  *
  * Validation, coverage, and orphan-detection live in the separate `csd-intent`

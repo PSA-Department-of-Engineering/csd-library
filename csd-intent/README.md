@@ -2,7 +2,7 @@
 
 Cross-runtime audit tool for CSD intent specifications. Validates `intent.yaml`
 against [CSD-INTENT-01](https://github.com/PSA-Department-of-Engineering/cognitive-software-delivery) and confirms every
-claim is attested by at least one test marker across **any** test runner —
+claim is attested by at least one test marker across **any** test runner -
 pytest, vitest, Playwright, Jest, or anything that uses the standard `intent()`
 / `@intent()` marker shape.
 
@@ -12,16 +12,16 @@ is invoked separately (CLI, CI step, or pre-commit hook).
 ## Why it exists
 
 `pytest-intent`, `vitest-intent`, and `playwright-intent` provide the test-side
-marker helpers — they let a test declare which intent claim it attests. They
+marker helpers - they let a test declare which intent claim it attests. They
 deliberately know nothing about other runtimes, schema validation, or whether a
 claim is unattested.
 
 `csd-intent` owns the cross-runtime auditing: it walks every test file in the
 project (Python via AST, TS/JS via regex), reads `intent.yaml`, and answers:
 
-1. **Schema** — does every claim match CSD-INTENT-01?
-2. **Orphan** — does every test marker reference a real claim?
-3. **Coverage** — does every claim have at least one attesting test, anywhere?
+1. **Schema** - does every claim match CSD-INTENT-01?
+2. **Orphan** - does every test marker reference a real claim?
+3. **Coverage** - does every claim have at least one attesting test, anywhere?
 
 ## Install
 
@@ -94,7 +94,7 @@ INT-NNN:
 ```
 
 For projects still on the legacy flat-`scope:` shape, the tool accepts it (with
-no warning) — that's a migration concession, not a recommendation.
+no warning) - that's a migration concession, not a recommendation.
 
 ## License
 

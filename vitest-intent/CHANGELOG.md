@@ -16,24 +16,24 @@ All notable changes to vitest-intent. Format follows [Keep a Changelog](https://
 
 ## [Unreleased]
 
-## [0.2.0] — 2026-06-11
+## [0.2.0] - 2026-06-11
 
 ### Changed
-- **BREAKING** — removed the in-suite meta-tests: `registerIntentMetaTests` and the `vitest-intent/meta-tests` subpath are gone. Schema validation (CSD-INTENT-01), orphan detection, and intent↔test coverage now live in the standalone, cross-runtime `csd-intent` CLI, run out of band. The public surface is now `intent()` / `validateIntentArgs` only.
+- **BREAKING** - removed the in-suite meta-tests: `registerIntentMetaTests` and the `vitest-intent/meta-tests` subpath are gone. Schema validation (CSD-INTENT-01), orphan detection, and intent↔test coverage now live in the standalone, cross-runtime `csd-intent` CLI, run out of band. The public surface is now `intent()` / `validateIntentArgs` only.
 - Published privately to GitHub Packages as `@psa-department-of-engineering/vitest-intent` (previously consumed as an unscoped `file:` sibling dependency).
 
-## [0.1.0] — 2026-04-26
+## [0.1.0] - 2026-04-26
 
 Initial release.
 
 ### Added
-- `intent(id, name, fn, options?)` — wraps `vitest.test()`, binds CSD intent claim ID. Supports single ID or array (multi-claim per test).
-- `validateIntentArgs(id, fn, options?)` — pure validator (does not call `test()`). Useful for unit-testing intent invocations.
-- `parseIntentYaml(path)` — reads `intent.yaml`, returns parsed claims (skips non-`INT-` prefixed top-level keys).
-- `checkSchema(claims)` — validates required fields (`statement`, `rationale`, `criticality`, `scope`) and allowed values per CSD.
-- `collectAnnotatedTests(dir)` — walks test files (`*.test.*` / `*.spec.*`), finds `intent(...)` calls via regex.
-- `coverageViolations(claims, annotated)` — returns intent ↔ test mismatch strings.
-- `registerIntentMetaTests(options)` — drop-in: registers `intent.schema` + `intent.coverage` vitest tests.
+- `intent(id, name, fn, options?)` - wraps `vitest.test()`, binds CSD intent claim ID. Supports single ID or array (multi-claim per test).
+- `validateIntentArgs(id, fn, options?)` - pure validator (does not call `test()`). Useful for unit-testing intent invocations.
+- `parseIntentYaml(path)` - reads `intent.yaml`, returns parsed claims (skips non-`INT-` prefixed top-level keys).
+- `checkSchema(claims)` - validates required fields (`statement`, `rationale`, `criticality`, `scope`) and allowed values per CSD.
+- `collectAnnotatedTests(dir)` - walks test files (`*.test.*` / `*.spec.*`), finds `intent(...)` calls via regex.
+- `coverageViolations(claims, annotated)` - returns intent ↔ test mismatch strings.
+- `registerIntentMetaTests(options)` - drop-in: registers `intent.schema` + `intent.coverage` vitest tests.
 - 25 internal tests covering all public APIs.
 - LICENSE (MIT), TypeScript declarations, ESM-only output.
 

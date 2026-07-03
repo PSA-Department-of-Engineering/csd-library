@@ -26,7 +26,7 @@ Use **release-please** (manifest mode) for this repo, run through a new reusable
 ## Why diverge from ADR-024 (semantic-release, auto-cut, no PR)
 
 - **Tooling fit.** semantic-release does not cleanly version four packages across two ecosystems in one repo (see Context). release-please is built for exactly this and reproduces the ADR-0001 tag scheme natively.
-- **The cut is the gate.** ADR-024 prefers an automatic cut because for services *promotion* (ArgoCD, ADR-022) is the real human gate; the version cut is cheap and reversible. A library has no promotion downstream — publishing to consumers *is* the irreversible step. So a one-click release-PR gate is appropriate here, not ceremony.
+- **The cut is the gate.** ADR-024 prefers an automatic cut because for services *promotion* (ArgoCD, ADR-022) is the real human gate; the version cut is cheap and reversible. A library has no promotion downstream - publishing to consumers *is* the irreversible step. So a one-click release-PR gate is appropriate here, not ceremony.
 
 ## Consequences
 
@@ -41,7 +41,7 @@ Use **release-please** (manifest mode) for this repo, run through a new reusable
 | Option | Why not |
 |---|---|
 | semantic-release (match ADR-024) | One-version-per-repo model; the monorepo plugin mangles the scoped npm tags and cannot version the Python packages. |
-| Tag-triggered publish (manual bump, CI publishes on a `<pkg>-v*` tag) | Works and is simpler, but keeps version bumps manual — the drift that motivated this ADR. Remains available as a local-dev escape hatch: you can still hand-tag to cut a release. |
+| Tag-triggered publish (manual bump, CI publishes on a `<pkg>-v*` tag) | Works and is simpler, but keeps version bumps manual - the drift that motivated this ADR. Remains available as a local-dev escape hatch: you can still hand-tag to cut a release. |
 | Self-hosted release tooling | Unjustified for a solo-maintained, four-package repo. |
 
 ## Rollout

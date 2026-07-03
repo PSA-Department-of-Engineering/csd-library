@@ -2,7 +2,7 @@
  * Tests for the `intent()` wrapper.
  *
  * Validation paths are tested via `validateIntentArgs` (a pure function
- * that doesn't call vitest's test() — so we can exercise it from inside
+ * that doesn't call vitest's test() - so we can exercise it from inside
  * another test without nested-test-call errors).
  *
  * Live `intent()` calls happen at module scope at the bottom of this file.
@@ -48,7 +48,7 @@ describe("validateIntentArgs", () => {
   });
 });
 
-// Real intent calls — at module scope, exercising the actual wrapper.
+// Real intent calls - at module scope, exercising the actual wrapper.
 intent("INT-VITEST-INTENT-001", "intent registers a passing test", () => {
   expect(true).toBe(true);
 });

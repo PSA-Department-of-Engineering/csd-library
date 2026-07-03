@@ -1,5 +1,5 @@
 /**
- * vitest-intent — the `intent()` wrapper that links a vitest test to a CSD claim.
+ * vitest-intent - the `intent()` wrapper that links a vitest test to a CSD claim.
  *
  * Validation, coverage, and orphan-detection live in the separate `csd-intent`
  * CLI (standalone, Python), not here. This package is intentionally small: it

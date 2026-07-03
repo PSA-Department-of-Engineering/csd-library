@@ -1,6 +1,6 @@
 # vitest-intent
 
-**The `intent()` wrapper for vitest — links a test to one or more CSD intent claims.**
+**The `intent()` wrapper for vitest - links a test to one or more CSD intent claims.**
 
 > CSD (Cognitive Software Delivery) is a language-agnostic methodology. This package is one specific implementation, scoped to Node/TypeScript projects using vitest. Sister project to [pytest-intent](../pytest-intent) and [playwright-intent](../playwright-intent).
 
@@ -22,11 +22,11 @@ intent(['INT-FOO-002', 'INT-FOO-003'], 'parses and validates the token', () => {
 });
 ```
 
-That's the entire public surface. `intent()` is a thin wrapper around vitest's `test()` — it validates the claim ID, then delegates to the underlying `test(name, fn)`.
+That's the entire public surface. `intent()` is a thin wrapper around vitest's `test()` - it validates the claim ID, then delegates to the underlying `test(name, fn)`.
 
 ## What it is NOT
 
-- **Not a validator.** Schema checks (CSD-INTENT-01), orphan detection (test references unknown claim), and cross-runtime coverage all live in the standalone [`csd-intent`](../csd-intent) CLI — point it at any project to audit.
+- **Not a validator.** Schema checks (CSD-INTENT-01), orphan detection (test references unknown claim), and cross-runtime coverage all live in the standalone [`csd-intent`](../csd-intent) CLI - point it at any project to audit.
 - **Not a vitest plugin.** Just a function. No config, no setup files.
 - **Not a generator.** You write your tests; this annotates them.
 

@@ -1,6 +1,6 @@
 """Nested-project awareness: project boundaries, discovery, and aggregation.
 
-A repo may contain a *nested* intent project — a subdirectory that carries its own
+A repo may contain a *nested* intent project - a subdirectory that carries its own
 ``intent.yaml``. The outer audit must treat that subtree as a separate project boundary
 (so its markers don't orphan against the outer claims), and ``audit_tree`` / the CLI must
 audit each nested project independently against its own ``intent.yaml``.
@@ -179,7 +179,7 @@ def test_audit_tree_nested_detects_its_own_unattested(tmp_path: Path) -> None:
     root_report, sub_report = reports
     # Root is unaffected.
     assert root_report.ok
-    # Nested flags only its own unattested claim — not anything from the root.
+    # Nested flags only its own unattested claim - not anything from the root.
     assert sub_report.unattested == ["INT-SUB-002"]
 
 
@@ -255,13 +255,13 @@ def test_cli_explicit_override_disables_discovery(tmp_path: Path, capsys) -> Non
     """--tests-dir forces single-project mode: no nested discovery, no aggregate banner.
 
     With an explicit tests dir pointing at the whole tree, the nested marker IS seen by
-    the root scan (the override opts out of discovery), so it orphans as before — proving
+    the root scan (the override opts out of discovery), so it orphans as before - proving
     the explicit single-project path is preserved unchanged.
     """
     root = _make_root_with_nested(tmp_path)
     rc = main([str(root), "--tests-dir", str(root / "sub")])
     out = capsys.readouterr().out
-    # Single-project report only — no aggregate banner.
+    # Single-project report only - no aggregate banner.
     assert "project(s) audited" not in out
     # INT-SUB-001 marker now orphans against the ROOT intent.yaml.
     assert "INT-SUB-001" in out

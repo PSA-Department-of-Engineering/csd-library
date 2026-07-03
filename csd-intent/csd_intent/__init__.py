@@ -1,4 +1,4 @@
-"""csd-intent — cross-runtime auditor for CSD intent specifications.
+"""csd-intent - cross-runtime auditor for CSD intent specifications.
 
 Validates intent.yaml against CSD-INTENT-01 (schema check), confirms every
 @intent / intent() marker references a real claim (orphan check), and reports
