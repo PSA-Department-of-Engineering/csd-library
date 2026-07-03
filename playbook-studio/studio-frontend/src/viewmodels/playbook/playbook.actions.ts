@@ -7,7 +7,7 @@ import type { PlaybookState } from './playbook.state';
 
 interface PlaybookActions {
     load: () => Promise<void>;
-    startEdit: () => void;
+    startEdit: () => Promise<void>;
     setDraft: (draft: string) => void;
     cancelEdit: () => void;
     save: () => Promise<void>;
@@ -24,7 +24,7 @@ export const usePlaybook = create<PlaybookState & PlaybookActions>()((set, get) 
     lastReport: null,
 
     load: async () => {
-        if (get().doc !== null || get().loading) {
+        if (get().loading) {
             return;
         }
         set({ loading: true, error: null });
@@ -38,8 +38,14 @@ export const usePlaybook = create<PlaybookState & PlaybookActions>()((set, get) 
         }
     },
 
-    startEdit: () => {
-        set({ editing: true, draft: get().doc?.raw ?? '', saveError: null });
+    startEdit: async () => {
+        let raw = get().doc?.raw;
+        if (!raw) {
+            const doc = await apiFetch<PlaybookResponse>('/api/playbook');
+            set({ doc });
+            raw = doc.raw;
+        }
+        set({ editing: true, draft: raw, saveError: null });
     },
 
     setDraft: (draft) => {

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from fastapi.testclient import TestClient
+from pytest_intent import intent
 
 
 class TestSystem:
@@ -13,6 +14,7 @@ class TestSystem:
 
 
 class TestGraph:
+    @intent("INT-GRAPH-001")
     def test_graph_contains_playbook_refs_and_skills(self, client: TestClient) -> None:
         resp = client.get("/api/graph")
         assert resp.status_code == 200
@@ -20,15 +22,18 @@ class TestGraph:
         ids = {n["id"] for n in graph["nodes"]}
         assert {"AI-PLAYBOOK", "REF-Alpha", "REF-Beta", "do-alpha"} <= ids
 
+    @intent("INT-GRAPH-001")
     def test_graph_has_all_three_edge_kinds(self, client: TestClient) -> None:
         kinds = {e["kind"] for e in client.get("/api/graph").json()["edges"]}
         assert kinds == {"playbook-to-ref", "ref-to-ref", "skill-to-ref"}
 
+    @intent("INT-GRAPH-001")
     def test_ref_nodes_carry_their_domain(self, client: TestClient) -> None:
         nodes = {n["id"]: n for n in client.get("/api/graph").json()["nodes"]}
         assert nodes["REF-Alpha"]["domain"] == "language"
         assert nodes["AI-PLAYBOOK"]["domain"] is None
 
+    @intent("INT-GRAPH-001")
     def test_nodes_carry_summaries(self, client: TestClient) -> None:
         nodes = {n["id"]: n for n in client.get("/api/graph").json()["nodes"]}
         assert nodes["REF-Alpha"]["summary"] == "Alpha conventions."
@@ -76,6 +81,7 @@ class TestClaims:
 
 
 class TestUpdateSection:
+    @intent("INT-GATE-001")
     def test_edit_survives_when_gates_pass(self, client: TestClient) -> None:
         resp = client.put(
             "/api/refs/REF-Alpha/sections/1",
@@ -86,6 +92,7 @@ class TestUpdateSection:
         body = client.get("/api/refs/REF-Alpha").json()["sections"][0]["body"]
         assert "twice" in body
 
+    @intent("INT-GATE-001")
     def test_edit_rolls_back_when_gates_fail(self, failing_client: TestClient) -> None:
         original = failing_client.get("/api/refs/REF-Alpha").json()["sections"][0]["body"]
         resp = failing_client.put(
@@ -98,6 +105,7 @@ class TestUpdateSection:
         after = failing_client.get("/api/refs/REF-Alpha").json()["sections"][0]["body"]
         assert after == original
 
+    @intent("INT-GATE-002")
     def test_generated_section_is_immutable(self, client: TestClient) -> None:
         resp = client.put(
             "/api/refs/REF-Alpha/sections/2",
@@ -112,6 +120,7 @@ class TestUpdateSection:
 
 
 class TestUpdateDocument:
+    @intent("INT-GATE-001")
     def test_full_rewrite_survives_when_gates_pass(self, client: TestClient) -> None:
         original = client.get("/api/refs/REF-Beta").json()["raw"]
         rewritten = original.replace("## 1. Guidance", "## 1. Guidance (revised)")
@@ -120,6 +129,7 @@ class TestUpdateDocument:
         after = client.get("/api/refs/REF-Beta").json()
         assert after["sections"][0]["title"] == "Guidance (revised)"
 
+    @intent("INT-GATE-001")
     def test_full_rewrite_rolls_back_when_gates_fail(self, failing_client: TestClient) -> None:
         original = failing_client.get("/api/refs/REF-Beta").json()["raw"]
         resp = failing_client.put("/api/refs/REF-Beta", json={"raw": "# REF: Broken\n"})
@@ -135,6 +145,7 @@ class TestCreateRef:
         "summary": "Gamma practices.",
     }
 
+    @intent("INT-DERIVE-001")
     def test_create_survives_when_gates_pass(self, client: TestClient) -> None:
         resp = client.post("/api/refs", json=self._PAYLOAD)
         assert resp.status_code == 201
@@ -151,6 +162,7 @@ class TestCreateRef:
         assert resp.status_code == 400
         assert resp.json()["error"] == "InvalidRefInputError"
 
+    @intent("INT-GATE-001")
     def test_create_is_removed_when_gates_fail(self, failing_client: TestClient) -> None:
         resp = failing_client.post("/api/refs", json=self._PAYLOAD)
         assert resp.status_code == 422
@@ -165,6 +177,7 @@ class TestSkillDocument:
         assert skill["refs"] == ["REF-Alpha"]
         assert skill["body"].startswith("# Do alpha")
 
+    @intent("INT-GATE-001")
     def test_skill_rewrite_rolls_back_when_gates_fail(self, failing_client: TestClient) -> None:
         original = failing_client.get("/api/skills/do-alpha").json()["raw"]
         resp = failing_client.put("/api/skills/do-alpha", json={"raw": "broken"})
@@ -175,6 +188,7 @@ class TestSkillDocument:
 class TestCreateSkill:
     _PAYLOAD = {"name": "do-beta", "description": "Does beta things.", "refs": ["REF-Beta"]}
 
+    @intent("INT-DERIVE-001")
     def test_create_skill_survives_when_gates_pass(self, client: TestClient) -> None:
         resp = client.post("/api/skills", json=self._PAYLOAD)
         assert resp.status_code == 201
@@ -189,6 +203,7 @@ class TestCreateSkill:
         resp = client.post("/api/skills", json={**self._PAYLOAD, "refs": ["REF-Nope"]})
         assert resp.status_code in (400, 404)
 
+    @intent("INT-GATE-001")
     def test_create_skill_rolls_back_when_gates_fail(self, failing_client: TestClient) -> None:
         playbook_before = failing_client.get("/api/playbook").json()["raw"]
         resp = failing_client.post("/api/skills", json=self._PAYLOAD)
@@ -198,6 +213,7 @@ class TestCreateSkill:
 
 
 class TestUpdatePlaybook:
+    @intent("INT-GATE-001")
     def test_playbook_rewrite_survives_when_gates_pass(self, client: TestClient) -> None:
         original = client.get("/api/playbook").json()["raw"]
         resp = client.put("/api/playbook", json={"raw": original + "\n## Extra\n\nMore.\n"})
@@ -205,6 +221,7 @@ class TestUpdatePlaybook:
         titles = [s["title"] for s in client.get("/api/playbook").json()["sections"]]
         assert "Extra" in titles
 
+    @intent("INT-GATE-001")
     def test_playbook_rewrite_rolls_back_when_gates_fail(self, failing_client: TestClient) -> None:
         original = failing_client.get("/api/playbook").json()["raw"]
         resp = failing_client.put("/api/playbook", json={"raw": "# Broken\n"})

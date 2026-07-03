@@ -73,7 +73,7 @@ export const PlaybookReader = () => {
         <div className="mx-auto flex max-w-4xl flex-col gap-4">
             <div className="flex items-center justify-between gap-3">
                 <h2 className="text-xl font-bold tracking-tight">{doc.title}</h2>
-                <Button variant="outline" onClick={startEdit}>
+                <Button variant="outline" onClick={() => void startEdit()}>
                     Edit document
                 </Button>
             </div>

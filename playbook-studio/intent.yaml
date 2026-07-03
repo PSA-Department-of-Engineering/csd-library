@@ -1,0 +1,69 @@
+# Intent claims for playbook-studio (CSD-INTENT-01 canonical schema).
+#
+# Cross-runtime: pytest tests in studio-backend/tests carry @intent markers,
+# vitest tests in studio-frontend/src carry intent() wrappers. Audit both in
+# one pass with the standalone csd-intent CLI:
+#
+#   pip install -e ../csd-intent
+#   csd-intent .
+#
+# Claim ID convention:
+#   INT-GATE-NNN   - trusted-output editing: gates run, failures roll back
+#   INT-DERIVE-NNN - the studio is derivative of the playbook's own tooling
+#   INT-GRAPH-NNN  - the reference graph faithfully mirrors the corpus
+#   INT-LAYOUT-NNN - visual layout invariants (frontend)
+
+INT-GATE-001:
+  version: 1.0.0
+  status: active
+  statement: "Every mutating operation (REF section or document, SKILL.md, AI-PLAYBOOK.md, and creation) MUST run the playbook's validation gates and restore the prior state byte-identical when they fail."
+  rationale: "CSD Trust Calibration applied to the playbook itself: an edit becomes trusted output only by passing the corpus's own deterministic gates. Without rollback, a rejected edit would still corrupt the corpus."
+  test:
+    scope: integration
+    component: GatedWrites
+    type: invariant
+  criticality: critical
+
+INT-GATE-002:
+  version: 1.0.0
+  status: active
+  statement: "The machine-generated 'Skills that instantiate this REF' section MUST be rejected (HTTP 409) by the section-edit endpoint."
+  rationale: "That section is owned by scripts/sync_backlinks.py (playbook Top Violation #1: no hand-maintained copies of mechanically derived content). The UI renders it read-only; the API must enforce it."
+  test:
+    scope: integration
+    component: RefSections
+    type: contract
+  criticality: high
+
+INT-DERIVE-001:
+  version: 1.0.0
+  status: active
+  statement: "REF and Skill creation MUST delegate to the playbook's own bootstrap-ref and bootstrap-skill scaffolders; the studio MUST NOT own a parallel copy of any authoring template."
+  rationale: "The playbook is the single source of authoring truth (REF-Authoring). A studio-owned template would drift from the skills' templates, recreating the exact violation the playbook forbids."
+  test:
+    scope: integration
+    component: Scaffolding
+    type: invariant
+  criticality: critical
+
+INT-GRAPH-001:
+  version: 1.0.0
+  status: active
+  statement: "The graph endpoint MUST expose the playbook root, every REF with its domain and summary, every skill, and all three edge kinds (playbook-to-ref, ref-to-ref, skill-to-ref)."
+  rationale: "Navigation, the map, and the connection panels are all derived from this graph; a lossy graph silently hides corpus content from every view."
+  test:
+    scope: integration
+    component: Graph
+    type: contract
+  criticality: high
+
+INT-LAYOUT-001:
+  version: 1.0.0
+  status: active
+  statement: "The radial layout MUST place the playbook at the origin, place every node exactly once, put skills on a wider ring than REFs, and color REFs by their domain."
+  rationale: "The map is only trustworthy if the geometry encodes what it claims: ring membership = artifact kind, color = domain, one dot per artifact."
+  test:
+    scope: unit
+    component: RadialLayout
+    type: invariant
+  criticality: medium

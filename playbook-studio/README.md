@@ -29,6 +29,14 @@ npm install && npm run dev
 
 The playbook location defaults to the sibling `../../../ai-coding-prompts`; override with `STUDIO_PLAYBOOK_ROOT`.
 
+## Intent claims (CSD)
+
+The studio eats its own dog food: `intent.yaml` at this root declares the claims (gated writes roll back, generated sections immutable, creation delegates to the playbook's own bootstrap skills, graph fidelity, layout invariants). Backend tests carry `@intent` (pytest-intent), frontend tests carry `intent()` (vitest-intent). Audit both in one pass:
+
+```bash
+studio-backend/.venv/Scripts/csd-intent .
+```
+
 ## Contract sync
 
 After any backend DTO or route change: `.venv/Scripts/python scripts/export_openapi.py` in `studio-backend`, then `npm run api:generate` in `studio-frontend` (or `npm run api:sync` against a running backend).
