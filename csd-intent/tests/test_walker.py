@@ -4,9 +4,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from pytest_intent import intent
+
 from csd_intent.walker import collect_attestations
 
 
+@intent('INT-CSD-004')
 def test_python_ast_picks_up_decorator(tmp_path: Path) -> None:
     tests = tmp_path / "tests"
     tests.mkdir()
@@ -52,6 +55,7 @@ def test_python_walker_ignores_non_test_files(tmp_path: Path) -> None:
     assert out == {}
 
 
+@intent('INT-CSD-004')
 def test_js_regex_picks_up_intent_call(tmp_path: Path) -> None:
     src = tmp_path / "src"
     src.mkdir()

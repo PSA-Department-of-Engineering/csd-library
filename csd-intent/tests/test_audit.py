@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from pytest_intent import intent
+
 from csd_intent.audit import ViolationKind, audit
 
 
@@ -58,6 +60,7 @@ def test_clean_audit(tmp_path: Path) -> None:
     assert report.attested_claims == {"INT-001", "INT-002"}
 
 
+@intent('INT-CSD-002')
 def test_orphan_test_marker_flagged(tmp_path: Path) -> None:
     project = _scaffold(
         tmp_path,
@@ -71,6 +74,7 @@ def test_orphan_test_marker_flagged(tmp_path: Path) -> None:
     assert {v.claim_id for v in orphans} == {"INT-999"}
 
 
+@intent('INT-CSD-003')
 def test_unattested_claim_flagged(tmp_path: Path) -> None:
     project = _scaffold(
         tmp_path,
@@ -100,6 +104,7 @@ INT-001:
     assert any("scope" in v.message for v in schema_violations)
 
 
+@intent('INT-CSD-003')
 def test_deprecated_claim_not_flagged_as_unattested(tmp_path: Path) -> None:
     """A deprecated claim documents removed behavior; no test expected."""
     yaml = """
@@ -120,6 +125,7 @@ INT-001:
     assert report.unattested == []
 
 
+@intent('INT-CSD-003')
 def test_draft_claim_not_flagged_as_unattested(tmp_path: Path) -> None:
     """A draft claim is a pre-implementation placeholder; not yet a coverage failure."""
     yaml = """

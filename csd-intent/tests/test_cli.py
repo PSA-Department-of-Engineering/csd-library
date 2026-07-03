@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from pytest_intent import intent
+
 from csd_intent.cli import main
 
 _GOOD_INTENT = """
@@ -41,6 +43,7 @@ def test_cli_missing_intent_exits_one(tmp_path: Path, capsys) -> None:
     assert "not found" in out
 
 
+@intent('INT-CSD-005')
 def test_cli_fail_on_schema_only(tmp_path: Path, capsys) -> None:
     """--fail-on schema tolerates unattested claims."""
     (tmp_path / "intent.yaml").write_text(_GOOD_INTENT, encoding="utf-8")

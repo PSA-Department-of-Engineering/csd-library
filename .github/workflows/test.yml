@@ -33,6 +33,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
+          # csd-intent's tests attest their claims with @intent markers, so the
+          # sibling pytest-intent runtime must be importable (self no-op for
+          # the pytest-intent matrix entry).
+          pip install -e ../pytest-intent
       - name: Lint (ruff)
         run: ruff check ${{ matrix.package.module }} tests
       - name: Type-check (mypy)
@@ -55,7 +59,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
       - name: Self-audit (csd-intent on itself)
-        run: csd-intent . --tests-dir tests --fail-on schema
+        run: csd-intent . --tests-dir tests --fail-on any
 
   node:
     runs-on: ubuntu-latest
