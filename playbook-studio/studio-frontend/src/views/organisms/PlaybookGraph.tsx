@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { GraphResponse } from '@/models';
 import { computeDomainArcs, computeLayout, REF_RADIUS, useGraph } from '@/viewmodels/graph';
 import { useNav } from '@/viewmodels/nav';
+import { useSkillDetail } from '@/viewmodels/skilldetail';
 import { Spinner } from '@/views/atoms/Spinner';
 
 const EDGE_COLORS: Record<string, string> = {
@@ -48,6 +49,7 @@ export const PlaybookGraph = () => {
     const select = useGraph((state) => state.select);
     const hover = useGraph((state) => state.hover);
     const setView = useNav((state) => state.setView);
+    const selectSkill = useSkillDetail((state) => state.select);
 
     const [settling, setSettling] = useState(false);
     const filterKey = `${visibleDomains?.join(',') ?? '*'}|${showSkills}`;
@@ -210,6 +212,9 @@ export const PlaybookGraph = () => {
                             if (isRef) {
                                 select(node.id);
                                 setView('ref');
+                            } else if (node.kind === 'skill') {
+                                selectSkill(node.id);
+                                setView('skill');
                             }
                         }}
                         onMouseEnter={() => hover(node.id)}
