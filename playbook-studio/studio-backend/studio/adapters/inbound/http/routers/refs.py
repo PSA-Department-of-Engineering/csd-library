@@ -1,0 +1,36 @@
+"""REF routes: detail and gated section editing."""
+
+from __future__ import annotations
+
+from fastapi import APIRouter
+
+from studio.adapters.inbound.http.dependencies import ContainerDep
+from studio.adapters.inbound.http.dtos.ref_detail_response import RefDetailResponse
+from studio.adapters.inbound.http.dtos.update_section_request import UpdateSectionRequest
+from studio.adapters.inbound.http.dtos.validation_report_response import ValidationReportResponse
+from studio.adapters.inbound.http.mappers.ref_mapper import map_ref
+from studio.adapters.inbound.http.mappers.validation_mapper import map_validation_report
+
+__all__ = ["router"]
+
+router = APIRouter()
+
+
+@router.get("/refs/{name}", response_model=RefDetailResponse)
+async def get_ref(name: str, container: ContainerDep) -> RefDetailResponse:
+    """Return one parsed REF by name (e.g. REF-Python)."""
+    return map_ref(container.get_ref().execute(name=name))
+
+
+@router.put("/refs/{name}/sections/{number}", response_model=ValidationReportResponse)
+async def update_ref_section(
+    name: str,
+    number: int,
+    request: UpdateSectionRequest,
+    container: ContainerDep,
+) -> ValidationReportResponse:
+    """Write a section body; the edit survives only if the validation gates pass."""
+    report = container.update_ref_section().execute(
+        ref_name=name, number=number, body=request.body
+    )
+    return map_validation_report(report)
