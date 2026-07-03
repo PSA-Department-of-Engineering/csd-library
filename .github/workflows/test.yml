@@ -75,8 +75,63 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Build the in-repo vitest-intent file dependency
+        if: matrix.package == 'starlight-theme'
+        working-directory: vitest-intent
+        run: |
+          npm ci
+          npm run build
       - run: npm ci
       - name: Build (tsc)
         run: npm run build
       - name: Run tests
         run: npm test
+
+  studio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Backend install (with sibling pytest-intent for @intent markers)
+        working-directory: playbook-studio/studio-backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]" -e ../../pytest-intent
+      - name: Backend lint (ruff)
+        working-directory: playbook-studio/studio-backend
+        run: ruff check .
+      - name: Backend tests
+        working-directory: playbook-studio/studio-backend
+        run: pytest -q
+      - name: Build the in-repo vitest-intent file dependency
+        working-directory: vitest-intent
+        run: |
+          npm ci
+          npm run build
+      - name: Frontend install
+        working-directory: playbook-studio/studio-frontend
+        run: npm ci
+      - name: Frontend tests
+        working-directory: playbook-studio/studio-frontend
+        run: npm test
+
+  intent-audits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install csd-intent
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e csd-intent
+      - name: Audit playbook-studio
+        run: csd-intent playbook-studio --fail-on any
+      - name: Audit starlight-theme
+        run: csd-intent starlight-theme --fail-on any
