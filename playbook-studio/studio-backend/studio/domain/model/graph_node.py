@@ -18,3 +18,4 @@ class GraphNode:
     kind: NodeKind
     label: str
     domain: RefDomain | None
+    summary: str

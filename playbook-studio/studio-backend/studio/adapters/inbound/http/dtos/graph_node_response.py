@@ -14,3 +14,4 @@ class GraphNodeResponse(BaseModel):
     kind: str
     label: str
     domain: str | None
+    summary: str

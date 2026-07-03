@@ -373,6 +373,10 @@
               }
             ],
             "title": "Domain"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
           }
         },
         "type": "object",
@@ -380,7 +384,8 @@
           "id",
           "kind",
           "label",
-          "domain"
+          "domain",
+          "summary"
         ],
         "title": "GraphNodeResponse",
         "description": "A playbook graph node returned over HTTP."

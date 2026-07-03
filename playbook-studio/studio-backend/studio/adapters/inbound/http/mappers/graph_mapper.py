@@ -23,6 +23,7 @@ def map_graph(graph: PlaybookGraph) -> GraphResponse:
                 kind=str(n.kind),
                 label=n.label,
                 domain=str(n.domain) if n.domain is not None else None,
+                summary=n.summary,
             )
             for n in graph.nodes
         ],

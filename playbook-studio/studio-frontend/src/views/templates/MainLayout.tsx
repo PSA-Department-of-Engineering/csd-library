@@ -11,7 +11,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
     const view = useNav((state) => state.view);
     const setView = useNav((state) => state.setView);
 
-    const tab = (target: 'map' | 'playbook', label: string) => (
+    const tab = (target: 'library' | 'map' | 'playbook', label: string) => (
         <button
             onClick={() => setView(target)}
             className={cn(
@@ -37,6 +37,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
                         <h1 className="text-base font-semibold tracking-tight">Playbook Studio</h1>
                     </div>
                     <nav className="flex items-center gap-1">
+                        {tab('library', 'Library')}
                         {tab('map', 'Map')}
                         {tab('playbook', 'Playbook')}
                     </nav>
