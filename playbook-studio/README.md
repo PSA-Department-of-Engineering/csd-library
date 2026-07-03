@@ -11,23 +11,9 @@ Editing applies CSD Trust Calibration to the playbook itself: a section edit is 
 
 ## Run
 
-Backend (default port 8000, override with `PORT`; the frontend dev proxy expects 8907):
+Double-click `devops/start.bat` (or `powershell -ExecutionPolicy Bypass -File devops/start.ps1`). The first run provisions everything (backend venv + deps + pytest-intent, frontend `npm ci` + generated API types); every run spawns the two server windows and opens http://localhost:5199. Close the windows to stop.
 
-```bash
-cd studio-backend
-python -m venv .venv && .venv/Scripts/python -m pip install -e ".[dev]"
-.venv/Scripts/python -m pip install -e ../../pytest-intent   # the validator runs the playbook's suite
-set PORT=8907 && .venv/Scripts/python -m studio.adapters.inbound.http.run
-```
-
-Frontend (dev server proxies `/api` to `127.0.0.1:8907`):
-
-```bash
-cd studio-frontend
-npm install && npm run dev
-```
-
-The playbook location defaults to the sibling `../../../ai-coding-prompts`; override with `STUDIO_PLAYBOOK_ROOT`.
+Manual equivalent: backend `PORT=8907` via `studio-backend/.venv/Scripts/python -m studio.adapters.inbound.http.run`, frontend `npm run dev -- --port 5199` (the dev proxy expects the backend on `127.0.0.1:8907`). The playbook location defaults to the sibling `../../../ai-coding-prompts`; override with `STUDIO_PLAYBOOK_ROOT`.
 
 ## Intent claims (CSD)
 
