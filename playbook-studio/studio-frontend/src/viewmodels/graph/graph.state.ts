@@ -6,4 +6,6 @@ export interface GraphState {
     error: string | null;
     selectedRef: string | null;
     hoveredNode: string | null;
+    hiddenDomains: string[];
+    showSkills: boolean;
 }

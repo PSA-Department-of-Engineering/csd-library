@@ -10,8 +10,8 @@ export const ValidationBanner = ({ report }: ValidationBannerProps) => (
         className={cn(
             'rounded-lg border p-3 text-sm',
             report.ok
-                ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
-                : 'border-rose-500/40 bg-rose-500/10 text-rose-200',
+                ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-900 dark:text-emerald-200'
+                : 'border-rose-500/40 bg-rose-500/10 text-rose-900 dark:text-rose-200',
         )}
     >
         <p className="font-semibold">

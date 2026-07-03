@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { useNav } from '@/viewmodels/nav';
+import { useTheme } from '@/viewmodels/theme';
 import { cn } from '@/utils';
 
 export interface MainLayoutProps {
@@ -10,6 +11,8 @@ export interface MainLayoutProps {
 export const MainLayout = ({ children }: MainLayoutProps) => {
     const view = useNav((state) => state.view);
     const setView = useNav((state) => state.setView);
+    const mode = useTheme((state) => state.mode);
+    const toggleTheme = useTheme((state) => state.toggle);
 
     const tab = (target: 'map' | 'playbook', label: string) => (
         <button
@@ -40,9 +43,18 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
                         {tab('map', 'Map')}
                         {tab('playbook', 'Playbook')}
                     </nav>
-                    <p className="ml-auto hidden text-xs text-muted-foreground lg:block">
-                        edits survive only if the intent gates pass
-                    </p>
+                    <div className="ml-auto flex items-center gap-3">
+                        <p className="hidden text-xs text-muted-foreground lg:block">
+                            edits survive only if the intent gates pass
+                        </p>
+                        <button
+                            onClick={toggleTheme}
+                            title="Toggle light/dark theme"
+                            className="rounded-md border border-border px-2 py-1 text-xs text-muted-foreground hover:text-foreground"
+                        >
+                            {mode === 'dark' ? 'Light' : 'Dark'}
+                        </button>
+                    </div>
                 </div>
             </header>
             <main className="flex-1 px-5 py-4">{children}</main>

@@ -2,10 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Single deliberate dark theme. color-scheme tells the browser not to
-   force-darken; every component styles against these tokens. */
+/* Two deliberate themes driven by the html class (dark is the default; an
+   inline script in index.html applies the persisted choice before paint).
+   color-scheme stops the browser from force-darkening either theme. */
 @layer base {
     :root {
+        color-scheme: light;
+        --background: 220 25% 97%;
+        --foreground: 228 30% 13%;
+        --card: 0 0% 100%;
+        --card-foreground: 228 30% 13%;
+        --primary: 239 65% 54%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 220 21% 92%;
+        --secondary-foreground: 228 30% 13%;
+        --muted: 220 21% 94%;
+        --muted-foreground: 222 12% 42%;
+        --accent: 220 21% 89%;
+        --accent-foreground: 228 30% 13%;
+        --destructive: 350 75% 42%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 220 18% 86%;
+        --input: 220 16% 78%;
+        --ring: 239 65% 54%;
+        --radius: 0.75rem;
+        --graph-label: #334667;
+        --graph-label-muted: #6b7994;
+        --graph-node-stroke: #f4f6fa;
+        --graph-ring: #d5dae6;
+        --graph-edge: #93a2bc;
+        --graph-edge-hub: #b3bdd2;
+        --graph-edge-skill: #8b7ce0;
+    }
+
+    .dark {
         color-scheme: dark;
         --background: 228 36% 6%;
         --foreground: 214 32% 91%;
@@ -24,7 +54,13 @@
         --border: 227 25% 17%;
         --input: 227 25% 22%;
         --ring: 239 84% 72%;
-        --radius: 0.75rem;
+        --graph-label: #c7d2e4;
+        --graph-label-muted: #8593ad;
+        --graph-node-stroke: #0a0e1a;
+        --graph-ring: #1b2338;
+        --graph-edge: #4c5a7a;
+        --graph-edge-hub: #3b4a6b;
+        --graph-edge-skill: #6d5fd0;
     }
 }
 
@@ -35,11 +71,14 @@
 
     body {
         background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-feature-settings: 'ss01', 'cv05';
+    }
+
+    .dark body {
         background-image:
             radial-gradient(ellipse 60% 45% at 30% 0%, hsl(239 60% 18% / 0.5), transparent),
             radial-gradient(ellipse 50% 40% at 85% 100%, hsl(190 65% 15% / 0.35), transparent);
         background-attachment: fixed;
-        color: hsl(var(--foreground));
-        font-feature-settings: 'ss01', 'cv05';
     }
 }

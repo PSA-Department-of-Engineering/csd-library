@@ -87,7 +87,7 @@ export const EgoGraph = ({ refName }: EgoGraphProps) => {
                             y1={center}
                             x2={x}
                             y2={y}
-                            stroke={n.inbound ? '#6d5fd0' : '#4c5a7a'}
+                            stroke={n.inbound ? 'var(--graph-edge-skill)' : 'var(--graph-edge)'}
                             strokeWidth={1}
                             strokeOpacity={0.55}
                             strokeDasharray={n.kind === 'skill' ? '2 3' : undefined}
@@ -99,7 +99,9 @@ export const EgoGraph = ({ refName }: EgoGraphProps) => {
                             dy="0.32em"
                             transform={`rotate(${flip ? deg + 180 : deg} ${lx} ${ly})`}
                             textAnchor={flip ? 'end' : 'start'}
-                            fill={n.kind === 'ref' ? '#c7d2e4' : '#8593ad'}
+                            fill={
+                                n.kind === 'ref' ? 'var(--graph-label)' : 'var(--graph-label-muted)'
+                            }
                             fontSize={8.5}
                         >
                             {label.length > 16 ? `${label.slice(0, 15)}…` : label}
@@ -112,7 +114,7 @@ export const EgoGraph = ({ refName }: EgoGraphProps) => {
                 cy={center}
                 r={9}
                 fill={selfColor}
-                stroke="#0a0e1a"
+                stroke="var(--graph-node-stroke)"
                 strokeWidth={1.5}
             />
         </svg>
