@@ -1,25 +1,32 @@
 import { DOMAIN_COLORS, DOMAIN_ORDER, useGraph } from '@/viewmodels/graph';
 import { cn } from '@/utils';
 
-/** Interactive legend: toggle domains and skills to focus the map. */
+/** Interactive legend: click a domain to focus on it (solo), click more to
+ *  widen the focus set, click an active chip to drop it. */
 export const MapFilters = () => {
-    const hiddenDomains = useGraph((state) => state.hiddenDomains);
+    const visibleDomains = useGraph((state) => state.visibleDomains);
     const showSkills = useGraph((state) => state.showSkills);
     const toggleDomain = useGraph((state) => state.toggleDomain);
     const toggleSkills = useGraph((state) => state.toggleSkills);
     const resetFilters = useGraph((state) => state.resetFilters);
 
-    const filtered = hiddenDomains.length > 0 || !showSkills;
+    const filtered = visibleDomains !== null || !showSkills;
 
     return (
         <div className="flex flex-wrap items-center gap-1.5">
             {DOMAIN_ORDER.map((domain) => {
-                const activeChip = !hiddenDomains.includes(domain);
+                const activeChip = visibleDomains === null || visibleDomains.includes(domain);
+                const title =
+                    visibleDomains === null
+                        ? `Focus on ${domain}`
+                        : activeChip
+                          ? `Remove ${domain} from focus`
+                          : `Add ${domain} to focus`;
                 return (
                     <button
                         key={domain}
                         onClick={() => toggleDomain(domain)}
-                        title={activeChip ? `Hide ${domain} REFs` : `Show ${domain} REFs`}
+                        title={title}
                         className={cn(
                             'rounded-full px-2 py-0.5 text-[11px] font-medium transition-opacity',
                             activeChip

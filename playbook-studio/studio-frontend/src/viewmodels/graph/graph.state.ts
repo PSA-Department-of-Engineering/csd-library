@@ -6,6 +6,7 @@ export interface GraphState {
     error: string | null;
     selectedRef: string | null;
     hoveredNode: string | null;
-    hiddenDomains: string[];
+    /** null means every domain is visible; otherwise the focus set. */
+    visibleDomains: string[] | null;
     showSkills: boolean;
 }

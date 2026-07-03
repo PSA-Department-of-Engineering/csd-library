@@ -20,7 +20,7 @@ export const useGraph = create<GraphState & GraphActions>()((set, get) => ({
     error: null,
     selectedRef: null,
     hoveredNode: null,
-    hiddenDomains: [],
+    visibleDomains: null,
     showSkills: true,
 
     load: async () => {
@@ -44,12 +44,16 @@ export const useGraph = create<GraphState & GraphActions>()((set, get) => ({
     },
 
     toggleDomain: (domain) => {
-        const hidden = get().hiddenDomains;
-        set({
-            hiddenDomains: hidden.includes(domain)
-                ? hidden.filter((d) => d !== domain)
-                : [...hidden, domain],
-        });
+        const visible = get().visibleDomains;
+        if (visible === null) {
+            // Everything visible: clicking a chip focuses (solos) that domain.
+            set({ visibleDomains: [domain] });
+            return;
+        }
+        const next = visible.includes(domain)
+            ? visible.filter((d) => d !== domain)
+            : [...visible, domain];
+        set({ visibleDomains: next.length === 0 ? null : next });
     },
 
     toggleSkills: () => {
@@ -57,6 +61,6 @@ export const useGraph = create<GraphState & GraphActions>()((set, get) => ({
     },
 
     resetFilters: () => {
-        set({ hiddenDomains: [], showSkills: true });
+        set({ visibleDomains: null, showSkills: true });
     },
 }));

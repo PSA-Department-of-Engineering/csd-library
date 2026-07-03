@@ -1,5 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import type { GraphResponse } from '@/models';
 import { computeDomainArcs, computeLayout, REF_RADIUS, useGraph } from '@/viewmodels/graph';
 import { useNav } from '@/viewmodels/nav';
 import { Spinner } from '@/views/atoms/Spinner';
@@ -14,6 +15,11 @@ const NODE_STROKE = 'var(--graph-node-stroke)';
 const REF_LABEL = 'var(--graph-label)';
 const SKILL_LABEL = 'var(--graph-label-muted)';
 
+/** Fade-glide-fade choreography: labels/edges fade out, dots glide to the
+ *  re-flowed circle, then labels/edges fade back in at the new geometry. */
+const GLIDE_MS = 500;
+const SETTLE_MS = 520;
+
 const shortLabel = (id: string): string => id.replace(/^REF-/, '');
 
 const truncated = (label: string): string => (label.length > 24 ? `${label.slice(0, 23)}…` : label);
@@ -22,19 +28,6 @@ const polarPoint = (radius: number, angle: number): [number, number] => [
     radius * Math.cos(angle),
     radius * Math.sin(angle),
 ];
-
-/** Rotated so every label owns its own angular sector: no collisions. */
-const radialLabel = (angle: number, radius: number) => {
-    const [x, y] = polarPoint(radius, angle);
-    const deg = (angle * 180) / Math.PI;
-    const flip = Math.cos(angle) < 0;
-    return {
-        x,
-        y,
-        transform: `rotate(${flip ? deg + 180 : deg} ${x} ${y})`,
-        textAnchor: flip ? ('end' as const) : ('start' as const),
-    };
-};
 
 const arcPath = (radius: number, start: number, end: number): string => {
     const [x1, y1] = polarPoint(radius, start);
@@ -49,19 +42,66 @@ export const PlaybookGraph = () => {
     const error = useGraph((state) => state.error);
     const selectedRef = useGraph((state) => state.selectedRef);
     const hoveredNode = useGraph((state) => state.hoveredNode);
-    const hiddenDomains = useGraph((state) => state.hiddenDomains);
+    const visibleDomains = useGraph((state) => state.visibleDomains);
     const showSkills = useGraph((state) => state.showSkills);
     const load = useGraph((state) => state.load);
     const select = useGraph((state) => state.select);
     const hover = useGraph((state) => state.hover);
     const setView = useNav((state) => state.setView);
 
+    const [settling, setSettling] = useState(false);
+    const filterKey = `${visibleDomains?.join(',') ?? '*'}|${showSkills}`;
+
     useEffect(() => {
         void load();
     }, [load]);
 
-    const layout = useMemo(() => (graph ? computeLayout(graph) : []), [graph]);
-    const arcs = useMemo(() => (graph ? computeDomainArcs(graph) : []), [graph]);
+    useEffect(() => {
+        setSettling(true);
+        const timer = setTimeout(() => setSettling(false), SETTLE_MS);
+        return () => clearTimeout(timer);
+    }, [filterKey]);
+
+    const domainVisible = (domain: string | null | undefined): boolean =>
+        visibleDomains === null || visibleDomains.includes(domain ?? '');
+
+    const visibleGraph = useMemo<GraphResponse | null>(() => {
+        if (!graph) {
+            return null;
+        }
+        const byId = new Map(graph.nodes.map((n) => [n.id, n]));
+        const nodeVisible = (id: string): boolean => {
+            const node = byId.get(id);
+            if (!node) {
+                return false;
+            }
+            if (node.kind === 'playbook') {
+                return true;
+            }
+            if (node.kind === 'ref') {
+                return domainVisible(node.domain);
+            }
+            if (!showSkills) {
+                return false;
+            }
+            const targets = graph.edges
+                .filter((e) => e.kind === 'skill-to-ref' && e.source === id)
+                .map((e) => byId.get(e.target));
+            return targets.length === 0 || targets.some((t) => t && domainVisible(t.domain));
+        };
+        return {
+            nodes: graph.nodes.filter((n) => nodeVisible(n.id)),
+            edges: graph.edges.filter((e) => nodeVisible(e.source) && nodeVisible(e.target)),
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [graph, filterKey]);
+
+    const fullLayout = useMemo(() => (graph ? computeLayout(graph) : []), [graph]);
+    const layout = useMemo(() => (visibleGraph ? computeLayout(visibleGraph) : []), [visibleGraph]);
+    const arcs = useMemo(
+        () => (visibleGraph ? computeDomainArcs(visibleGraph) : []),
+        [visibleGraph],
+    );
     const positions = useMemo(() => new Map(layout.map((l) => [l.node.id, l])), [layout]);
 
     if (loading && !graph) {
@@ -70,36 +110,14 @@ export const PlaybookGraph = () => {
     if (error) {
         return <p className="text-sm text-destructive">{error}</p>;
     }
-    if (!graph) {
+    if (!graph || !visibleGraph) {
         return null;
     }
 
-    const nodeById = new Map(graph.nodes.map((n) => [n.id, n]));
-    const isVisible = (id: string): boolean => {
-        const node = nodeById.get(id);
-        if (!node) {
-            return false;
-        }
-        if (node.kind === 'playbook') {
-            return true;
-        }
-        if (node.kind === 'ref') {
-            return !hiddenDomains.includes(node.domain ?? '');
-        }
-        if (!showSkills) {
-            return false;
-        }
-        const targets = graph.edges
-            .filter((e) => e.kind === 'skill-to-ref' && e.source === id)
-            .map((e) => nodeById.get(e.target));
-        return (
-            targets.length === 0 ||
-            targets.some((t) => t && !hiddenDomains.includes(t.domain ?? ''))
-        );
-    };
-
     const active = hoveredNode ?? selectedRef;
-    const activeEdges = graph.edges.filter((e) => e.source === active || e.target === active);
+    const activeEdges = visibleGraph.edges.filter(
+        (e) => e.source === active || e.target === active,
+    );
     const neighbourIds = new Set(activeEdges.flatMap((e) => [e.source, e.target]));
 
     const edgePath = (x1: number, y1: number, x2: number, y2: number): string => {
@@ -112,6 +130,11 @@ export const PlaybookGraph = () => {
         return `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
     };
 
+    const fadeStyle = {
+        opacity: settling ? 0 : 1,
+        transition: 'opacity 200ms ease',
+    } as const;
+
     return (
         <svg
             viewBox="-535 -535 1070 1070"
@@ -120,9 +143,8 @@ export const PlaybookGraph = () => {
             aria-label="Playbook reference graph"
             onClick={() => select(null)}
         >
-            {arcs
-                .filter((arc) => !hiddenDomains.includes(arc.domain))
-                .map((arc) => (
+            <g style={fadeStyle}>
+                {arcs.map((arc) => (
                     <path
                         key={arc.domain}
                         d={arcPath(REF_RADIUS - 24, arc.startAngle, arc.endAngle)}
@@ -134,40 +156,54 @@ export const PlaybookGraph = () => {
                     />
                 ))}
 
-            {graph.edges.map((edge) => {
-                const from = positions.get(edge.source);
-                const to = positions.get(edge.target);
-                if (!from || !to || !isVisible(edge.source) || !isVisible(edge.target)) {
-                    return null;
-                }
-                const isActive =
-                    active !== null && (edge.source === active || edge.target === active);
-                return (
-                    <path
-                        key={`${edge.source}->${edge.target}`}
-                        d={edgePath(from.x, from.y, to.x, to.y)}
-                        fill="none"
-                        stroke={EDGE_COLORS[edge.kind] ?? 'var(--graph-edge)'}
-                        strokeWidth={isActive ? 1.8 : 0.7}
-                        strokeOpacity={active === null ? 0.16 : isActive ? 0.95 : 0.04}
-                    />
-                );
-            })}
+                {visibleGraph.edges.map((edge) => {
+                    const from = positions.get(edge.source);
+                    const to = positions.get(edge.target);
+                    if (!from || !to) {
+                        return null;
+                    }
+                    const isActive =
+                        active !== null && (edge.source === active || edge.target === active);
+                    return (
+                        <path
+                            key={`${edge.source}->${edge.target}`}
+                            d={edgePath(from.x, from.y, to.x, to.y)}
+                            fill="none"
+                            stroke={EDGE_COLORS[edge.kind] ?? 'var(--graph-edge)'}
+                            strokeWidth={isActive ? 1.8 : 0.7}
+                            strokeOpacity={active === null ? 0.16 : isActive ? 0.95 : 0.04}
+                        />
+                    );
+                })}
+            </g>
 
-            {layout.map(({ node, x, y, angle, color }) => {
-                if (!isVisible(node.id)) {
-                    return null;
-                }
+            {fullLayout.map((home) => {
+                const node = home.node;
+                const placed = positions.get(node.id) ?? home;
+                const hidden = !positions.has(node.id);
                 const isRef = node.kind === 'ref';
                 const isPlaybook = node.kind === 'playbook';
                 const isFocused = node.id === active || node.id === selectedRef;
                 const radius = isPlaybook ? 26 : isRef ? (isFocused ? 11 : 9) : isFocused ? 6 : 4.5;
                 const dimmed = active !== null && node.id !== active && !neighbourIds.has(node.id);
-                const label = isPlaybook ? null : radialLabel(angle, Math.hypot(x, y) + radius + 8);
+
+                const dist = Math.hypot(placed.x, placed.y);
+                const labelDist = dist + radius + 8;
+                const [ax, ay] = polarPoint(labelDist, placed.angle);
+                const lx = ax - placed.x;
+                const ly = ay - placed.y;
+                const deg = (placed.angle * 180) / Math.PI;
+                const flip = Math.cos(placed.angle) < 0;
+
                 return (
                     <g
                         key={node.id}
-                        opacity={dimmed ? 0.22 : 1}
+                        style={{
+                            transform: `translate(${placed.x}px, ${placed.y}px)`,
+                            transition: `transform ${GLIDE_MS}ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease`,
+                            opacity: hidden ? 0 : dimmed ? 0.22 : 1,
+                            pointerEvents: hidden ? 'none' : undefined,
+                        }}
                         className="cursor-pointer"
                         onClick={(event) => {
                             event.stopPropagation();
@@ -181,10 +217,8 @@ export const PlaybookGraph = () => {
                     >
                         {isPlaybook && <circle r={44} fill="#6366f1" fillOpacity={0.12} />}
                         <circle
-                            cx={x}
-                            cy={y}
                             r={radius}
-                            fill={isPlaybook ? '#6366f1' : color}
+                            fill={isPlaybook ? '#6366f1' : placed.color}
                             stroke={
                                 node.id === selectedRef ? 'hsl(var(--foreground))' : NODE_STROKE
                             }
@@ -203,13 +237,13 @@ export const PlaybookGraph = () => {
                                 PLAYBOOK
                             </text>
                         ) : (
-                            label && (
+                            <g style={fadeStyle}>
                                 <text
-                                    x={label.x}
-                                    y={label.y}
+                                    x={lx}
+                                    y={ly}
                                     dy="0.32em"
-                                    transform={label.transform}
-                                    textAnchor={label.textAnchor}
+                                    transform={`rotate(${flip ? deg + 180 : deg} ${lx} ${ly})`}
+                                    textAnchor={flip ? 'end' : 'start'}
                                     fill={isRef ? REF_LABEL : SKILL_LABEL}
                                     fontSize={isRef ? 12.5 : 10}
                                     fontWeight={isFocused ? 700 : isRef ? 500 : 400}
@@ -217,7 +251,7 @@ export const PlaybookGraph = () => {
                                     <title>{node.id}</title>
                                     {truncated(shortLabel(node.id))}
                                 </text>
-                            )
+                            </g>
                         )}
                     </g>
                 );
