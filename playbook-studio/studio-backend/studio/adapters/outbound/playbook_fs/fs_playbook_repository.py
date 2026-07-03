@@ -7,6 +7,7 @@ from pathlib import Path
 
 import yaml
 
+from studio.domain.exceptions.already_exists_error import AlreadyExistsError
 from studio.domain.exceptions.entity_not_found_error import EntityNotFoundError
 from studio.domain.model.edge_kind import EdgeKind
 from studio.domain.model.intent_claim import IntentClaim
@@ -166,6 +167,20 @@ class FsPlaybookRepository:
         path.write_text(raw.rstrip("\n") + "\n", encoding="utf-8", newline="\n")
         logger.info("Wrote %s (full document, %d chars)", ref_name, len(raw))
         return self._parse_ref(path)
+
+    def create_ref_document(self, *, ref_name: str, raw: str) -> RefDoc:
+        path = self._root / f"{ref_name}.md"
+        if path.exists():
+            raise AlreadyExistsError("REF", ref_name)
+        path.write_text(raw.rstrip("\n") + "\n", encoding="utf-8", newline="\n")
+        logger.info("Created %s", ref_name)
+        return self._parse_ref(path)
+
+    def delete_ref_document(self, *, ref_name: str) -> None:
+        path = self._root / f"{ref_name}.md"
+        if path.exists():
+            path.unlink()
+            logger.info("Deleted %s", ref_name)
 
     def write_ref_section(self, *, ref_name: str, number: int, body: str) -> RefDoc:
         path = self._root / f"{ref_name}.md"

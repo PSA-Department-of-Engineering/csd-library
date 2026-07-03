@@ -94,6 +94,17 @@ export const SidebarNav = () => {
                     <p className="px-2 text-xs text-muted-foreground">No REF matches "{query}".</p>
                 )}
             </div>
+            <button
+                onClick={() => setView('create')}
+                className={cn(
+                    'flex w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-border px-2 py-1.5 text-xs font-medium',
+                    view === 'create'
+                        ? 'border-primary/60 text-primary'
+                        : 'text-muted-foreground hover:border-primary/40 hover:text-foreground',
+                )}
+            >
+                + New REF
+            </button>
         </nav>
     );
 };

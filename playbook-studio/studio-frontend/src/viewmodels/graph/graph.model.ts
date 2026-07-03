@@ -40,8 +40,8 @@ export interface DomainArc {
     color: string;
 }
 
-export const REF_RADIUS = 250;
-export const SKILL_RADIUS = 390;
+export const REF_RADIUS = 215;
+export const SKILL_RADIUS = 350;
 
 const polar = (radius: number, angle: number): { x: number; y: number } => ({
     x: Math.round(radius * Math.cos(angle) * 100) / 100,

@@ -122,6 +122,36 @@ class TestUpdateDocument:
         assert failing_client.get("/api/refs/REF-Beta").json()["raw"] == original
 
 
+class TestCreateRef:
+    _PAYLOAD = {
+        "name": "REF-Gamma",
+        "domain": "practice",
+        "title": "Gamma",
+        "summary": "Gamma practices.",
+    }
+
+    def test_create_survives_when_gates_pass(self, client: TestClient) -> None:
+        resp = client.post("/api/refs", json=self._PAYLOAD)
+        assert resp.status_code == 201
+        created = client.get("/api/refs/REF-Gamma").json()
+        assert created["domain"] == "practice"
+        assert [s["number"] for s in created["sections"]] == [1]
+
+    def test_duplicate_name_returns_409(self, client: TestClient) -> None:
+        assert client.post("/api/refs", json=self._PAYLOAD).status_code == 201
+        assert client.post("/api/refs", json=self._PAYLOAD).status_code == 409
+
+    def test_bad_name_returns_400(self, client: TestClient) -> None:
+        resp = client.post("/api/refs", json={**self._PAYLOAD, "name": "gamma"})
+        assert resp.status_code == 400
+        assert resp.json()["error"] == "InvalidRefInputError"
+
+    def test_create_is_removed_when_gates_fail(self, failing_client: TestClient) -> None:
+        resp = failing_client.post("/api/refs", json=self._PAYLOAD)
+        assert resp.status_code == 422
+        assert failing_client.get("/api/refs/REF-Gamma").status_code == 404
+
+
 class TestValidation:
     def test_validate_returns_report(self, client: TestClient) -> None:
         resp = client.post("/api/validate")
