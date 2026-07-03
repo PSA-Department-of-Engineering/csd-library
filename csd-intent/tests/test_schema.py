@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from pytest_intent import intent
+
 from csd_intent.schema import check_schema, parse_intent_yaml
 
 
@@ -13,6 +15,7 @@ def _write(tmp_path: Path, body: str) -> Path:
     return p
 
 
+@intent('INT-CSD-001')
 def test_canonical_claim_passes(tmp_path: Path) -> None:
     yaml = """
 INT-SB-001:
@@ -48,6 +51,7 @@ INT-001:
     assert all("scope" not in v.lower() or "test.scope" in v for v in violations)
 
 
+@intent('INT-CSD-001')
 def test_missing_version_fails(tmp_path: Path) -> None:
     yaml = """
 INT-001:
@@ -81,6 +85,7 @@ INT-001:
     assert any("scope" in v and "system" in v for v in violations)
 
 
+@intent('INT-CSD-001')
 def test_invalid_id_pattern_fails(tmp_path: Path) -> None:
     yaml = """
 intent-1:
@@ -98,6 +103,7 @@ intent-1:
     assert claims == {}
 
 
+@intent('INT-CSD-001')
 def test_unknown_status_fails(tmp_path: Path) -> None:
     yaml = """
 INT-001:

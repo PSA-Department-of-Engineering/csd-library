@@ -1,8 +1,7 @@
 # Intent claims for csd-intent itself: the auditor dogfoods the CSD-INTENT-01 spec
-# it enforces. CI runs `csd-intent . --fail-on schema`, so this file is held to the
-# same schema csd-intent checks in every other project. The behaviours below are
-# exercised by tests/ today; linking each claim to its test via a marker (full
-# attestation) is a tracked follow-up.
+# it enforces. CI runs `csd-intent . --fail-on any`, so this file is held to the
+# same gate csd-intent applies in every other project: valid schema, no orphan
+# markers, and every active claim attested by an @intent marker in tests/.
 
 INT-CSD-001:
   version: 1.0.0
