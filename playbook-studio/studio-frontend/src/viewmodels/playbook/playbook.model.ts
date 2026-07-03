@@ -8,3 +8,40 @@ export const selectViolationsSection = (
 
 export const selectOtherSections = (doc: PlaybookResponse | null): PlaybookSectionResponse[] =>
     doc?.sections.filter((s) => !s.title.toLowerCase().startsWith('top violations')) ?? [];
+
+export interface ViolationItem {
+    number: number;
+    title: string;
+    body: string;
+}
+
+export interface ParsedViolations {
+    intro: string;
+    items: ViolationItem[];
+    footer: string;
+}
+
+/** Split the violations section into scannable items: bold lead = the rule. */
+export function parseViolations(body: string): ParsedViolations {
+    const firstItem = body.search(/^\d+\.\s/m);
+    if (firstItem === -1) {
+        return { intro: body, items: [], footer: '' };
+    }
+    const intro = body.slice(0, firstItem).trim();
+    const rest = body.slice(firstItem);
+    const chunks = rest.split(/\n(?=\d+\.\s)/);
+    const items: ViolationItem[] = [];
+    let footer = '';
+    chunks.forEach((chunk, i) => {
+        let text = chunk;
+        if (i === chunks.length - 1) {
+            const paragraphs = text.split(/\n\n+/);
+            text = paragraphs[0];
+            footer = paragraphs.slice(1).join('\n\n').trim();
+        }
+        const number = Number.parseInt(text, 10);
+        const title = /\*\*(.+?)\*\*/.exec(text)?.[1] ?? text.slice(0, 60);
+        items.push({ number, title, body: text.trim() });
+    });
+    return { intro, items, footer };
+}

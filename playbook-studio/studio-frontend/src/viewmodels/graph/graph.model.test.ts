@@ -6,10 +6,10 @@ import { computeLayout } from './graph.model';
 
 const graph: GraphResponse = {
     nodes: [
-        { id: 'AI-PLAYBOOK', kind: 'playbook', label: 'AI Playbook', domain: null },
-        { id: 'REF-Alpha', kind: 'ref', label: 'Alpha', domain: 'language' },
-        { id: 'REF-Beta', kind: 'ref', label: 'Beta', domain: 'meta' },
-        { id: 'do-alpha', kind: 'skill', label: 'do-alpha', domain: null },
+        { id: 'AI-PLAYBOOK', kind: 'playbook', label: 'AI Playbook', domain: null, summary: '' },
+        { id: 'REF-Alpha', kind: 'ref', label: 'Alpha', domain: 'language', summary: 'Alpha.' },
+        { id: 'REF-Beta', kind: 'ref', label: 'Beta', domain: 'meta', summary: 'Beta.' },
+        { id: 'do-alpha', kind: 'skill', label: 'do-alpha', domain: null, summary: 'Does alpha.' },
     ],
     edges: [{ source: 'do-alpha', target: 'REF-Alpha', kind: 'skill-to-ref' }],
 };

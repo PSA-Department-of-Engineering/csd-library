@@ -24,15 +24,31 @@ class GetGraph:
     def execute(self) -> PlaybookGraph:
         """Return the playbook root, every REF, every skill, and all edges."""
         root = GraphNode(
-            id=_PLAYBOOK_NODE_ID, kind=NodeKind.PLAYBOOK, label="AI Playbook", domain=None
+            id=_PLAYBOOK_NODE_ID,
+            kind=NodeKind.PLAYBOOK,
+            label="AI Playbook",
+            domain=None,
+            summary="The routing and governance entry point.",
         )
         nodes: list[GraphNode] = [root]
         nodes += [
-            GraphNode(id=ref.name, kind=NodeKind.REF, label=ref.title, domain=ref.domain)
+            GraphNode(
+                id=ref.name,
+                kind=NodeKind.REF,
+                label=ref.title,
+                domain=ref.domain,
+                summary=ref.summary,
+            )
             for ref in self._repository.list_refs()
         ]
         nodes += [
-            GraphNode(id=skill.name, kind=NodeKind.SKILL, label=skill.name, domain=None)
+            GraphNode(
+                id=skill.name,
+                kind=NodeKind.SKILL,
+                label=skill.name,
+                domain=None,
+                summary=skill.description,
+            )
             for skill in self._repository.list_skills()
         ]
         edges = tuple(self._repository.list_edges())

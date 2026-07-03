@@ -29,6 +29,11 @@ class TestGraph:
         assert nodes["REF-Alpha"]["domain"] == "language"
         assert nodes["AI-PLAYBOOK"]["domain"] is None
 
+    def test_nodes_carry_summaries(self, client: TestClient) -> None:
+        nodes = {n["id"]: n for n in client.get("/api/graph").json()["nodes"]}
+        assert nodes["REF-Alpha"]["summary"] == "Alpha conventions."
+        assert nodes["do-alpha"]["summary"].startswith("Do the alpha thing.")
+
 
 class TestRefDetail:
     def test_ref_detail_parses_sections(self, client: TestClient) -> None:

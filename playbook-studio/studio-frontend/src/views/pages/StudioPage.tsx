@@ -2,6 +2,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useNav } from '@/viewmodels/nav';
 import { CreateRefForm } from '@/views/organisms/CreateRefForm';
 import { GovernanceRail } from '@/views/organisms/GovernanceRail';
+import { LibraryPage } from '@/views/organisms/LibraryPage';
 import { PlaybookGraph } from '@/views/organisms/PlaybookGraph';
 import { PlaybookReader } from '@/views/organisms/PlaybookReader';
 import { RefReader } from '@/views/organisms/RefReader';
@@ -18,6 +19,11 @@ export const StudioPage = () => {
                 </CardContent>
             </Card>
 
+            {view === 'library' && (
+                <div className="min-h-0 min-w-0 overflow-y-auto pr-1">
+                    <LibraryPage />
+                </div>
+            )}
             {view === 'map' && (
                 <div className="flex min-h-0 min-w-0 gap-4">
                     <Card className="relative min-w-0 flex-1 overflow-hidden">
