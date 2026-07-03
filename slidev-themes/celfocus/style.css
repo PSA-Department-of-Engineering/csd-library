@@ -1,0 +1,350 @@
+/* Celfocus Slidev theme.
+   Class prefix: `k-`. See REF-Slidev §6 for the standard class taxonomy.
+   Brand cues: terracotta accent (#B9593A), editorial typography. */
+
+:root {
+  /* Brand */
+  --k-accent:       #B9593A;
+  --k-accent-soft:  #F4E7E1;
+
+  /* Neutrals */
+  --k-ink:          #0E1116;
+  --k-ink-soft:     #3B4048;
+  --k-muted:        #6B7280;
+  --k-line:         #E5E7EB;
+  --k-bg:           #FFFFFF;
+  --k-bg-card:      #F7F7F5;
+  --k-bg-subtle:    #FAFAF8;
+
+  /* Status */
+  --k-good:         #2F6F4F;
+  --k-warn:         #A36A00;
+  --k-bad:          #9A2A2A;
+
+  --k-font:         "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --k-serif:        "Source Serif Pro", Georgia, serif;
+  --k-font-mono:    ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
+
+  /* Slidev integration */
+  --slidev-theme-primary:    var(--k-accent);
+  --slidev-theme-text:       var(--k-ink);
+  --slidev-theme-background: var(--k-bg);
+}
+
+/* ── Global ──────────────────────────────────────── */
+
+.slidev-layout {
+  font-family: var(--k-font);
+  color: var(--k-ink);
+  background-color: var(--k-bg);
+  padding: 2rem 3rem;
+  line-height: 1.4;
+}
+
+.slidev-layout h1 {
+  font-family: var(--k-font);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--k-ink);
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+}
+
+.slidev-layout h2 {
+  font-family: var(--k-font);
+  font-weight: 600;
+  color: var(--k-ink-soft);
+  font-size: 1.4rem;
+  letter-spacing: -0.01em;
+}
+
+.slidev-layout h3 {
+  font-family: var(--k-font);
+  font-weight: 600;
+  color: var(--k-ink);
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.slidev-layout h4 {
+  font-family: var(--k-font);
+  font-weight: 600;
+  color: var(--k-ink-soft);
+  margin-bottom: 0.25rem;
+}
+
+.slidev-layout strong { font-weight: 600; color: var(--k-ink); }
+.slidev-layout em     { color: var(--k-ink-soft); font-style: italic; }
+.slidev-layout p      { color: var(--k-ink-soft); }
+
+.slidev-layout code {
+  font-family: var(--k-font-mono);
+  background: var(--k-bg-card);
+  color: var(--k-accent);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.slidev-layout pre {
+  font-family: var(--k-font-mono);
+  font-size: 0.78em;
+  line-height: 1.4;
+  max-height: 22em;
+  overflow: auto;
+}
+
+.slidev-layout a {
+  color: var(--k-accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--k-accent-soft);
+}
+
+.slidev-layout img { max-height: 20em; height: auto; }
+
+/* ── Tables ──────────────────────────────────────── */
+
+.slidev-layout table {
+  font-size: 0.75rem;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+.slidev-layout th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--k-ink);
+  border-bottom: 2px solid var(--k-ink);
+  padding: 0.3rem 0.6rem 0.3rem 0;
+}
+
+.slidev-layout td {
+  border-bottom: 1px solid var(--k-line);
+  padding: 0.3rem 0.6rem 0.3rem 0;
+  color: var(--k-ink-soft);
+  vertical-align: top;
+}
+
+/* ── Lists ───────────────────────────────────────── */
+
+.slidev-layout ul { margin-top: 0.4rem; padding-left: 1.1rem; }
+.slidev-layout ul li { margin: 0.3rem 0; color: var(--k-ink-soft); padding-left: 0.25rem; }
+.slidev-layout ul li::marker { color: var(--k-accent); }
+
+/* ── Standard taxonomy (REF-Slidev §6) ───────────── */
+
+.k-divider {
+  height: 2px;
+  background: var(--k-ink);
+  border: none;
+  margin: 0.5rem 0 0.75rem;
+  width: 3.5rem;
+}
+
+/* k-rule kept as alias for prior decks. */
+.k-rule { height: 2px; background: var(--k-ink); width: 3.5rem; margin: 0.5rem 0 0.75rem; }
+
+.k-footer {
+  position: absolute;
+  bottom: 1rem;
+  left: 3rem;
+  right: 3rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--k-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.k-footer .k-brand {
+  font-weight: 700;
+  color: var(--k-accent);
+  letter-spacing: 0.08em;
+}
+
+.k-note {
+  font-size: 0.75rem;
+  color: var(--k-muted);
+  font-style: italic;
+}
+
+.k-alert {
+  background: var(--k-accent-soft);
+  border-left: 3px solid var(--k-accent);
+  border-radius: 4px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--k-ink-soft);
+}
+
+.k-alert--info { background: #EEF3F7; border-left-color: #4A6B8A; }
+.k-alert--ok   { background: #EAF3EE; border-left-color: var(--k-good); }
+.k-alert--bad  { background: #F7E6E6; border-left-color: var(--k-bad); }
+
+.k-card {
+  background: var(--k-bg-card);
+  border: 1px solid var(--k-line);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+}
+
+.k-card--accent {
+  background: var(--k-accent-soft);
+  border-color: var(--k-accent);
+}
+
+/* Backward-compat alias (some decks use k-card-accent). */
+.k-card-accent {
+  background: var(--k-accent-soft);
+  border: 1px solid var(--k-accent);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+}
+
+.k-card ul, .k-card-accent ul, .k-card--accent ul { padding-left: 1rem; margin-top: 0.5rem; }
+.k-card ul li, .k-card-accent ul li, .k-card--accent ul li { margin: 0.35rem 0; line-height: 1.4; }
+.k-card p, .k-card-accent p, .k-card--accent p { margin: 0.35rem 0; }
+.k-card h3, .k-card-accent h3, .k-card--accent h3 { margin-bottom: 0.25rem; }
+
+.k-stat {
+  background: var(--k-bg-card);
+  border-radius: 4px;
+  padding: 0.5rem 0.6rem;
+  text-align: center;
+}
+
+.k-stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--k-ink);
+  line-height: 1.1;
+}
+
+.k-stat-label {
+  font-size: 0.7rem;
+  color: var(--k-muted);
+  margin-top: 0.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.k-stat--primary { border-left: 3px solid var(--k-accent); }
+.k-stat--primary .k-stat-value { color: var(--k-accent); }
+
+.k-flow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.k-flow-step {
+  background: var(--k-bg-card);
+  border: 1px solid var(--k-line);
+  border-radius: 4px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--k-ink-soft);
+  white-space: nowrap;
+}
+
+.k-flow-step--primary { background: var(--k-accent); color: var(--k-bg); border-color: var(--k-accent); }
+.k-flow-step--dark    { background: var(--k-ink);    color: var(--k-bg); border-color: var(--k-ink); }
+
+.k-flow-arrow {
+  font-size: 1rem;
+  color: var(--k-muted);
+}
+
+.k-section-title {
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 0.3rem;
+  color: var(--k-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.k-section-title--spaced { margin-top: 0.6rem; }
+
+.k-pipeline {
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+}
+
+.k-pipeline-stage {
+  flex: 1;
+  background: var(--k-bg-card);
+  border-top: 3px solid var(--k-muted);
+  border-radius: 0 0 4px 4px;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.65rem;
+}
+
+.k-pipeline-stage--accent { border-top-color: var(--k-accent); }
+.k-pipeline-stage--ok     { border-top-color: var(--k-good); }
+.k-pipeline-stage--warn   { border-top-color: var(--k-warn); }
+.k-pipeline-stage--bad    { border-top-color: var(--k-bad); }
+
+.k-pipeline-stage .k-stage-title {
+  font-weight: 700;
+  font-size: 0.7rem;
+  margin-bottom: 0.15rem;
+  color: var(--k-ink);
+}
+
+.k-pipeline-stage .k-stage-items {
+  color: var(--k-muted);
+  line-height: 1.5;
+}
+
+/* ── Celfocus-specific decorative extras ──────────── */
+
+.k-eyebrow {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--k-accent);
+  font-weight: 600;
+}
+
+.k-kicker {
+  font-family: var(--k-serif);
+  font-style: italic;
+  font-size: 1.6rem;
+  line-height: 1.35;
+  color: var(--k-ink);
+  max-width: 32ch;
+}
+
+.k-big {
+  font-size: 4.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--k-ink);
+}
+
+.k-huge {
+  font-size: 6rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--k-accent);
+}
+
+.k-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--k-line);
+  border-radius: 3px;
+  color: var(--k-muted);
+  margin-right: 0.4rem;
+}

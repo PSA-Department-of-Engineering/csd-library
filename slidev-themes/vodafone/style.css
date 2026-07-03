@@ -1,0 +1,266 @@
+/* Vodafone Slidev theme.
+   Class prefix: `vf-`. See REF-Slidev §6 for the standard class taxonomy.
+   Brand cues: red accent (#E60000), neutral greys, Inter sans. */
+
+:root {
+  /* Brand */
+  --vf-red:        #E60000;
+  --vf-red-soft:   #FFF3F3;
+
+  /* Neutrals */
+  --vf-black:      #000000;
+  --vf-ink:        #1A1A1A;
+  --vf-ink-soft:   #333333;
+  --vf-muted:      #666666;
+  --vf-line:       #E8E8E8;
+  --vf-bg:         #FFFFFF;
+  --vf-bg-card:    #F2F2F2;
+  --vf-bg-subtle:  #F9F9F9;
+
+  /* Status */
+  --vf-blue:       #00B0CA;
+  --vf-green:      #009900;
+  --vf-orange:     #EB6100;
+
+  --vf-font:       Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --vf-font-mono:  ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
+
+  /* Slidev integration */
+  --slidev-theme-primary:    var(--vf-red);
+  --slidev-theme-text:       var(--vf-ink);
+  --slidev-theme-background: var(--vf-bg);
+}
+
+/* ── Global ──────────────────────────────────────── */
+
+.slidev-layout {
+  font-family: var(--vf-font) !important;
+  color: var(--vf-ink);
+  background-color: var(--vf-bg);
+}
+
+.slidev-layout h1 {
+  font-family: var(--vf-font) !important;
+  font-weight: 700 !important;
+  color: var(--vf-black) !important;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+}
+
+.slidev-layout h2,
+.slidev-layout h3,
+.slidev-layout h4 {
+  font-family: var(--vf-font) !important;
+  font-weight: 600 !important;
+  color: var(--vf-ink-soft) !important;
+}
+
+.slidev-layout h4 { margin-bottom: 0.25rem; }
+
+.slidev-layout strong { font-weight: 700; color: var(--vf-ink); }
+
+.slidev-layout a {
+  color: var(--vf-red) !important;
+  text-decoration: none;
+}
+.slidev-layout a:hover { text-decoration: underline; }
+
+.slidev-layout code {
+  font-family: var(--vf-font-mono);
+  background: var(--vf-bg-subtle);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+.slidev-layout pre {
+  font-family: var(--vf-font-mono);
+  font-size: 0.78em;
+  line-height: 1.4;
+  max-height: 22em;
+  overflow: auto;
+}
+
+.slidev-layout img { max-height: 20em; height: auto; }
+
+/* ── Tables ──────────────────────────────────────── */
+
+.slidev-layout table { border-collapse: collapse; }
+
+.slidev-layout table th {
+  background-color: var(--vf-red) !important;
+  color: var(--vf-bg) !important;
+  font-weight: 600;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8em;
+  text-align: left;
+}
+
+.slidev-layout table td {
+  border-bottom: 1px solid var(--vf-line);
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8em;
+}
+
+.slidev-layout table tr:hover td { background-color: var(--vf-bg-subtle); }
+
+/* ── Blockquotes ─────────────────────────────────── */
+
+.slidev-layout blockquote {
+  border-left: 3px solid var(--vf-red) !important;
+  background-color: var(--vf-bg-card);
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  font-size: 0.9em;
+  color: var(--vf-ink-soft);
+}
+
+/* ── Standard taxonomy (REF-Slidev §6) ───────────── */
+
+.vf-divider {
+  height: 3px;
+  background: var(--vf-red);
+  border: none;
+  margin: 0.6rem 0 0.9rem;
+  width: 60px;
+  border-radius: 2px;
+}
+
+.vf-footer {
+  position: absolute;
+  bottom: 1.4rem;
+  left: 2rem;
+  right: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.65rem;
+  color: var(--vf-muted);
+  font-family: var(--vf-font);
+}
+
+.vf-footer .vf-brand {
+  font-weight: 700;
+  color: var(--vf-red);
+  letter-spacing: 0.05em;
+}
+
+.vf-note {
+  font-size: 0.75rem;
+  color: var(--vf-muted);
+}
+
+.vf-alert {
+  background: var(--vf-red-soft);
+  border-left: 4px solid var(--vf-red);
+  border-radius: 4px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--vf-ink-soft);
+}
+
+.vf-alert--info { border-left-color: var(--vf-blue); background: #ECFAFC; }
+.vf-alert--ok   { border-left-color: var(--vf-green); background: #F0F9F0; }
+.vf-alert--bad  { border-left-color: var(--vf-red); background: var(--vf-red-soft); }
+
+.vf-card {
+  background: var(--vf-bg-card);
+  border: 1px solid var(--vf-line);
+  border-radius: 6px;
+  padding: 0.75rem 0.9rem;
+}
+
+.vf-card--accent { border-left: 3px solid var(--vf-red); }
+
+.vf-stat {
+  background: var(--vf-bg-card);
+  border-radius: 4px;
+  padding: 0.5rem 0.6rem;
+  text-align: center;
+}
+
+.vf-stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--vf-ink);
+  line-height: 1.1;
+}
+
+.vf-stat-label {
+  font-size: 0.7rem;
+  color: var(--vf-muted);
+  margin-top: 0.15rem;
+}
+
+.vf-stat--primary { border-left: 3px solid var(--vf-red); }
+.vf-stat--primary .vf-stat-value { color: var(--vf-red); }
+.vf-stat--dark { border-left: 3px solid var(--vf-ink); }
+.vf-stat--dark .vf-stat-value { color: var(--vf-ink); }
+
+.vf-flow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.vf-flow-step {
+  background: var(--vf-bg-card);
+  border: 1px solid var(--vf-line);
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--vf-ink-soft);
+  white-space: nowrap;
+}
+
+.vf-flow-step--primary { background: var(--vf-red);   color: var(--vf-bg); border-color: var(--vf-red); }
+.vf-flow-step--dark    { background: var(--vf-ink);   color: var(--vf-bg); border-color: var(--vf-ink); }
+.vf-flow-step--blue    { background: var(--vf-blue);  color: var(--vf-bg); border-color: var(--vf-blue); }
+
+.vf-flow-arrow {
+  font-size: 1rem;
+  color: var(--vf-muted);
+}
+
+.vf-section-title {
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 0.3rem;
+  color: var(--vf-ink);
+}
+
+.vf-section-title--spaced { margin-top: 0.6rem; }
+
+.vf-pipeline {
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+}
+
+.vf-pipeline-stage {
+  flex: 1;
+  background: var(--vf-bg-card);
+  border-top: 3px solid var(--vf-muted);
+  border-radius: 0 0 4px 4px;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.65rem;
+}
+
+.vf-pipeline-stage--green  { border-top-color: var(--vf-green); }
+.vf-pipeline-stage--red    { border-top-color: var(--vf-red); }
+.vf-pipeline-stage--blue   { border-top-color: var(--vf-blue); }
+.vf-pipeline-stage--orange { border-top-color: var(--vf-orange); }
+
+.vf-pipeline-stage .vf-stage-title {
+  font-weight: 700;
+  font-size: 0.7rem;
+  margin-bottom: 0.15rem;
+  color: var(--vf-ink);
+}
+
+.vf-pipeline-stage .vf-stage-items {
+  color: var(--vf-muted);
+  line-height: 1.5;
+}
