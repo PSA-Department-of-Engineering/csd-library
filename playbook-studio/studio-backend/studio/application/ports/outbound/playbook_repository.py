@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Protocol, runtime_checkable
 
 from studio.domain.model.intent_claim import IntentClaim
+from studio.domain.model.playbook_doc import PlaybookDoc
 from studio.domain.model.ref_doc import RefDoc
 from studio.domain.model.reference_edge import ReferenceEdge
 from studio.domain.model.skill_doc import SkillDoc
@@ -15,6 +16,8 @@ __all__ = ["PlaybookRepository"]
 @runtime_checkable
 class PlaybookRepository(Protocol):
     """Parses the playbook folder into domain objects and writes section edits."""
+
+    def get_playbook(self) -> PlaybookDoc: ...
 
     def list_refs(self) -> list[RefDoc]: ...
 

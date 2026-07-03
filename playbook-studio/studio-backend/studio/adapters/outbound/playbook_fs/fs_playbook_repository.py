@@ -10,6 +10,8 @@ import yaml
 from studio.domain.exceptions.entity_not_found_error import EntityNotFoundError
 from studio.domain.model.edge_kind import EdgeKind
 from studio.domain.model.intent_claim import IntentClaim
+from studio.domain.model.playbook_doc import PlaybookDoc
+from studio.domain.model.playbook_section import PlaybookSection
 from studio.domain.model.ref_doc import RefDoc
 from studio.domain.model.ref_domain import RefDomain
 from studio.domain.model.ref_section import RefSection
@@ -62,6 +64,36 @@ class FsPlaybookRepository:
         self._root = playbook_root
 
     # -- reads --------------------------------------------------------------
+
+    def get_playbook(self) -> PlaybookDoc:
+        path = self._root / "AI-PLAYBOOK.md"
+        if not path.is_file():
+            raise EntityNotFoundError("playbook", "AI-PLAYBOOK.md")
+        lines = path.read_text(encoding="utf-8").splitlines()
+
+        title = "AI Playbook"
+        sections: list[PlaybookSection] = []
+        in_fence = False
+        current: str | None = None
+        buffer: list[str] = []
+        for line in lines:
+            if _FENCE_RE.match(line):
+                in_fence = not in_fence
+            if not in_fence and line.startswith("# ") and not line.startswith("## "):
+                title = line[2:].strip()
+                continue
+            if not in_fence and line.startswith("## "):
+                if current is not None:
+                    body = "\n".join(buffer).strip("\n")
+                    sections.append(PlaybookSection(title=current, body=body))
+                current = line[3:].strip()
+                buffer = []
+            elif current is not None:
+                buffer.append(line)
+        if current is not None:
+            sections.append(PlaybookSection(title=current, body="\n".join(buffer).strip("\n")))
+
+        return PlaybookDoc(title=title, sections=tuple(sections))
 
     def list_refs(self) -> list[RefDoc]:
         return [self._parse_ref(p) for p in sorted(self._root.glob("REF-*.md"))]

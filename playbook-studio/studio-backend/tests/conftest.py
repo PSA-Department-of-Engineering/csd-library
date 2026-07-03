@@ -53,6 +53,17 @@ Beta guidance body.
 _PLAYBOOK = """# AI Playbook
 
 Route by task: `REF-Alpha.md` and `REF-Beta.md`.
+
+## Task Routing - load only what you need
+
+| Task | Read These REFs |
+| ---- | --------------- |
+| Alpha work | `REF-Alpha.md` |
+
+## Top Violations - Check EVERY Change
+
+1. **Do not duplicate.**
+2. **No em-dashes.**
 """
 
 _SKILL = """---
