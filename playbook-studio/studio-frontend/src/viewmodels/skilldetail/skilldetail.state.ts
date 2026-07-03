@@ -1,7 +1,8 @@
-import type { PlaybookResponse, ValidationReportResponse } from '@/models';
+import type { SkillResponse, ValidationReportResponse } from '@/models';
 
-export interface PlaybookState {
-    doc: PlaybookResponse | null;
+export interface SkillDetailState {
+    selectedSkill: string | null;
+    skill: SkillResponse | null;
     loading: boolean;
     error: string | null;
     editing: boolean;

@@ -14,3 +14,4 @@ class SkillDoc:
     name: str
     description: str
     refs: tuple[str, ...]
+    raw: str

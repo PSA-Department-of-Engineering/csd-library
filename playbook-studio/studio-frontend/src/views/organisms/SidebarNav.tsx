@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { DOMAIN_COLORS, DOMAIN_ORDER, useGraph } from '@/viewmodels/graph';
 import { useNav } from '@/viewmodels/nav';
+import { useSkillDetail } from '@/viewmodels/skilldetail';
 import { cn } from '@/utils';
 
 const shortName = (id: string): string => id.replace(/^REF-/, '');
@@ -11,6 +12,8 @@ export const SidebarNav = () => {
     const load = useGraph((state) => state.load);
     const select = useGraph((state) => state.select);
     const selectedRef = useGraph((state) => state.selectedRef);
+    const selectSkill = useSkillDetail((state) => state.select);
+    const selectedSkill = useSkillDetail((state) => state.selectedSkill);
     const view = useNav((state) => state.view);
     const setView = useNav((state) => state.setView);
     const [query, setQuery] = useState('');
@@ -20,12 +23,18 @@ export const SidebarNav = () => {
     }, [load]);
 
     const refs = graph?.nodes.filter((n) => n.kind === 'ref') ?? [];
+    const skills = graph?.nodes.filter((n) => n.kind === 'skill') ?? [];
     const q = query.trim().toLowerCase();
-    const visible = q ? refs.filter((r) => r.id.toLowerCase().includes(q)) : refs;
+    const visibleRefs = q ? refs.filter((r) => r.id.toLowerCase().includes(q)) : refs;
+    const visibleSkills = q ? skills.filter((s) => s.id.toLowerCase().includes(q)) : skills;
 
-    const open = (id: string) => {
+    const openRef = (id: string) => {
         select(id);
         setView('ref');
+    };
+    const openSkill = (id: string) => {
+        selectSkill(id);
+        setView('skill');
     };
 
     return (
@@ -44,14 +53,14 @@ export const SidebarNav = () => {
             </button>
             <input
                 type="search"
-                placeholder="Find a REF..."
+                placeholder="Find a REF or skill..."
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 className="w-full rounded-md border border-input bg-background/60 px-3 py-1.5 text-sm outline-none placeholder:text-muted-foreground/60 focus:ring-1 focus:ring-ring"
             />
             <div className="flex-1 overflow-y-auto pr-1">
                 {DOMAIN_ORDER.map((domain) => {
-                    const group = visible.filter((r) => r.domain === domain);
+                    const group = visibleRefs.filter((r) => r.domain === domain);
                     if (group.length === 0) {
                         return null;
                     }
@@ -66,7 +75,8 @@ export const SidebarNav = () => {
                                     return (
                                         <li key={ref.id}>
                                             <button
-                                                onClick={() => open(ref.id)}
+                                                onClick={() => openRef(ref.id)}
+                                                title={ref.summary}
                                                 className={cn(
                                                     'flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[13px]',
                                                     isActive
@@ -90,21 +100,65 @@ export const SidebarNav = () => {
                         </div>
                     );
                 })}
-                {visible.length === 0 && (
-                    <p className="px-2 text-xs text-muted-foreground">No REF matches "{query}".</p>
+
+                {visibleSkills.length > 0 && (
+                    <div className="mb-3">
+                        <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/70">
+                            skills
+                        </p>
+                        <ul>
+                            {visibleSkills.map((skill) => {
+                                const isActive = view === 'skill' && selectedSkill === skill.id;
+                                return (
+                                    <li key={skill.id}>
+                                        <button
+                                            onClick={() => openSkill(skill.id)}
+                                            title={skill.summary}
+                                            className={cn(
+                                                'flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[13px]',
+                                                isActive
+                                                    ? 'bg-secondary font-semibold text-foreground'
+                                                    : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground',
+                                            )}
+                                        >
+                                            <span className="h-2 w-2 shrink-0 rounded-full bg-slate-500" />
+                                            {skill.id}
+                                        </button>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
+                )}
+
+                {visibleRefs.length === 0 && visibleSkills.length === 0 && (
+                    <p className="px-2 text-xs text-muted-foreground">No match for "{query}".</p>
                 )}
             </div>
-            <button
-                onClick={() => setView('create')}
-                className={cn(
-                    'flex w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-border px-2 py-1.5 text-xs font-medium',
-                    view === 'create'
-                        ? 'border-primary/60 text-primary'
-                        : 'text-muted-foreground hover:border-primary/40 hover:text-foreground',
-                )}
-            >
-                + New REF
-            </button>
+            <div className="flex gap-1.5">
+                <button
+                    onClick={() => setView('create')}
+                    className={cn(
+                        'flex-1 rounded-md border border-dashed border-border px-2 py-1.5 text-xs font-medium',
+                        view === 'create'
+                            ? 'border-primary/60 text-primary'
+                            : 'text-muted-foreground hover:border-primary/40 hover:text-foreground',
+                    )}
+                >
+                    + REF
+                </button>
+                <button
+                    onClick={() => setView('createskill')}
+                    className={cn(
+                        'flex-1 rounded-md border border-dashed border-border px-2 py-1.5 text-xs font-medium',
+                        view === 'createskill'
+                            ? 'border-primary/60 text-primary'
+                            : 'text-muted-foreground hover:border-primary/40 hover:text-foreground',
+                    )}
+                >
+                    + Skill
+                </button>
+            </div>
         </nav>
     );
 };

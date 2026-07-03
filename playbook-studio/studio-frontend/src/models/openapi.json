@@ -69,6 +69,46 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "playbook"
+        ],
+        "summary": "Update Playbook",
+        "description": "Replace AI-PLAYBOOK.md; the edit survives only if the gates pass.",
+        "operationId": "update_playbook_api_playbook_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDocumentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationReportResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/refs": {
@@ -269,6 +309,142 @@
         }
       }
     },
+    "/api/skills": {
+      "post": {
+        "tags": [
+          "skills"
+        ],
+        "summary": "Create Skill",
+        "description": "Run the bootstrap-skill transaction; gated like every edit.",
+        "operationId": "create_skill_api_skills_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSkillRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/skills/{name}": {
+      "get": {
+        "tags": [
+          "skills"
+        ],
+        "summary": "Get Skill",
+        "description": "Return one parsed skill by name.",
+        "operationId": "get_skill_api_skills__name__get",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "skills"
+        ],
+        "summary": "Update Skill Document",
+        "description": "Replace the whole SKILL.md; the edit survives only if the gates pass.",
+        "operationId": "update_skill_document_api_skills__name__put",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDocumentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationReportResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/claims": {
       "get": {
         "tags": [
@@ -348,6 +524,33 @@
         ],
         "title": "CreateRefRequest",
         "description": "Inputs for a template-conformant new REF."
+      },
+      "CreateSkillRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "refs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Refs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "refs"
+        ],
+        "title": "CreateSkillRequest",
+        "description": "Inputs for the bootstrap-skill transaction."
       },
       "GraphNodeResponse": {
         "properties": {
@@ -493,12 +696,17 @@
             },
             "type": "array",
             "title": "Sections"
+          },
+          "raw": {
+            "type": "string",
+            "title": "Raw"
           }
         },
         "type": "object",
         "required": [
           "title",
-          "sections"
+          "sections",
+          "raw"
         ],
         "title": "PlaybookResponse",
         "description": "The parsed AI-PLAYBOOK.md returned over HTTP."
@@ -616,6 +824,43 @@
         ],
         "title": "ReferenceEdgeResponse",
         "description": "A directed reference edge returned over HTTP."
+      },
+      "SkillResponse": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "refs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Refs"
+          },
+          "raw": {
+            "type": "string",
+            "title": "Raw"
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "refs",
+          "raw",
+          "body"
+        ],
+        "title": "SkillResponse",
+        "description": "A parsed SKILL.md returned over HTTP."
       },
       "UpdateDocumentRequest": {
         "properties": {

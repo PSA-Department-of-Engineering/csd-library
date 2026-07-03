@@ -18,4 +18,5 @@ def map_playbook(doc: PlaybookDoc) -> PlaybookResponse:
     return PlaybookResponse(
         title=doc.title,
         sections=[PlaybookSectionResponse(title=s.title, body=s.body) for s in doc.sections],
+        raw=doc.raw,
     )

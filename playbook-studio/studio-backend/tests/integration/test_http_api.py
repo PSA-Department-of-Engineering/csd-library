@@ -157,6 +157,61 @@ class TestCreateRef:
         assert failing_client.get("/api/refs/REF-Gamma").status_code == 404
 
 
+class TestSkillDocument:
+    def test_skill_detail_is_parsed(self, client: TestClient) -> None:
+        resp = client.get("/api/skills/do-alpha")
+        assert resp.status_code == 200
+        skill = resp.json()
+        assert skill["refs"] == ["REF-Alpha"]
+        assert skill["body"].startswith("# Do alpha")
+
+    def test_skill_rewrite_rolls_back_when_gates_fail(self, failing_client: TestClient) -> None:
+        original = failing_client.get("/api/skills/do-alpha").json()["raw"]
+        resp = failing_client.put("/api/skills/do-alpha", json={"raw": "broken"})
+        assert resp.status_code == 422
+        assert failing_client.get("/api/skills/do-alpha").json()["raw"] == original
+
+
+class TestCreateSkill:
+    _PAYLOAD = {"name": "do-beta", "description": "Does beta things.", "refs": ["REF-Beta"]}
+
+    def test_create_skill_survives_when_gates_pass(self, client: TestClient) -> None:
+        resp = client.post("/api/skills", json=self._PAYLOAD)
+        assert resp.status_code == 201
+        assert client.get("/api/skills/do-beta").json()["description"] == "Does beta things."
+        assert "`do-beta`" in client.get("/api/playbook").json()["raw"]
+
+    def test_duplicate_skill_returns_409(self, client: TestClient) -> None:
+        assert client.post("/api/skills", json=self._PAYLOAD).status_code == 201
+        assert client.post("/api/skills", json=self._PAYLOAD).status_code == 409
+
+    def test_unknown_ref_returns_400(self, client: TestClient) -> None:
+        resp = client.post("/api/skills", json={**self._PAYLOAD, "refs": ["REF-Nope"]})
+        assert resp.status_code in (400, 404)
+
+    def test_create_skill_rolls_back_when_gates_fail(self, failing_client: TestClient) -> None:
+        playbook_before = failing_client.get("/api/playbook").json()["raw"]
+        resp = failing_client.post("/api/skills", json=self._PAYLOAD)
+        assert resp.status_code == 422
+        assert failing_client.get("/api/skills/do-beta").status_code == 404
+        assert failing_client.get("/api/playbook").json()["raw"] == playbook_before
+
+
+class TestUpdatePlaybook:
+    def test_playbook_rewrite_survives_when_gates_pass(self, client: TestClient) -> None:
+        original = client.get("/api/playbook").json()["raw"]
+        resp = client.put("/api/playbook", json={"raw": original + "\n## Extra\n\nMore.\n"})
+        assert resp.status_code == 200
+        titles = [s["title"] for s in client.get("/api/playbook").json()["sections"]]
+        assert "Extra" in titles
+
+    def test_playbook_rewrite_rolls_back_when_gates_fail(self, failing_client: TestClient) -> None:
+        original = failing_client.get("/api/playbook").json()["raw"]
+        resp = failing_client.put("/api/playbook", json={"raw": "# Broken\n"})
+        assert resp.status_code == 422
+        assert failing_client.get("/api/playbook").json()["raw"] == original
+
+
 class TestValidation:
     def test_validate_returns_report(self, client: TestClient) -> None:
         resp = client.post("/api/validate")
