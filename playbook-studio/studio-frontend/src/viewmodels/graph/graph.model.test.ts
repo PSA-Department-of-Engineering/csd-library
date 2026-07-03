@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect } from 'vitest';
+import { intent } from 'vitest-intent';
 
 import type { GraphResponse } from '@/models';
 
@@ -15,17 +16,17 @@ const graph: GraphResponse = {
 };
 
 describe('computeLayout', () => {
-    it('puts the playbook at the origin', () => {
+    intent('INT-LAYOUT-001', 'puts the playbook at the origin', () => {
         const playbook = computeLayout(graph).find((l) => l.node.id === 'AI-PLAYBOOK');
         expect(playbook).toMatchObject({ x: 0, y: 0 });
     });
 
-    it('places every node exactly once', () => {
+    intent('INT-LAYOUT-001', 'places every node exactly once', () => {
         const ids = computeLayout(graph).map((l) => l.node.id);
         expect(ids.sort()).toEqual(['AI-PLAYBOOK', 'REF-Alpha', 'REF-Beta', 'do-alpha']);
     });
 
-    it('puts skills on a wider ring than refs', () => {
+    intent('INT-LAYOUT-001', 'puts skills on a wider ring than refs', () => {
         const layout = computeLayout(graph);
         const radius = (id: string) => {
             const l = layout.find((n) => n.node.id === id);
@@ -34,7 +35,7 @@ describe('computeLayout', () => {
         expect(radius('do-alpha')).toBeGreaterThan(radius('REF-Alpha'));
     });
 
-    it('colors refs by their domain', () => {
+    intent('INT-LAYOUT-001', 'colors refs by their domain', () => {
         const layout = computeLayout(graph);
         const alpha = layout.find((l) => l.node.id === 'REF-Alpha');
         const beta = layout.find((l) => l.node.id === 'REF-Beta');
