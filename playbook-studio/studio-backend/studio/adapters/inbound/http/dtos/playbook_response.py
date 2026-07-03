@@ -14,3 +14,4 @@ class PlaybookResponse(BaseModel):
 
     title: str
     sections: list[PlaybookSectionResponse]
+    raw: str

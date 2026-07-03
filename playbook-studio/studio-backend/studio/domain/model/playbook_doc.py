@@ -15,3 +15,4 @@ class PlaybookDoc:
 
     title: str
     sections: tuple[PlaybookSection, ...]
+    raw: str

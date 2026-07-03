@@ -106,6 +106,64 @@ class StubValidator:
         )
 
 
+# Stand-ins for the playbook's bootstrap-ref / bootstrap-skill scaffolders.
+# They replicate the CLI contract (args, exit code 2 on rejection, files
+# written) so the studio's orchestration is tested against the contract.
+_BOOTSTRAP_REF = '''
+import argparse, sys
+from pathlib import Path
+ap = argparse.ArgumentParser()
+for f in ("--name", "--domain", "--title", "--summary"):
+    ap.add_argument(f, required=True)
+ap.add_argument("--playbook-root", type=Path, required=True)
+a = ap.parse_args()
+p = a.playbook_root / f"{a.name}.md"
+if p.exists():
+    sys.exit(2)
+p.write_text(
+    f"---\\ndomain: {a.domain}\\n---\\n\\n# REF: {a.title}\\n\\n> {a.summary}\\n\\n---\\n\\n"
+    f"## 1. Scope\\n\\nState the first rule set for this REF here.\\n",
+    encoding="utf-8",
+)
+'''
+
+_BOOTSTRAP_SKILL = '''
+import argparse, json, sys
+from pathlib import Path
+ap = argparse.ArgumentParser()
+for f in ("--name", "--description"):
+    ap.add_argument(f, required=True)
+ap.add_argument("--refs", default="")
+ap.add_argument("--playbook-root", type=Path, required=True)
+a = ap.parse_args()
+refs = [r for r in a.refs.split(",") if r]
+for r in refs:
+    if not (a.playbook_root / f"{r}.md").is_file():
+        sys.exit(2)
+d = a.playbook_root / "skills" / a.name
+if d.exists():
+    sys.exit(2)
+d.mkdir(parents=True)
+refs_block = "refs:\\n" + "".join(f"  - {r}\\n" for r in refs) if refs else "refs: []\\n"
+(d / "SKILL.md").write_text(
+    f"---\\nname: {a.name}\\ndescription: {json.dumps(a.description)}\\n{refs_block}---\\n\\n"
+    f"# {a.name}\\n\\nBody.\\n",
+    encoding="utf-8",
+)
+pb = a.playbook_root / "AI-PLAYBOOK.md"
+raw = pb.read_text(encoding="utf-8")
+pb.write_text(
+    raw.rstrip("\\n")
+    + f"\\n\\n## Available Skills (invocable)\\n\\n| Skill | What it does | Master | Refs |\\n"
+    + f"|---|---|---|---|\\n| `{a.name}` | {a.description} | `skills/{a.name}/SKILL.md` | - |\\n",
+    encoding="utf-8",
+) if "## Available Skills" not in raw else pb.write_text(
+    raw.rstrip("\\n") + f"\\n| `{a.name}` | {a.description} | `skills/{a.name}/SKILL.md` | - |\\n",
+    encoding="utf-8",
+)
+'''
+
+
 @pytest.fixture
 def playbook_root(tmp_path: Path) -> Path:
     (tmp_path / "REF-Alpha.md").write_text(_REF_ALPHA, encoding="utf-8")
@@ -115,6 +173,10 @@ def playbook_root(tmp_path: Path) -> Path:
     skill_dir = tmp_path / "skills" / "do-alpha"
     skill_dir.mkdir(parents=True)
     (skill_dir / "SKILL.md").write_text(_SKILL, encoding="utf-8")
+    for name, script in (("bootstrap-ref", _BOOTSTRAP_REF), ("bootstrap-skill", _BOOTSTRAP_SKILL)):
+        d = tmp_path / "skills" / name
+        d.mkdir(parents=True)
+        (d / "bootstrap.py").write_text(script, encoding="utf-8")
     return tmp_path
 
 

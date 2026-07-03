@@ -1,4 +1,4 @@
-export type StudioView = 'library' | 'map' | 'playbook' | 'ref' | 'create';
+export type StudioView = 'map' | 'playbook' | 'ref' | 'skill' | 'create' | 'createskill';
 
 export interface NavState {
     view: StudioView;

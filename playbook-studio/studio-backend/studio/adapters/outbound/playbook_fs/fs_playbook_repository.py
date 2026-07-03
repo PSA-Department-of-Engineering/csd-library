@@ -3,12 +3,17 @@
 from __future__ import annotations
 
 import re
+import shutil
+import subprocess
+import sys
 from pathlib import Path
 
 import yaml
 
 from studio.domain.exceptions.already_exists_error import AlreadyExistsError
+from studio.domain.exceptions.app_error import AppError
 from studio.domain.exceptions.entity_not_found_error import EntityNotFoundError
+from studio.domain.exceptions.invalid_ref_input_error import InvalidRefInputError
 from studio.domain.model.edge_kind import EdgeKind
 from studio.domain.model.intent_claim import IntentClaim
 from studio.domain.model.playbook_doc import PlaybookDoc
@@ -94,7 +99,7 @@ class FsPlaybookRepository:
         if current is not None:
             sections.append(PlaybookSection(title=current, body="\n".join(buffer).strip("\n")))
 
-        return PlaybookDoc(title=title, sections=tuple(sections))
+        return PlaybookDoc(title=title, sections=tuple(sections), raw="\n".join(lines) + "\n")
 
     def list_refs(self) -> list[RefDoc]:
         return [self._parse_ref(p) for p in sorted(self._root.glob("REF-*.md"))]
@@ -106,16 +111,15 @@ class FsPlaybookRepository:
         return self._parse_ref(path)
 
     def list_skills(self) -> list[SkillDoc]:
-        out: list[SkillDoc] = []
-        for skill_md in sorted((self._root / "skills").glob("*/SKILL.md")):
-            fm, _ = _split_frontmatter(skill_md.read_text(encoding="utf-8"))
-            name = fm.get("name") or skill_md.parent.name
-            out.append(SkillDoc(
-                name=str(name),
-                description=str(fm.get("description", "")),
-                refs=tuple(str(r) for r in (fm.get("refs") or [])),
-            ))
-        return out
+        return [
+            self._parse_skill(p) for p in sorted((self._root / "skills").glob("*/SKILL.md"))
+        ]
+
+    def get_skill(self, *, name: str) -> SkillDoc:
+        path = self._root / "skills" / name / "SKILL.md"
+        if not path.is_file():
+            raise EntityNotFoundError("skill", name)
+        return self._parse_skill(path)
 
     def list_claims(self) -> list[IntentClaim]:
         intent_path = self._root / "intent.yaml"
@@ -168,13 +172,61 @@ class FsPlaybookRepository:
         logger.info("Wrote %s (full document, %d chars)", ref_name, len(raw))
         return self._parse_ref(path)
 
-    def create_ref_document(self, *, ref_name: str, raw: str) -> RefDoc:
-        path = self._root / f"{ref_name}.md"
-        if path.exists():
-            raise AlreadyExistsError("REF", ref_name)
+    def write_playbook_document(self, *, raw: str) -> PlaybookDoc:
+        path = self._root / "AI-PLAYBOOK.md"
         path.write_text(raw.rstrip("\n") + "\n", encoding="utf-8", newline="\n")
-        logger.info("Created %s", ref_name)
-        return self._parse_ref(path)
+        logger.info("Wrote AI-PLAYBOOK.md (%d chars)", len(raw))
+        return self.get_playbook()
+
+    def write_skill_document(self, *, name: str, raw: str) -> SkillDoc:
+        path = self._root / "skills" / name / "SKILL.md"
+        if not path.is_file():
+            raise EntityNotFoundError("skill", name)
+        path.write_text(raw.rstrip("\n") + "\n", encoding="utf-8", newline="\n")
+        logger.info("Wrote skill %s (%d chars)", name, len(raw))
+        return self._parse_skill(path)
+
+    def scaffold_ref(self, *, name: str, domain: str, title: str, summary: str) -> RefDoc:
+        if (self._root / f"{name}.md").exists():
+            raise AlreadyExistsError("REF", name)
+        self._run_bootstrap(
+            "skills/bootstrap-ref/bootstrap.py",
+            ["--name", name, "--domain", domain, "--title", title, "--summary", summary],
+        )
+        return self._parse_ref(self._root / f"{name}.md")
+
+    def scaffold_skill(self, *, name: str, description: str, refs: list[str]) -> SkillDoc:
+        if (self._root / "skills" / name).exists():
+            raise AlreadyExistsError("skill", name)
+        self._run_bootstrap(
+            "skills/bootstrap-skill/bootstrap.py",
+            ["--name", name, "--description", description, "--refs", ",".join(refs)],
+        )
+        return self.get_skill(name=name)
+
+    def delete_skill_document(self, *, name: str) -> None:
+        skill_dir = self._root / "skills" / name
+        if skill_dir.exists():
+            shutil.rmtree(skill_dir)
+            logger.info("Deleted skill %s", name)
+
+    def _run_bootstrap(self, script_rel: str, argv: list[str]) -> None:
+        """Invoke a playbook scaffolder script; the playbook owns the template."""
+        script = self._root / script_rel
+        if not script.is_file():
+            raise EntityNotFoundError("scaffolder", script_rel)
+        proc = subprocess.run(
+            [sys.executable, str(script), "--playbook-root", str(self._root), *argv],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=60,
+        )
+        if proc.returncode == 2:
+            raise InvalidRefInputError(proc.stderr.strip() or "scaffolder rejected the input")
+        if proc.returncode != 0:
+            raise AppError(f"{script_rel} failed: {proc.stderr.strip()[:500]}")
 
     def delete_ref_document(self, *, ref_name: str) -> None:
         path = self._root / f"{ref_name}.md"
@@ -199,6 +251,16 @@ class FsPlaybookRepository:
         return self._parse_ref(path)
 
     # -- parsing ------------------------------------------------------------
+
+    def _parse_skill(self, path: Path) -> SkillDoc:
+        raw = path.read_text(encoding="utf-8")
+        fm, _ = _split_frontmatter(raw)
+        return SkillDoc(
+            name=str(fm.get("name") or path.parent.name),
+            description=str(fm.get("description", "")),
+            refs=tuple(str(r) for r in (fm.get("refs") or [])),
+            raw=raw,
+        )
 
     def _parse_ref(self, path: Path) -> RefDoc:
         raw = path.read_text(encoding="utf-8")

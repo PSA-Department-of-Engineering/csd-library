@@ -6,6 +6,39 @@ export function cn(...inputs: ClassValue[]): string {
     return twMerge(clsx(inputs));
 }
 
+export interface GateResult<T> {
+    ok: T | null;
+    report: unknown | null;
+    error: string | null;
+}
+
+/** Send a gated write; surfaces the validation report carried by a 422 rejection. */
+export async function gatedSend<T>(
+    url: string,
+    method: 'PUT' | 'POST',
+    payload: object,
+): Promise<GateResult<T>> {
+    const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
+    if (response.ok) {
+        return { ok: (await response.json()) as T, report: null, error: null };
+    }
+    let rejection: { detail?: string; report?: unknown } = {};
+    try {
+        rejection = (await response.json()) as { detail?: string; report?: unknown };
+    } catch {
+        // Non-JSON error body; fall through to the status text.
+    }
+    return {
+        ok: null,
+        report: rejection.report ?? null,
+        error: rejection.detail ?? `${response.status} ${response.statusText}`,
+    };
+}
+
 /** Fetch JSON from the API, throwing an Error with the server-provided detail on failure. */
 export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
     const response = await fetch(path, {

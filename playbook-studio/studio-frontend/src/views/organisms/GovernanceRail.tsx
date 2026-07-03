@@ -5,8 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useClaims } from '@/viewmodels/claims';
 import { selectViolationsSection, usePlaybook } from '@/viewmodels/playbook';
 import { ClaimRow } from '@/views/molecules/ClaimRow';
-import { Markdown } from '@/views/molecules/Markdown';
 import { ValidationBanner } from '@/views/molecules/ValidationBanner';
+import { ViolationsPanel } from '@/views/molecules/ViolationsPanel';
 
 /** Governance beside the map: health, top violations, claims. Always visible. */
 export const GovernanceRail = () => {
@@ -42,18 +42,7 @@ export const GovernanceRail = () => {
             </Card>
             {report && <ValidationBanner report={report} />}
 
-            {violations && (
-                <Card className="border-amber-500/40">
-                    <CardContent className="p-3.5 pt-3.5">
-                        <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-amber-300">
-                            Top violations - check every change
-                        </h3>
-                        <Markdown className="prose-p:text-xs prose-li:text-xs">
-                            {violations.body}
-                        </Markdown>
-                    </CardContent>
-                </Card>
-            )}
+            {violations && <ViolationsPanel body={violations.body} />}
 
             <Card>
                 <CardContent className="p-3.5 pt-3.5">
