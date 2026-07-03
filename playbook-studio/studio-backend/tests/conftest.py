@@ -189,7 +189,11 @@ def passing_validator() -> StubValidator:
 def client(playbook_root: Path, passing_validator: StubValidator) -> TestClient:
     """TestClient against the synthetic playbook with a passing validator."""
     app = create_app()
-    container = Container(playbook_root=playbook_root, validator=passing_validator)
+    container = Container(
+        playbook_root=playbook_root,
+        validator=passing_validator,
+        runtime_skills_dir=playbook_root / "_runtime",
+    )
     app.dependency_overrides[get_container] = lambda: container
     return TestClient(app)
 
@@ -198,6 +202,10 @@ def client(playbook_root: Path, passing_validator: StubValidator) -> TestClient:
 def failing_client(playbook_root: Path) -> TestClient:
     """TestClient whose validator rejects every edit."""
     app = create_app()
-    container = Container(playbook_root=playbook_root, validator=StubValidator(ok=False))
+    container = Container(
+        playbook_root=playbook_root,
+        validator=StubValidator(ok=False),
+        runtime_skills_dir=playbook_root / "_runtime",
+    )
     app.dependency_overrides[get_container] = lambda: container
     return TestClient(app)

@@ -185,6 +185,51 @@ class TestSkillDocument:
         assert failing_client.get("/api/skills/do-alpha").json()["raw"] == original
 
 
+class TestSkillFiles:
+    def test_files_are_listed_skill_md_first(self, client: TestClient) -> None:
+        files = client.get("/api/skills/do-alpha").json()["files"]
+        assert files[0] == "SKILL.md"
+
+    def test_file_content_is_served(self, client: TestClient) -> None:
+        resp = client.get("/api/skills/do-alpha/files/SKILL.md")
+        assert resp.status_code == 200
+        assert resp.json()["content"].startswith("---")
+
+    def test_path_traversal_is_rejected(self, client: TestClient) -> None:
+        resp = client.get("/api/skills/do-alpha/files/..%2F..%2FREF-Alpha.md")
+        assert resp.status_code in (400, 404)
+
+    @intent("INT-GATE-001")
+    def test_file_edit_rolls_back_when_gates_fail(self, failing_client: TestClient) -> None:
+        original = failing_client.get("/api/skills/do-alpha/files/SKILL.md").json()["content"]
+        resp = failing_client.put(
+            "/api/skills/do-alpha/files/SKILL.md", json={"raw": "broken"}
+        )
+        assert resp.status_code == 422
+        after = failing_client.get("/api/skills/do-alpha/files/SKILL.md").json()["content"]
+        assert after == original
+
+
+class TestInstallSkill:
+    def test_skill_starts_uninstalled(self, client: TestClient) -> None:
+        skill = client.get("/api/skills/do-alpha").json()
+        assert skill["installed"] is False
+
+    def test_install_copies_and_reports_in_sync(self, client: TestClient) -> None:
+        resp = client.post("/api/skills/do-alpha/install")
+        assert resp.status_code == 200
+        assert resp.json() == {"installed": True, "in_sync": True}
+        assert client.get("/api/skills/do-alpha").json()["in_sync"] is True
+
+    def test_master_edit_marks_out_of_sync(self, client: TestClient) -> None:
+        client.post("/api/skills/do-alpha/install")
+        raw = client.get("/api/skills/do-alpha").json()["raw"]
+        client.put("/api/skills/do-alpha", json={"raw": f"{raw}{chr(10)}More.{chr(10)}"})
+        skill = client.get("/api/skills/do-alpha").json()
+        assert skill["installed"] is True
+        assert skill["in_sync"] is False
+
+
 class TestCreateSkill:
     _PAYLOAD = {"name": "do-beta", "description": "Does beta things.", "refs": ["REF-Beta"]}
 

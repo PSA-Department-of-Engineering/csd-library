@@ -15,3 +15,6 @@ class SkillResponse(BaseModel):
     refs: list[str]
     raw: str
     body: str
+    files: list[str]
+    installed: bool
+    in_sync: bool

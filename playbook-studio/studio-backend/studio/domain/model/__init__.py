@@ -14,6 +14,7 @@ from studio.domain.model.ref_domain import RefDomain
 from studio.domain.model.ref_section import RefSection
 from studio.domain.model.reference_edge import ReferenceEdge
 from studio.domain.model.skill_doc import SkillDoc
+from studio.domain.model.skill_status import SkillStatus
 from studio.domain.model.validation_report import ValidationReport
 
 __all__ = [
@@ -29,5 +30,6 @@ __all__ = [
     "RefSection",
     "ReferenceEdge",
     "SkillDoc",
+    "SkillStatus",
     "ValidationReport",
 ]

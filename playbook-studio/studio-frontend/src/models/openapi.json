@@ -357,7 +357,7 @@
           "skills"
         ],
         "summary": "Get Skill",
-        "description": "Return one parsed skill by name.",
+        "description": "Return one parsed skill, its file list, and its runtime state.",
         "operationId": "get_skill_api_skills__name__get",
         "parameters": [
           {
@@ -428,6 +428,161 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ValidationReportResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/skills/{name}/files/{rel_path}": {
+      "get": {
+        "tags": [
+          "skills"
+        ],
+        "summary": "Get Skill File",
+        "description": "Return one file from the skill folder.",
+        "operationId": "get_skill_file_api_skills__name__files__rel_path__get",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          },
+          {
+            "name": "rel_path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rel Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillFileResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "skills"
+        ],
+        "summary": "Update Skill File",
+        "description": "Write one skill file; the edit survives only if the gates pass.",
+        "operationId": "update_skill_file_api_skills__name__files__rel_path__put",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          },
+          {
+            "name": "rel_path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rel Path"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDocumentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationReportResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/skills/{name}/install": {
+      "post": {
+        "tags": [
+          "skills"
+        ],
+        "summary": "Install Skill",
+        "description": "Copy the master skill folder into the Claude runtime's skills directory.",
+        "operationId": "install_skill_api_skills__name__install_post",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillStatusResponse"
                 }
               }
             }
@@ -825,6 +980,25 @@
         "title": "ReferenceEdgeResponse",
         "description": "A directed reference edge returned over HTTP."
       },
+      "SkillFileResponse": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          }
+        },
+        "type": "object",
+        "required": [
+          "path",
+          "content"
+        ],
+        "title": "SkillFileResponse",
+        "description": "A text file from a skill folder returned over HTTP."
+      },
       "SkillResponse": {
         "properties": {
           "name": {
@@ -849,6 +1023,21 @@
           "body": {
             "type": "string",
             "title": "Body"
+          },
+          "files": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Files"
+          },
+          "installed": {
+            "type": "boolean",
+            "title": "Installed"
+          },
+          "in_sync": {
+            "type": "boolean",
+            "title": "In Sync"
           }
         },
         "type": "object",
@@ -857,10 +1046,32 @@
           "description",
           "refs",
           "raw",
-          "body"
+          "body",
+          "files",
+          "installed",
+          "in_sync"
         ],
         "title": "SkillResponse",
         "description": "A parsed SKILL.md returned over HTTP."
+      },
+      "SkillStatusResponse": {
+        "properties": {
+          "installed": {
+            "type": "boolean",
+            "title": "Installed"
+          },
+          "in_sync": {
+            "type": "boolean",
+            "title": "In Sync"
+          }
+        },
+        "type": "object",
+        "required": [
+          "installed",
+          "in_sync"
+        ],
+        "title": "SkillStatusResponse",
+        "description": "Installed / in-sync state of a skill in the runtime directory."
       },
       "UpdateDocumentRequest": {
         "properties": {
