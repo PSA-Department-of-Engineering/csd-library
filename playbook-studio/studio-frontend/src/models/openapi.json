@@ -112,6 +112,57 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "refs"
+        ],
+        "summary": "Update Ref Document",
+        "description": "Replace the whole document; the edit survives only if the gates pass.",
+        "operationId": "update_ref_document_api_refs__name__put",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDocumentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationReportResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/refs/{name}/sections/{number}": {
@@ -419,6 +470,10 @@
             },
             "type": "array",
             "title": "Sections"
+          },
+          "raw": {
+            "type": "string",
+            "title": "Raw"
           }
         },
         "type": "object",
@@ -427,7 +482,8 @@
           "domain",
           "title",
           "summary",
-          "sections"
+          "sections",
+          "raw"
         ],
         "title": "RefDetailResponse",
         "description": "A parsed REF returned over HTTP."
@@ -484,6 +540,20 @@
         ],
         "title": "ReferenceEdgeResponse",
         "description": "A directed reference edge returned over HTTP."
+      },
+      "UpdateDocumentRequest": {
+        "properties": {
+          "raw": {
+            "type": "string",
+            "title": "Raw"
+          }
+        },
+        "type": "object",
+        "required": [
+          "raw"
+        ],
+        "title": "UpdateDocumentRequest",
+        "description": "The new full markdown content (frontmatter included) for one REF."
       },
       "UpdateSectionRequest": {
         "properties": {

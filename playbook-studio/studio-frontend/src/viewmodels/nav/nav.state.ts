@@ -1,4 +1,4 @@
-export type StudioView = 'overview' | 'ref' | 'map';
+export type StudioView = 'map' | 'playbook' | 'ref';
 
 export interface NavState {
     view: StudioView;

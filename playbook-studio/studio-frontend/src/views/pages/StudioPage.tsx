@@ -1,9 +1,8 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { DOMAIN_ORDER } from '@/viewmodels/graph';
 import { useNav } from '@/viewmodels/nav';
-import { DomainBadge } from '@/views/atoms/DomainBadge';
+import { GovernanceRail } from '@/views/organisms/GovernanceRail';
 import { PlaybookGraph } from '@/views/organisms/PlaybookGraph';
-import { PlaybookOverview } from '@/views/organisms/PlaybookOverview';
+import { PlaybookReader } from '@/views/organisms/PlaybookReader';
 import { RefReader } from '@/views/organisms/RefReader';
 import { SidebarNav } from '@/views/organisms/SidebarNav';
 
@@ -11,28 +10,35 @@ export const StudioPage = () => {
     const view = useNav((state) => state.view);
 
     return (
-        <div className="grid h-[calc(100vh-7rem)] grid-cols-[240px_minmax(0,1fr)] gap-4">
+        <div className="grid h-[calc(100vh-6.5rem)] grid-cols-[230px_minmax(0,1fr)] gap-4">
             <Card className="overflow-hidden">
                 <CardContent className="h-full p-3 pt-3">
                     <SidebarNav />
                 </CardContent>
             </Card>
-            <div className="overflow-y-auto pr-1">
-                {view === 'overview' && <PlaybookOverview />}
-                {view === 'ref' && <RefReader />}
-                {view === 'map' && (
-                    <Card className="relative h-full">
-                        <CardContent className="h-full p-2 pt-2">
-                            <div className="absolute left-4 top-3 z-10 flex flex-wrap gap-1.5">
-                                {DOMAIN_ORDER.map((domain) => (
-                                    <DomainBadge key={domain} domain={domain} />
-                                ))}
-                            </div>
+
+            {view === 'map' && (
+                <div className="flex min-h-0 min-w-0 gap-4">
+                    <Card className="relative min-w-0 flex-1 overflow-hidden">
+                        <CardContent className="h-full p-1 pt-1">
                             <PlaybookGraph />
                         </CardContent>
                     </Card>
-                )}
-            </div>
+                    <div className="w-[360px] shrink-0">
+                        <GovernanceRail />
+                    </div>
+                </div>
+            )}
+            {view === 'playbook' && (
+                <div className="min-w-0 overflow-y-auto pr-1">
+                    <PlaybookReader />
+                </div>
+            )}
+            {view === 'ref' && (
+                <div className="min-w-0 overflow-y-auto pr-1">
+                    <RefReader />
+                </div>
+            )}
         </div>
     );
 };

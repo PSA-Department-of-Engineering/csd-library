@@ -15,6 +15,7 @@ from studio.application.ports.inbound.get_playbook_port import GetPlaybookPort
 from studio.application.ports.inbound.get_ref_port import GetRefPort
 from studio.application.ports.inbound.list_claims_port import ListClaimsPort
 from studio.application.ports.inbound.run_validation_port import RunValidationPort
+from studio.application.ports.inbound.update_ref_document_port import UpdateRefDocumentPort
 from studio.application.ports.inbound.update_ref_section_port import UpdateRefSectionPort
 from studio.application.ports.outbound.playbook_validator import PlaybookValidator
 from studio.application.use_cases.get_graph import GetGraph
@@ -22,6 +23,7 @@ from studio.application.use_cases.get_playbook import GetPlaybook
 from studio.application.use_cases.get_ref import GetRef
 from studio.application.use_cases.list_claims import ListClaims
 from studio.application.use_cases.run_validation import RunValidation
+from studio.application.use_cases.update_ref_document import UpdateRefDocument
 from studio.application.use_cases.update_ref_section import UpdateRefSection
 
 __all__ = ["Container", "resolve_playbook_root"]
@@ -72,6 +74,9 @@ class Container:
 
     def update_ref_section(self) -> UpdateRefSectionPort:
         return _check(UpdateRefSection(self._repository, self._validator), UpdateRefSectionPort)
+
+    def update_ref_document(self) -> UpdateRefDocumentPort:
+        return _check(UpdateRefDocument(self._repository, self._validator), UpdateRefDocumentPort)
 
     def list_claims(self) -> ListClaimsPort:
         return _check(ListClaims(self._repository), ListClaimsPort)

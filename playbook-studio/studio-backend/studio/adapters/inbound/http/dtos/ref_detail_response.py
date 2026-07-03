@@ -17,3 +17,4 @@ class RefDetailResponse(BaseModel):
     title: str
     summary: str
     sections: list[RefSectionResponse]
+    raw: str

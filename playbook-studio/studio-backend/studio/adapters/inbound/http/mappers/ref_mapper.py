@@ -20,6 +20,7 @@ def map_ref(ref: RefDoc) -> RefDetailResponse:
         domain=str(ref.domain),
         title=ref.title,
         summary=ref.summary,
+        raw=ref.raw,
         sections=[
             RefSectionResponse(
                 number=s.number, title=s.title, body=s.body, generated=s.generated

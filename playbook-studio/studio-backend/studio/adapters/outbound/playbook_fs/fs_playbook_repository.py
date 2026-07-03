@@ -159,6 +159,14 @@ class FsPlaybookRepository:
 
     # -- writes -------------------------------------------------------------
 
+    def write_ref_document(self, *, ref_name: str, raw: str) -> RefDoc:
+        path = self._root / f"{ref_name}.md"
+        if not path.is_file():
+            raise EntityNotFoundError("REF", ref_name)
+        path.write_text(raw.rstrip("\n") + "\n", encoding="utf-8", newline="\n")
+        logger.info("Wrote %s (full document, %d chars)", ref_name, len(raw))
+        return self._parse_ref(path)
+
     def write_ref_section(self, *, ref_name: str, number: int, body: str) -> RefDoc:
         path = self._root / f"{ref_name}.md"
         if not path.is_file():
@@ -178,7 +186,8 @@ class FsPlaybookRepository:
     # -- parsing ------------------------------------------------------------
 
     def _parse_ref(self, path: Path) -> RefDoc:
-        fm, body = _split_frontmatter(path.read_text(encoding="utf-8"))
+        raw = path.read_text(encoding="utf-8")
+        fm, body = _split_frontmatter(raw)
         domain = RefDomain(str(fm.get("domain", RefDomain.PRACTICE)))
         lines = body.splitlines()
 
@@ -221,6 +230,7 @@ class FsPlaybookRepository:
             title=title,
             summary=summary,
             sections=tuple(sections),
+            raw=raw,
         )
 
     @staticmethod
