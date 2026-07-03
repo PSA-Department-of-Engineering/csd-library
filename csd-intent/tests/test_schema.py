@@ -42,7 +42,7 @@ INT-001:
   status: active
 """
     claims = parse_intent_yaml(_write(tmp_path, yaml))
-    # Missing nested test.component / test.type — that's still a violation,
+    # Missing nested test.component / test.type - that's still a violation,
     # but the FLAT scope itself is honored.
     violations = check_schema(claims)
     assert all("scope" not in v.lower() or "test.scope" in v for v in violations)

@@ -1,6 +1,6 @@
 /**
  * Unit tests for the validation logic. Doesn't actually register Playwright
- * tests — that would require a browser. Runs under vitest.
+ * tests - that would require a browser. Runs under vitest.
  */
 
 import { describe, expect, it } from 'vitest';

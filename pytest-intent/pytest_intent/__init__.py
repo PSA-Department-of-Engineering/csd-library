@@ -1,4 +1,4 @@
-"""pytest-intent — the @intent decorator that links a pytest test to a CSD claim.
+"""pytest-intent - the @intent decorator that links a pytest test to a CSD claim.
 
 Validation, coverage, and orphan-detection live in the separate `csd-intent`
 tool (a standalone CLI), not here. This package is intentionally small: it

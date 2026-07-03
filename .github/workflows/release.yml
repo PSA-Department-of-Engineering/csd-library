@@ -4,7 +4,7 @@
 # On push to main, release-please maintains a per-package release PR (npm + Python)
 # from Conventional Commits; merging that PR cuts the tag + GitHub release and
 # publishes the npm packages to GitHub Packages. Day-to-day work still pushes
-# straight to main — the only PR in the flow is release-please's bot-authored
+# straight to main - the only PR in the flow is release-please's bot-authored
 # release PR. See docs/adr/0002-release-automation.md.
 name: release
 

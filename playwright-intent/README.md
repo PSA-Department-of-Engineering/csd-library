@@ -1,6 +1,6 @@
 # playwright-intent
 
-**The `intent()` wrapper for Playwright — links an e2e test to one or more CSD intent claims.**
+**The `intent()` wrapper for Playwright - links an e2e test to one or more CSD intent claims.**
 
 > CSD (Cognitive Software Delivery) is a language-agnostic methodology. This package is one specific implementation, scoped to browser-driven end-to-end tests using Playwright. Sister project to [pytest-intent](../pytest-intent) and [vitest-intent](../vitest-intent).
 
@@ -28,11 +28,11 @@ intent(
 );
 ```
 
-That's the entire public surface. `intent()` is a thin wrapper around Playwright's `test()` — it validates the claim ID, then delegates to `test(name, fn)`. All Playwright fixtures (`page`, `request`, `context`, etc.) are forwarded transparently.
+That's the entire public surface. `intent()` is a thin wrapper around Playwright's `test()` - it validates the claim ID, then delegates to `test(name, fn)`. All Playwright fixtures (`page`, `request`, `context`, etc.) are forwarded transparently.
 
 ## What it is NOT
 
-- **Not a validator.** Schema checks (CSD-INTENT-01), orphan detection, and cross-runtime coverage all live in the standalone [`csd-intent`](../csd-intent) CLI — point it at any project to audit.
+- **Not a validator.** Schema checks (CSD-INTENT-01), orphan detection, and cross-runtime coverage all live in the standalone [`csd-intent`](../csd-intent) CLI - point it at any project to audit.
 - **Not a Playwright plugin.** Just a function. No config, no setup files.
 - **Not a generator.** You write your tests; this annotates them.
 
@@ -40,7 +40,7 @@ That's the entire public surface. `intent()` is a thin wrapper around Playwright
 
 - **Same `intent()` shape across runtimes.** vitest-intent, pytest-intent, and playwright-intent all expose the same marker. The auditor reads all of them, regardless of which package put the marker there.
 - **Tiny install.** No runtime deps beyond `@playwright/test`.
-- **e2e tests are just another runtime.** The methodology doesn't care whether a claim is attested by a unit test, integration test, or e2e — it just needs at least one marker somewhere.
+- **e2e tests are just another runtime.** The methodology doesn't care whether a claim is attested by a unit test, integration test, or e2e - it just needs at least one marker somewhere.
 
 ## Install
 

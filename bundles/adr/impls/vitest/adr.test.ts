@@ -1,5 +1,5 @@
 /**
- * ADR bundle — vitest implementation.
+ * ADR bundle - vitest implementation.
  *
  * Walks src/content/docs/decisions/ for ADR pages, parses their frontmatter,
  * and asserts each claim from intent.yaml: adr_status validity, id uniqueness,

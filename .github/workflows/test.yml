@@ -1,8 +1,7 @@
 # Tests for every package in the monorepo. Runs on PRs (including release-please's
-# release PR — make these checks required on main to gate releases) and on pushes to
-# main. This single root workflow replaces the per-package test.yml files that
-# previously sat under <pkg>/.github/workflows/, which GitHub Actions never ran:
-# only the repository-root .github/workflows/ is read.
+# release PR - make these checks required on main to gate releases) and on pushes to
+# main. All workflows live here at the repository root: GitHub Actions only reads
+# the root .github/workflows/, so a workflow file under <pkg>/.github/ never runs.
 name: tests
 
 on:

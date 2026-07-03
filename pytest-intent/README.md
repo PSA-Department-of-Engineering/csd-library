@@ -1,6 +1,6 @@
 # pytest-intent
 
-**The `@intent` decorator for pytest — links a test function to one or more CSD intent claims.**
+**The `@intent` decorator for pytest - links a test function to one or more CSD intent claims.**
 
 > CSD (Cognitive Software Delivery) is a language-agnostic methodology. This package is one specific implementation, scoped to Python projects using pytest.
 
@@ -24,7 +24,7 @@ That's the entire public surface.
 
 ## What it is NOT
 
-- **Not a validator.** Schema checks (CSD-INTENT-01), orphan detection (test references unknown claim), and cross-runtime coverage all live in the standalone [`csd-intent`](https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/csd-intent) CLI — point it at any project to audit.
+- **Not a validator.** Schema checks (CSD-INTENT-01), orphan detection (test references unknown claim), and cross-runtime coverage all live in the standalone [`csd-intent`](https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/csd-intent) CLI - point it at any project to audit.
 - **Not a pytest plugin.** Just a decorator. No fixtures, no entry points, no autoloading. Drop the import in your tests and you're done.
 - **Not a generator.** You write your tests; this annotates them.
 

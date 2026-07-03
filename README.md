@@ -2,7 +2,7 @@
 
 Reusable implementation artifacts for projects following CSD methodology. Anything that helps implement, test, or scaffold a CSD-aligned project lives here. Methodology stays separate (the canonical CSD source); this folder is the *implementation* counterpart.
 
-The Playbook (`ai-coding-prompts/`) stays separate too — it covers many topics beyond CSD (Java, FastAPI, Frontend, PowerShell, …), so `csd-library` can grow without dragging unrelated guidance along.
+The Playbook (`ai-coding-prompts/`) stays separate too - it covers many topics beyond CSD (Java, FastAPI, Frontend, PowerShell, …), so `csd-library` can grow without dragging unrelated guidance along.
 
 ## Layout
 
@@ -37,10 +37,10 @@ csd-library/
 
 The Playbook hosts the skills that operate on this folder. Cloned as a sibling of `csd-library/`, those skills reach in via relative path:
 
-- `apply-intent-bundle` — applies a bundle from `bundles/<topic>/` to a target project
-- `bootstrap-pytest-intent` — wires `pytest-intent` into a Python project
-- `bootstrap-vitest-intent` — wires `vitest-intent` into a JS/TS project
-- `bootstrap-starlight` — scaffolds a Starlight site and (by default) applies the `starlight` bundle
+- `apply-intent-bundle` - applies a bundle from `bundles/<topic>/` to a target project
+- `bootstrap-pytest-intent` - wires `pytest-intent` into a Python project
+- `bootstrap-vitest-intent` - wires `vitest-intent` into a JS/TS project
+- `bootstrap-starlight` - scaffolds a Starlight site and (by default) applies the `starlight` bundle
 
 Reference documentation lives in `REF-Intent-Bundle.md` (bundle contract) and `REF-CSD.md` (cites the canonical methodology site) in the playbook.
 
@@ -67,7 +67,7 @@ How a release happens:
 3. The repo's tests (`.github/workflows/test.yml`) run on that PR. Merge it when you want to cut the release; the merge is the release gate.
 4. On merge, release-please tags `<pkg>-vX.Y.Z`, creates the GitHub release, and:
    - **npm** (`vitest-intent`, `playwright-intent`): publishes to GitHub Packages.
-   - **Python** (`pytest-intent`, `csd-intent`): nothing more to push — the tag *is* the release; consumers `pip install` it (see ADR-0001).
+   - **Python** (`pytest-intent`, `csd-intent`): nothing more to push - the tag *is* the release; consumers `pip install` it (see ADR-0001).
 
 Because those bumps are computed from the commit messages, a committed `.pre-commit-config.yaml` ships a bypassable local `commit-msg` hook that checks each message is a Conventional Commit before it lands. Install it once per clone (the `.git/hooks` install is not committed, only the config is):
 

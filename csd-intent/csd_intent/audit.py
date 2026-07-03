@@ -135,7 +135,7 @@ def audit(
     # Unattested: claim has no marker anywhere.
     # Only enforce for ACTIVE claims. Deprecated claims document a behaviour
     # that no longer holds (no tests expected). Draft claims are pre-implementation
-    # placeholders (tests may not yet exist) — surface as informational but don't
+    # placeholders (tests may not yet exist) - surface as informational but don't
     # treat as a failing violation.
     for cid in sorted(claim_ids - attested_ids):
         status = str(claims[cid].get("status", "active"))

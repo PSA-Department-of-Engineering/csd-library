@@ -1,5 +1,5 @@
 /**
- * The `intent()` function — a thin wrapper around Playwright's `test()` that
+ * The `intent()` function - a thin wrapper around Playwright's `test()` that
  * binds a CSD intent claim ID to an e2e test.
  *
  * Usage:
@@ -15,7 +15,7 @@
  * (which uses regex on test files) can map claims to tests.
  *
  * For skip / only / fixme variants, call Playwright's `test.skip(name, fn)` etc
- * directly — the intent marker only covers the regular `test(name, fn)` path.
+ * directly - the intent marker only covers the regular `test(name, fn)` path.
  */
 
 import { test, type PlaywrightTestArgs, type TestInfo } from '@playwright/test';
@@ -34,7 +34,7 @@ export type IntentTestBody = (
 
 export interface IntentOptions {
     // Reserved for future use. For skip / only / fixme variants, call Playwright's
-    // test.skip / test.only / test.fixme directly — their overloads are too
+    // test.skip / test.only / test.fixme directly - their overloads are too
     // ambiguous to forward generically through a single helper.
     _reserved?: never;
 }
@@ -80,7 +80,7 @@ export function intent(
     validateIntentArgs(id, fn, options);
     // The `(title, body)` overload is what we always want. Cast via unknown is
     // needed because Playwright's `test()` has multiple overloads with strict
-    // generic constraints — our loose `IntentTestBody` deliberately forwards any
+    // generic constraints - our loose `IntentTestBody` deliberately forwards any
     // user fixtures, which TS can't reconcile with the strict overload set.
     (test as unknown as (title: string, body: IntentTestBody) => void)(name, fn);
 }

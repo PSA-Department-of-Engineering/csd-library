@@ -45,7 +45,7 @@ PY_EXT = ".py"
 JS_EXTS = frozenset({".ts", ".tsx", ".js", ".jsx", ".mts", ".cts"})
 
 # A directory that contains this file (other than the scan root) is a *nested
-# intent project* — a separate project boundary. The marker walk must not descend
+# intent project* - a separate project boundary. The marker walk must not descend
 # into it, so its markers do not orphan against the outer project's claims.
 INTENT_FILENAME = "intent.yaml"
 TEST_FILE_RE = re.compile(r"(^|[._-])(test|spec)([._-]|$)|test_|_test\.|\.test\.|\.spec\.")
@@ -113,7 +113,7 @@ def _walk_files(
             if entry.name in exclude_dirs:
                 continue
             if respect_nested_projects and (entry / INTENT_FILENAME).is_file():
-                # A nested intent project — a separate boundary. Do not descend.
+                # A nested intent project - a separate boundary. Do not descend.
                 continue
             yield from _walk_files(entry, exclude_dirs, respect_nested_projects)
         elif entry.is_file():

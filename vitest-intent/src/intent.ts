@@ -1,5 +1,5 @@
 /**
- * The `intent()` function — a thin wrapper around vitest's `test()` that
+ * The `intent()` function - a thin wrapper around vitest's `test()` that
  * binds a CSD intent claim ID to a test case.
  *
  * Usage:

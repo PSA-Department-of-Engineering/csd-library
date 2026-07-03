@@ -9,10 +9,10 @@
 
 `csd-library` is a monorepo that ships reusable intent-testing packages consumed by sibling projects:
 
-- `vitest-intent` — npm package (ESM, built with `tsc`).
-- `pytest-intent`, `csd-intent` — pure-Python packages (setuptools).
+- `vitest-intent` - npm package (ESM, built with `tsc`).
+- `pytest-intent`, `csd-intent` - pure-Python packages (setuptools).
 
-Consumers historically referenced them by sibling path — `"vitest-intent": "file:../../csd-library/vitest-intent"` and `pip install -e ../csd-library/<pkg>`. This is **not fresh-clone reproducible**:
+Consumers historically referenced them by sibling path - `"vitest-intent": "file:../../csd-library/vitest-intent"` and `pip install -e ../csd-library/<pkg>`. This is **not fresh-clone reproducible**:
 
 - `vitest-intent`'s entrypoint is `dist/index.js`, but `dist/` is built by `tsc` and is gitignored, so a freshly cloned consumer cannot resolve the package until someone manually runs the build.
 - The editable Python installs assume the exact sibling-clone layout on disk.
@@ -26,20 +26,20 @@ We want consumers to install these as **normal, versioned, private dependencies*
 - The package name is scoped to the GitHub owner of this repo: `@psa-department-of-engineering/vitest-intent`.
   - **Portable rule:** the npm scope is the owning org's GitHub login, lowercased. `@psa-department-of-engineering` is the concrete value for this deployment; a fork re-points the scope to its own owner in one place.
 - Published to `https://npm.pkg.github.com` (via `publishConfig.registry`). Private visibility is inherited from the repository.
-- The existing `prepublishOnly: tsc` + `files: ["dist", ...]` already build `dist/` and bundle it into the tarball, so the published artifact is self-contained. This — not committing `dist/` — is the actual fix for the uncommitted-build problem; `dist/` stays gitignored.
+- The existing `prepublishOnly: tsc` + `files: ["dist", ...]` already build `dist/` and bundle it into the tarball, so the published artifact is self-contained. This - not committing `dist/` - is the actual fix for the uncommitted-build problem; `dist/` stays gitignored.
 
 ### Python (`pytest-intent`, `csd-intent`) → pinned git-tag installs (no registry)
 
 - Consumers depend via a PEP 508 direct reference at a tag, using the monorepo subdirectory:
   `pkg @ git+https://github.com/PSA-Department-of-Engineering/csd-library.git@<tag>#subdirectory=<pkg>`
-- `pip` builds the wheel from source at install time (both packages are pure-Python), so "publishing" is just pushing a tag — no build/upload step, no index to host.
+- `pip` builds the wheel from source at install time (both packages are pure-Python), so "publishing" is just pushing a tag - no build/upload step, no index to host.
 - **Why the npm/Python asymmetry:** `pip` has first-class support for installing a subdirectory of a git repo at a tag; npm's git support does not handle monorepo subdirectories cleanly. npm therefore benefits from a real registry while Python does not need one.
 
 ### Versioning
 
 SemVer per package, versioned independently. Git tags are per-package prefixed: `<pkg>-vX.Y.Z` (e.g. `vitest-intent-v0.2.0`, `pytest-intent-v0.2.0`). A single `vX.Y.Z` namespace cannot represent three independently-versioned packages in one repo.
 
-### Not self-hosting a registry (Verdaccio / devpi) in the homelab — for now
+### Not self-hosting a registry (Verdaccio / devpi) in the homelab - for now
 
 A single-node homelab behind a Cloudflare tunnel would become a hard dependency for every `npm install` / `pip install` / CI run. GitHub Packages + git-tags lean on infrastructure GitHub already runs. Revisit self-hosting when any of these become true: multiple contributors, many packages, a need for bare-name `pip install <pkg>` from a private index, or wanting a pull-through cache of the public registries.
 
