@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest';
-import { intent } from 'vitest-intent';
+import { intent } from '@psa-department-of-engineering/vitest-intent';
 
 import type { GraphResponse } from '@/models';
 
