@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
-import shutil
+import subprocess
+import sys
 from pathlib import Path
 
+from studio.domain.exceptions.app_error import AppError
 from studio.domain.exceptions.entity_not_found_error import EntityNotFoundError
 from studio.domain.model.skill_status import SkillStatus
 from studio.logging import get_logger
@@ -13,13 +15,13 @@ __all__ = ["FsSkillRuntime"]
 
 logger = get_logger(__name__)
 
-_IGNORED = shutil.ignore_patterns("__pycache__", "*.pyc")
-
 
 class FsSkillRuntime:
-    """Copies skills/<name>/ into the runtime skills dir and compares state."""
+    """Runtime install state; installing delegates to the playbook's own
+    scripts/install_skills.py so the copy mechanism has one owner."""
 
     def __init__(self, playbook_root: Path, runtime_dir: Path) -> None:
+        self._playbook_root = playbook_root
         self._source_root = playbook_root / "skills"
         self._runtime_dir = runtime_dir
 
@@ -31,14 +33,29 @@ class FsSkillRuntime:
         return SkillStatus(installed=True, in_sync=self._same_content(source, target))
 
     def install(self, *, name: str) -> SkillStatus:
-        source = self._source_root / name
-        if not (source / "SKILL.md").is_file():
+        if not (self._source_root / name / "SKILL.md").is_file():
             raise EntityNotFoundError("skill", name)
-        target = self._runtime_dir / name
-        if target.exists():
-            shutil.rmtree(target)
-        shutil.copytree(source, target, ignore=_IGNORED)
-        logger.info("Installed skill %s to %s", name, target)
+        script = self._playbook_root / "scripts" / "install_skills.py"
+        if not script.is_file():
+            raise EntityNotFoundError("installer", "scripts/install_skills.py")
+        proc = subprocess.run(
+            [
+                sys.executable,
+                str(script),
+                "--only",
+                name,
+                "--runtime-dir",
+                str(self._runtime_dir),
+            ],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=60,
+        )
+        if proc.returncode != 0:
+            raise AppError(f"install_skills.py failed: {proc.stderr.strip()[:500]}")
+        logger.info("Installed skill %s via install_skills.py", name)
         return self.status(name=name)
 
     def _same_content(self, source: Path, target: Path) -> bool:

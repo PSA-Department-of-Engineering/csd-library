@@ -163,6 +163,24 @@ pb.write_text(
 )
 '''
 
+_INSTALL_SKILLS = """
+import argparse, shutil
+from pathlib import Path
+ap = argparse.ArgumentParser()
+ap.add_argument("--only", action="append", default=None)
+ap.add_argument("--runtime-dir", type=Path, required=True)
+ap.add_argument("--list", action="store_true")
+a = ap.parse_args()
+root = Path(__file__).resolve().parents[1] / "skills"
+names = a.only or [d.name for d in root.iterdir() if (d / "SKILL.md").is_file()]
+a.runtime_dir.mkdir(parents=True, exist_ok=True)
+for n in names:
+    t = a.runtime_dir / n
+    if t.exists():
+        shutil.rmtree(t)
+    shutil.copytree(root / n, t, ignore=shutil.ignore_patterns("__pycache__"))
+"""
+
 
 @pytest.fixture
 def playbook_root(tmp_path: Path) -> Path:
@@ -177,6 +195,9 @@ def playbook_root(tmp_path: Path) -> Path:
         d = tmp_path / "skills" / name
         d.mkdir(parents=True)
         (d / "bootstrap.py").write_text(script, encoding="utf-8")
+    scripts_dir = tmp_path / "scripts"
+    scripts_dir.mkdir()
+    (scripts_dir / "install_skills.py").write_text(_INSTALL_SKILLS, encoding="utf-8")
     return tmp_path
 
 
