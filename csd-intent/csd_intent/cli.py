@@ -52,7 +52,10 @@ def _build_parser() -> argparse.ArgumentParser:
         "--intent",
         type=Path,
         default=None,
-        help="Path to intent.yaml (default: PROJECT_DIR/intent.yaml).",
+        help=(
+            "Path to intent.yaml; a relative path is anchored to PROJECT_DIR "
+            "(default: PROJECT_DIR/intent.yaml)."
+        ),
     )
     parser.add_argument(
         "--tests-dir",
@@ -60,7 +63,10 @@ def _build_parser() -> argparse.ArgumentParser:
         action="append",
         type=Path,
         default=None,
-        help="Directory to scan for test markers (repeatable; default: PROJECT_DIR).",
+        help=(
+            "Directory to scan for test markers; a relative path is anchored to "
+            "PROJECT_DIR (repeatable; default: PROJECT_DIR)."
+        ),
     )
     parser.add_argument(
         "--fail-on",
@@ -91,6 +97,11 @@ def _has_failing_violation(report: AuditReport, fail_kinds: set[ViolationKind]) 
     return any(v.kind in fail_kinds for v in report.violations)
 
 
+def _anchored(project_dir: Path, path: Path) -> Path:
+    """Anchor a relative path to the project root rather than the caller's cwd."""
+    return path if path.is_absolute() else project_dir / path
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
 
@@ -106,8 +117,14 @@ def main(argv: list[str] | None = None) -> int:
     if args.intent is not None or args.tests_dirs is not None:
         report = audit(
             project_dir=args.project_dir,
-            intent_path=args.intent,
-            test_dirs=args.tests_dirs,
+            intent_path=(
+                None if args.intent is None else _anchored(args.project_dir, args.intent)
+            ),
+            test_dirs=(
+                None
+                if args.tests_dirs is None
+                else [_anchored(args.project_dir, d) for d in args.tests_dirs]
+            ),
         )
         _print_report(report, args.quiet)
         return 1 if _has_failing_violation(report, fail_kinds) else 0

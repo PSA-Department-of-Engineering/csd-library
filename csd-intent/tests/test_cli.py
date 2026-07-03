@@ -55,6 +55,28 @@ def test_cli_fail_on_schema_only(tmp_path: Path, capsys) -> None:
     assert "INT-001" in out
 
 
+@intent("INT-CSD-006")
+def test_cli_relative_tests_dir_anchors_to_project_root(
+    tmp_path: Path, monkeypatch, capsys
+) -> None:
+    """The same audit passes regardless of the caller's working directory."""
+    project = tmp_path / "proj"
+    tests = project / "tests"
+    tests.mkdir(parents=True)
+    (project / "intent.yaml").write_text(_GOOD_INTENT, encoding="utf-8")
+    (tests / "test_x.py").write_text(
+        "from pytest_intent import intent\n@intent('INT-001')\ndef test_one(): pass\n",
+        encoding="utf-8",
+    )
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    monkeypatch.chdir(elsewhere)
+    rc = main([str(project), "--tests-dir", "tests", "--intent", "intent.yaml"])
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert "CLEAN" in out
+
+
 def test_cli_version_prints_and_exits(capsys) -> None:
     rc = main(["--version"])
     out = capsys.readouterr().out
