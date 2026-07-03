@@ -1,6 +1,0 @@
-node_modules/
-dist/
-.vite/
-*.local
-src/models/schema.d.ts
-src/models/index.ts
