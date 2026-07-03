@@ -4,10 +4,15 @@ import { Spinner } from '@/views/atoms/Spinner';
 import { computeLayout, useGraph } from '@/viewmodels/graph';
 
 const EDGE_COLORS: Record<string, string> = {
-    'playbook-to-ref': '#cbd5e1',
-    'ref-to-ref': '#94a3b8',
-    'skill-to-ref': '#c4b5fd',
+    'playbook-to-ref': '#3b4a6b',
+    'ref-to-ref': '#4c5a7a',
+    'skill-to-ref': '#6d5fd0',
 };
+
+const NODE_STROKE = '#0a0e1a';
+const REF_LABEL = '#c7d2e4';
+const SKILL_LABEL = '#5f6b82';
+const RING_STROKE = '#1b2338';
 
 const shortLabel = (id: string): string => id.replace(/^REF-/, '');
 
@@ -32,7 +37,7 @@ export const PlaybookGraph = () => {
         return <Spinner />;
     }
     if (error) {
-        return <p className="text-sm text-rose-700">{error}</p>;
+        return <p className="text-sm text-destructive">{error}</p>;
     }
     if (!graph) {
         return null;
@@ -44,12 +49,30 @@ export const PlaybookGraph = () => {
 
     return (
         <svg
-            viewBox="-470 -470 940 940"
+            viewBox="-480 -480 960 960"
             className="h-full w-full"
             role="img"
             aria-label="Playbook reference graph"
             onClick={() => select(null)}
         >
+            <defs>
+                <radialGradient id="hub-glow">
+                    <stop offset="0%" stopColor="#818cf8" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#818cf8" stopOpacity="0" />
+                </radialGradient>
+            </defs>
+
+            {[250, 400].map((r) => (
+                <circle
+                    key={r}
+                    r={r}
+                    fill="none"
+                    stroke={RING_STROKE}
+                    strokeWidth={1}
+                    strokeDasharray="2 6"
+                />
+            ))}
+
             {graph.edges.map((edge) => {
                 const from = positions.get(edge.source);
                 const to = positions.get(edge.target);
@@ -65,24 +88,28 @@ export const PlaybookGraph = () => {
                         y1={from.y}
                         x2={to.x}
                         y2={to.y}
-                        stroke={EDGE_COLORS[edge.kind] ?? '#e2e8f0'}
-                        strokeWidth={isActive ? 1.6 : 0.6}
-                        strokeOpacity={active === null ? 0.25 : isActive ? 0.85 : 0.06}
+                        stroke={EDGE_COLORS[edge.kind] ?? '#334155'}
+                        strokeWidth={isActive ? 1.8 : 0.7}
+                        strokeOpacity={active === null ? 0.35 : isActive ? 0.95 : 0.08}
                     />
                 );
             })}
+
+            <circle r={70} fill="url(#hub-glow)" pointerEvents="none" />
+
             {layout.map(({ node, x, y, color }) => {
                 const isRef = node.kind === 'ref';
                 const isPlaybook = node.kind === 'playbook';
-                const radius = isPlaybook ? 26 : isRef ? 9 : 4.5;
+                const radius = isPlaybook ? 30 : isRef ? 9.5 : 5;
                 const dimmed = active !== null && node.id !== active && !neighbourIds.has(node.id);
-                const labelFactor = (Math.hypot(x, y) + radius + 10) / (Math.hypot(x, y) || 1);
+                const labelFactor = (Math.hypot(x, y) + radius + 11) / (Math.hypot(x, y) || 1);
                 const lx = x * labelFactor;
                 const ly = y * labelFactor;
+                const isFocused = node.id === active || node.id === selectedRef;
                 return (
                     <g
                         key={node.id}
-                        opacity={dimmed ? 0.25 : 1}
+                        opacity={dimmed ? 0.2 : 1}
                         className="cursor-pointer"
                         onClick={(event) => {
                             event.stopPropagation();
@@ -95,26 +122,30 @@ export const PlaybookGraph = () => {
                             cx={x}
                             cy={y}
                             r={radius}
-                            fill={color}
-                            stroke={node.id === selectedRef ? '#0f172a' : 'white'}
-                            strokeWidth={node.id === selectedRef ? 3 : 1.5}
+                            fill={isPlaybook ? '#6366f1' : color}
+                            stroke={node.id === selectedRef ? '#e2e8f0' : NODE_STROKE}
+                            strokeWidth={node.id === selectedRef ? 2.5 : 1.5}
                         />
                         {isPlaybook ? (
                             <text
                                 x={0}
                                 y={4}
                                 textAnchor="middle"
-                                className="fill-white text-[11px] font-bold"
+                                fill="#eef2ff"
+                                fontSize={11}
+                                fontWeight={700}
+                                letterSpacing="0.08em"
                             >
                                 PLAYBOOK
                             </text>
                         ) : (
                             <text
                                 x={lx}
-                                y={ly + 3}
+                                y={ly + 3.5}
                                 textAnchor={lx > 20 ? 'start' : lx < -20 ? 'end' : 'middle'}
-                                fill={isRef ? '#334155' : '#94a3b8'}
-                                fontSize={isRef ? 11 : 8.5}
+                                fill={isRef ? REF_LABEL : SKILL_LABEL}
+                                fontSize={isRef ? 12 : 9}
+                                fontWeight={isRef ? (isFocused ? 700 : 500) : 400}
                             >
                                 {shortLabel(node.id)}
                             </text>

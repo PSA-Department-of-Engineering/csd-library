@@ -22,13 +22,13 @@ export const ClaimsPanel = () => {
     return (
         <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-                <h2 className="text-base font-bold">Intent claims</h2>
+                <h2 className="text-base font-bold tracking-tight">Intent claims</h2>
                 <Button disabled={validating} onClick={() => void validate()}>
                     {validating ? 'Running gates...' : 'Run validation'}
                 </Button>
             </div>
             {report && <ValidationBanner report={report} />}
-            {error && <p className="text-sm text-rose-700">{error}</p>}
+            {error && <p className="text-sm text-destructive">{error}</p>}
             {loading ? (
                 <Spinner />
             ) : (
@@ -38,7 +38,7 @@ export const ClaimsPanel = () => {
                     ))}
                 </ul>
             )}
-            <p className="text-xs text-slate-500">
+            <p className="text-xs leading-relaxed text-muted-foreground/80">
                 Select a REF in the graph to inspect and edit it. Edits only survive if the
                 playbook's intent tests and link checker still pass.
             </p>
