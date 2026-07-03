@@ -49,6 +49,28 @@
         }
       }
     },
+    "/api/playbook": {
+      "get": {
+        "tags": [
+          "playbook"
+        ],
+        "summary": "Get Playbook",
+        "description": "Return AI-PLAYBOOK.md parsed into titled sections.",
+        "operationId": "get_playbook_api_playbook_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaybookResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/refs/{name}": {
       "get": {
         "tags": [
@@ -331,6 +353,47 @@
         ],
         "title": "IntentClaimResponse",
         "description": "An intent.yaml claim returned over HTTP."
+      },
+      "PlaybookResponse": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/PlaybookSectionResponse"
+            },
+            "type": "array",
+            "title": "Sections"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "sections"
+        ],
+        "title": "PlaybookResponse",
+        "description": "The parsed AI-PLAYBOOK.md returned over HTTP."
+      },
+      "PlaybookSectionResponse": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "body"
+        ],
+        "title": "PlaybookSectionResponse",
+        "description": "A titled AI-PLAYBOOK.md section returned over HTTP."
       },
       "RefDetailResponse": {
         "properties": {

@@ -51,6 +51,18 @@ class TestRefDetail:
         assert resp.json()["error"] == "EntityNotFoundError"
 
 
+class TestPlaybook:
+    def test_playbook_sections_are_parsed(self, client: TestClient) -> None:
+        resp = client.get("/api/playbook")
+        assert resp.status_code == 200
+        doc = resp.json()
+        assert doc["title"] == "AI Playbook"
+        titles = [s["title"] for s in doc["sections"]]
+        assert "Top Violations - Check EVERY Change" in titles
+        violations = next(s for s in doc["sections"] if s["title"].startswith("Top Violations"))
+        assert "Do not duplicate" in violations["body"]
+
+
 class TestClaims:
     def test_claims_are_listed(self, client: TestClient) -> None:
         claims = client.get("/api/claims").json()

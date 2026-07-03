@@ -1,32 +1,38 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { DOMAIN_ORDER, useGraph } from '@/viewmodels/graph';
+import { DOMAIN_ORDER } from '@/viewmodels/graph';
+import { useNav } from '@/viewmodels/nav';
 import { DomainBadge } from '@/views/atoms/DomainBadge';
-import { ClaimsPanel } from '@/views/organisms/ClaimsPanel';
 import { PlaybookGraph } from '@/views/organisms/PlaybookGraph';
-import { RefDetailPanel } from '@/views/organisms/RefDetailPanel';
+import { PlaybookOverview } from '@/views/organisms/PlaybookOverview';
+import { RefReader } from '@/views/organisms/RefReader';
+import { SidebarNav } from '@/views/organisms/SidebarNav';
 
 export const StudioPage = () => {
-    const selectedRef = useGraph((state) => state.selectedRef);
+    const view = useNav((state) => state.view);
 
     return (
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-            <Card className="lg:col-span-2">
-                <CardContent className="p-3">
-                    <div className="flex flex-wrap gap-1.5 px-1.5 pt-1.5">
-                        {DOMAIN_ORDER.map((domain) => (
-                            <DomainBadge key={domain} domain={domain} />
-                        ))}
-                    </div>
-                    <div className="aspect-square w-full">
-                        <PlaybookGraph />
-                    </div>
+        <div className="grid h-[calc(100vh-7rem)] grid-cols-[240px_minmax(0,1fr)] gap-4">
+            <Card className="overflow-hidden">
+                <CardContent className="h-full p-3 pt-3">
+                    <SidebarNav />
                 </CardContent>
             </Card>
-            <Card className="max-h-[85vh] overflow-y-auto">
-                <CardContent className="p-4 pt-4">
-                    {selectedRef ? <RefDetailPanel /> : <ClaimsPanel />}
-                </CardContent>
-            </Card>
+            <div className="overflow-y-auto pr-1">
+                {view === 'overview' && <PlaybookOverview />}
+                {view === 'ref' && <RefReader />}
+                {view === 'map' && (
+                    <Card className="relative h-full">
+                        <CardContent className="h-full p-2 pt-2">
+                            <div className="absolute left-4 top-3 z-10 flex flex-wrap gap-1.5">
+                                {DOMAIN_ORDER.map((domain) => (
+                                    <DomainBadge key={domain} domain={domain} />
+                                ))}
+                            </div>
+                            <PlaybookGraph />
+                        </CardContent>
+                    </Card>
+                )}
+            </div>
         </div>
     );
 };

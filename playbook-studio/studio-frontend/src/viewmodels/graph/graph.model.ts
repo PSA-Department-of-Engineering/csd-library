@@ -28,11 +28,20 @@ export interface LaidOutNode {
     node: GraphNodeResponse;
     x: number;
     y: number;
+    /** Angle in radians; NaN for the center node. Drives rotated labels. */
+    angle: number;
     color: string;
 }
 
-const REF_RADIUS = 250;
-const SKILL_RADIUS = 400;
+export interface DomainArc {
+    domain: string;
+    startAngle: number;
+    endAngle: number;
+    color: string;
+}
+
+export const REF_RADIUS = 250;
+export const SKILL_RADIUS = 390;
 
 const polar = (radius: number, angle: number): { x: number; y: number } => ({
     x: Math.round(radius * Math.cos(angle) * 100) / 100,
@@ -49,17 +58,14 @@ export function computeLayout(graph: GraphResponse): LaidOutNode[] {
     const skills = graph.nodes.filter((n) => n.kind === 'skill');
     const playbook = graph.nodes.filter((n) => n.kind === 'playbook');
 
-    const sortedRefs = [...refs].sort((a, b) => {
-        const da = DOMAIN_ORDER.indexOf((a.domain ?? 'practice') as (typeof DOMAIN_ORDER)[number]);
-        const db = DOMAIN_ORDER.indexOf((b.domain ?? 'practice') as (typeof DOMAIN_ORDER)[number]);
-        return da === db ? a.id.localeCompare(b.id) : da - db;
-    });
+    const sortedRefs = sortRefsByDomain(refs);
 
     const refAngle = new Map<string, number>();
     const out: LaidOutNode[] = playbook.map((node) => ({
         node,
         x: 0,
         y: 0,
+        angle: Number.NaN,
         color: PLAYBOOK_COLOR,
     }));
 
@@ -69,6 +75,7 @@ export function computeLayout(graph: GraphResponse): LaidOutNode[] {
         out.push({
             node,
             ...polar(REF_RADIUS, angle),
+            angle,
             color: DOMAIN_COLORS[node.domain ?? ''] ?? SKILL_COLOR,
         });
     });
@@ -91,10 +98,42 @@ export function computeLayout(graph: GraphResponse): LaidOutNode[] {
     const sortedSkills = [...skills].sort((a, b) => desiredAngle(a.id) - desiredAngle(b.id));
     sortedSkills.forEach((node, i) => {
         const angle = (2 * Math.PI * i) / sortedSkills.length - Math.PI / 2;
-        out.push({ node, ...polar(SKILL_RADIUS, angle), color: SKILL_COLOR });
+        out.push({ node, ...polar(SKILL_RADIUS, angle), angle, color: SKILL_COLOR });
     });
 
     return out;
+}
+
+/** One arc per contiguous domain group on the REF ring, for cluster accents. */
+export function computeDomainArcs(graph: GraphResponse): DomainArc[] {
+    const sortedRefs = sortRefsByDomain(graph.nodes.filter((n) => n.kind === 'ref'));
+    if (sortedRefs.length === 0) {
+        return [];
+    }
+    const slot = (2 * Math.PI) / sortedRefs.length;
+    const arcs: DomainArc[] = [];
+    let start = 0;
+    for (let i = 1; i <= sortedRefs.length; i += 1) {
+        const domain = sortedRefs[start].domain ?? 'practice';
+        if (i === sortedRefs.length || (sortedRefs[i].domain ?? 'practice') !== domain) {
+            arcs.push({
+                domain,
+                startAngle: start * slot - Math.PI / 2 - slot * 0.32,
+                endAngle: (i - 1) * slot - Math.PI / 2 + slot * 0.32,
+                color: DOMAIN_COLORS[domain] ?? SKILL_COLOR,
+            });
+            start = i;
+        }
+    }
+    return arcs;
+}
+
+function sortRefsByDomain(refs: GraphNodeResponse[]): GraphNodeResponse[] {
+    return [...refs].sort((a, b) => {
+        const da = DOMAIN_ORDER.indexOf((a.domain ?? 'practice') as (typeof DOMAIN_ORDER)[number]);
+        const db = DOMAIN_ORDER.indexOf((b.domain ?? 'practice') as (typeof DOMAIN_ORDER)[number]);
+        return da === db ? a.id.localeCompare(b.id) : da - db;
+    });
 }
 
 export const selectNodeCount = (state: { graph: GraphResponse | null }): number =>

@@ -11,12 +11,14 @@ from studio.adapters.outbound.playbook_fs.subprocess_playbook_validator import (
     SubprocessPlaybookValidator,
 )
 from studio.application.ports.inbound.get_graph_port import GetGraphPort
+from studio.application.ports.inbound.get_playbook_port import GetPlaybookPort
 from studio.application.ports.inbound.get_ref_port import GetRefPort
 from studio.application.ports.inbound.list_claims_port import ListClaimsPort
 from studio.application.ports.inbound.run_validation_port import RunValidationPort
 from studio.application.ports.inbound.update_ref_section_port import UpdateRefSectionPort
 from studio.application.ports.outbound.playbook_validator import PlaybookValidator
 from studio.application.use_cases.get_graph import GetGraph
+from studio.application.use_cases.get_playbook import GetPlaybook
 from studio.application.use_cases.get_ref import GetRef
 from studio.application.use_cases.list_claims import ListClaims
 from studio.application.use_cases.run_validation import RunValidation
@@ -61,6 +63,9 @@ class Container:
 
     def get_graph(self) -> GetGraphPort:
         return _check(GetGraph(self._repository), GetGraphPort)
+
+    def get_playbook(self) -> GetPlaybookPort:
+        return _check(GetPlaybook(self._repository), GetPlaybookPort)
 
     def get_ref(self) -> GetRefPort:
         return _check(GetRef(self._repository), GetRefPort)
