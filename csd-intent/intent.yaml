@@ -57,3 +57,14 @@ INT-CSD-005:
     component: CLI
     type: contract
   criticality: high
+
+INT-CSD-006:
+  version: 1.0.0
+  status: active
+  statement: "Relative --intent and --tests-dir paths are anchored to PROJECT_DIR, so an audit yields the same result from any working directory."
+  rationale: "CI and skills invoke the CLI from repo roots; cwd-relative resolution scans the wrong tree and reports false unattested claims."
+  test:
+    scope: integration
+    component: CLI
+    type: contract
+  criticality: high
