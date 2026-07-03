@@ -38,7 +38,7 @@ export const RefDetailPanel = () => {
         return <Spinner />;
     }
     if (error) {
-        return <p className="text-sm text-rose-700">{error}</p>;
+        return <p className="text-sm text-destructive">{error}</p>;
     }
     if (!ref) {
         return null;
@@ -51,26 +51,32 @@ export const RefDetailPanel = () => {
     return (
         <div className="flex flex-col gap-3">
             <div>
-                <div className="flex items-center gap-2">
-                    <h2 className="text-base font-bold">{ref.name}</h2>
+                <div className="flex items-center gap-2.5">
+                    <h2 className="font-mono text-base font-bold tracking-tight">{ref.name}</h2>
                     <DomainBadge domain={ref.domain} />
                 </div>
-                <p className="mt-1 text-xs italic text-slate-600">{ref.summary}</p>
+                <p className="mt-1.5 text-xs italic leading-relaxed text-muted-foreground">
+                    {ref.summary}
+                </p>
             </div>
             {lastReport && <ValidationBanner report={lastReport} />}
             {ref.sections.map((section) =>
                 editingSection === section.number ? (
-                    <div key={section.number} className="rounded-md border border-sky-300 p-3">
+                    <div
+                        key={section.number}
+                        className="rounded-lg border border-primary/50 bg-secondary/40 p-3.5"
+                    >
                         <h3 className="text-sm font-semibold">
-                            §{section.number}. {section.title}
+                            <span className="mr-1.5 text-primary">§{section.number}</span>
+                            {section.title}
                         </h3>
                         <textarea
-                            className="mt-2 h-56 w-full rounded border border-slate-300 p-2 font-mono text-xs"
+                            className="mt-2 h-56 w-full rounded-md border border-input bg-background/80 p-2.5 font-mono text-xs leading-relaxed text-foreground outline-none focus:ring-1 focus:ring-ring"
                             value={draft}
                             onChange={(event) => setDraft(event.target.value)}
                         />
-                        {saveError && <p className="mt-1 text-xs text-rose-700">{saveError}</p>}
-                        <div className="mt-2 flex gap-2">
+                        {saveError && <p className="mt-1 text-xs text-destructive">{saveError}</p>}
+                        <div className="mt-2.5 flex gap-2">
                             <Button disabled={saving} onClick={() => void save()}>
                                 {saving ? 'Validating...' : 'Save (runs gates)'}
                             </Button>

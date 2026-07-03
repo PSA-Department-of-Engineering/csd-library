@@ -5,12 +5,19 @@ export interface MainLayoutProps {
 }
 
 export const MainLayout = ({ children }: MainLayoutProps) => (
-    <div className="min-h-screen bg-background text-foreground">
-        <header className="border-b">
-            <div className="mx-auto max-w-7xl px-4 py-3">
-                <h1 className="text-lg font-semibold">Playbook Studio</h1>
+    <div className="min-h-screen">
+        <header className="sticky top-0 z-10 border-b border-border/70 bg-background/80 backdrop-blur">
+            <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-3.5">
+                <span className="relative flex h-2.5 w-2.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-40" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary" />
+                </span>
+                <h1 className="text-base font-semibold tracking-tight">Playbook Studio</h1>
+                <p className="ml-auto hidden text-xs text-muted-foreground sm:block">
+                    edits survive only if the intent gates pass
+                </p>
             </div>
         </header>
-        <main className="mx-auto max-w-7xl px-4 py-4">{children}</main>
+        <main className="mx-auto max-w-7xl px-6 py-6">{children}</main>
     </div>
 );
