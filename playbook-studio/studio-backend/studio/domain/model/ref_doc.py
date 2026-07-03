@@ -19,6 +19,7 @@ class RefDoc:
     title: str
     summary: str
     sections: tuple[RefSection, ...]
+    raw: str
 
     def section(self, number: int) -> RefSection | None:
         return next((s for s in self.sections if s.number == number), None)

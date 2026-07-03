@@ -5,6 +5,7 @@ export interface RefDetailState {
     loading: boolean;
     error: string | null;
     editingSection: number | null;
+    editingDoc: boolean;
     draft: string;
     saving: boolean;
     saveError: string | null;

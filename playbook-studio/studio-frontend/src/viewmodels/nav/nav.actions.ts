@@ -7,7 +7,7 @@ interface NavActions {
 }
 
 export const useNav = create<NavState & NavActions>()((set) => ({
-    view: 'overview',
+    view: 'map',
 
     setView: (view) => {
         set({ view });

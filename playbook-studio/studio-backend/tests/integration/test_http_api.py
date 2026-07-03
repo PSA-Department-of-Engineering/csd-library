@@ -106,6 +106,22 @@ class TestUpdateSection:
         assert resp.status_code == 404
 
 
+class TestUpdateDocument:
+    def test_full_rewrite_survives_when_gates_pass(self, client: TestClient) -> None:
+        original = client.get("/api/refs/REF-Beta").json()["raw"]
+        rewritten = original.replace("## 1. Guidance", "## 1. Guidance (revised)")
+        resp = client.put("/api/refs/REF-Beta", json={"raw": rewritten})
+        assert resp.status_code == 200
+        after = client.get("/api/refs/REF-Beta").json()
+        assert after["sections"][0]["title"] == "Guidance (revised)"
+
+    def test_full_rewrite_rolls_back_when_gates_fail(self, failing_client: TestClient) -> None:
+        original = failing_client.get("/api/refs/REF-Beta").json()["raw"]
+        resp = failing_client.put("/api/refs/REF-Beta", json={"raw": "# REF: Broken\n"})
+        assert resp.status_code == 422
+        assert failing_client.get("/api/refs/REF-Beta").json()["raw"] == original
+
+
 class TestValidation:
     def test_validate_returns_report(self, client: TestClient) -> None:
         resp = client.post("/api/validate")

@@ -30,6 +30,18 @@ export const SidebarNav = () => {
 
     return (
         <nav className="flex h-full flex-col gap-3">
+            <button
+                onClick={() => setView('playbook')}
+                className={cn(
+                    'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[13px] font-semibold',
+                    view === 'playbook'
+                        ? 'bg-secondary text-foreground'
+                        : 'text-foreground hover:bg-secondary/60',
+                )}
+            >
+                <span className="h-2 w-2 shrink-0 rounded-full bg-primary" />
+                AI-PLAYBOOK
+            </button>
             <input
                 type="search"
                 placeholder="Find a REF..."
