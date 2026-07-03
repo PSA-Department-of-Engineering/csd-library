@@ -88,7 +88,7 @@ export const PlaybookGraph = () => {
 
     return (
         <svg
-            viewBox="-575 -575 1150 1150"
+            viewBox="-535 -535 1070 1070"
             className="h-full w-full"
             role="img"
             aria-label="Playbook reference graph"

@@ -5,6 +5,7 @@ from __future__ import annotations
 from fastapi import APIRouter
 
 from studio.adapters.inbound.http.dependencies import ContainerDep
+from studio.adapters.inbound.http.dtos.create_ref_request import CreateRefRequest
 from studio.adapters.inbound.http.dtos.ref_detail_response import RefDetailResponse
 from studio.adapters.inbound.http.dtos.update_document_request import UpdateDocumentRequest
 from studio.adapters.inbound.http.dtos.update_section_request import UpdateSectionRequest
@@ -15,6 +16,18 @@ from studio.adapters.inbound.http.mappers.validation_mapper import map_validatio
 __all__ = ["router"]
 
 router = APIRouter()
+
+
+@router.post("/refs", response_model=RefDetailResponse, status_code=201)
+async def create_ref(request: CreateRefRequest, container: ContainerDep) -> RefDetailResponse:
+    """Author a new REF from the canonical template; gated like every edit."""
+    ref = container.create_ref().execute(
+        name=request.name,
+        domain=request.domain,
+        title=request.title,
+        summary=request.summary,
+    )
+    return map_ref(ref)
 
 
 @router.get("/refs/{name}", response_model=RefDetailResponse)

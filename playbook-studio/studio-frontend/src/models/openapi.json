@@ -71,6 +71,48 @@
         }
       }
     },
+    "/api/refs": {
+      "post": {
+        "tags": [
+          "refs"
+        ],
+        "summary": "Create Ref",
+        "description": "Author a new REF from the canonical template; gated like every edit.",
+        "operationId": "create_ref_api_refs_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRefRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefDetailResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/refs/{name}": {
       "get": {
         "tags": [
@@ -278,6 +320,35 @@
   },
   "components": {
     "schemas": {
+      "CreateRefRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "domain": {
+            "type": "string",
+            "title": "Domain"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "domain",
+          "title",
+          "summary"
+        ],
+        "title": "CreateRefRequest",
+        "description": "Inputs for a template-conformant new REF."
+      },
       "GraphNodeResponse": {
         "properties": {
           "id": {

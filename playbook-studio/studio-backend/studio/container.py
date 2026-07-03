@@ -10,6 +10,7 @@ from studio.adapters.outbound.playbook_fs.fs_playbook_repository import FsPlaybo
 from studio.adapters.outbound.playbook_fs.subprocess_playbook_validator import (
     SubprocessPlaybookValidator,
 )
+from studio.application.ports.inbound.create_ref_port import CreateRefPort
 from studio.application.ports.inbound.get_graph_port import GetGraphPort
 from studio.application.ports.inbound.get_playbook_port import GetPlaybookPort
 from studio.application.ports.inbound.get_ref_port import GetRefPort
@@ -18,6 +19,7 @@ from studio.application.ports.inbound.run_validation_port import RunValidationPo
 from studio.application.ports.inbound.update_ref_document_port import UpdateRefDocumentPort
 from studio.application.ports.inbound.update_ref_section_port import UpdateRefSectionPort
 from studio.application.ports.outbound.playbook_validator import PlaybookValidator
+from studio.application.use_cases.create_ref import CreateRef
 from studio.application.use_cases.get_graph import GetGraph
 from studio.application.use_cases.get_playbook import GetPlaybook
 from studio.application.use_cases.get_ref import GetRef
@@ -77,6 +79,9 @@ class Container:
 
     def update_ref_document(self) -> UpdateRefDocumentPort:
         return _check(UpdateRefDocument(self._repository, self._validator), UpdateRefDocumentPort)
+
+    def create_ref(self) -> CreateRefPort:
+        return _check(CreateRef(self._repository, self._validator), CreateRefPort)
 
     def list_claims(self) -> ListClaimsPort:
         return _check(ListClaims(self._repository), ListClaimsPort)
