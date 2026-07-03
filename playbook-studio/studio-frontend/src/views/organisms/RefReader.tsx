@@ -34,17 +34,20 @@ const SLOT_BADGES: Partial<
 > = {
     'anti-patterns': {
         label: 'anti-patterns',
-        className: 'bg-rose-500/15 text-rose-300 ring-1 ring-inset ring-rose-500/30',
+        className:
+            'bg-rose-500/15 text-rose-700 dark:text-rose-300 ring-1 ring-inset ring-rose-500/30',
         hint: 'The template slot for what NOT to do.',
     },
     derivable: {
         label: 'derivable',
-        className: 'bg-slate-500/15 text-slate-300 ring-1 ring-inset ring-slate-500/30',
+        className:
+            'bg-slate-500/15 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-500/30',
         hint: 'Links here are derivable from the graph (see the Connections panel); only the annotations are curated.',
     },
     generated: {
         label: 'generated',
-        className: 'bg-slate-500/15 text-slate-300 ring-1 ring-inset ring-slate-500/30',
+        className:
+            'bg-slate-500/15 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-500/30',
         hint: 'Maintained by scripts/sync_backlinks.py; edit skill frontmatter instead.',
     },
 };
@@ -241,7 +244,7 @@ export const RefReader = () => {
                             if (rows.length === 0) {
                                 return (
                                     <div>
-                                        <p className="text-xs text-amber-300">
+                                        <p className="text-xs text-amber-700 dark:text-amber-300">
                                             Not in the playbook routing table: no task will load
                                             this REF.
                                         </p>

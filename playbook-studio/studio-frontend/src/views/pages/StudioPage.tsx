@@ -3,6 +3,7 @@ import { useNav } from '@/viewmodels/nav';
 import { CreateRefForm } from '@/views/organisms/CreateRefForm';
 import { CreateSkillForm } from '@/views/organisms/CreateSkillForm';
 import { GovernanceRail } from '@/views/organisms/GovernanceRail';
+import { MapFilters } from '@/views/molecules/MapFilters';
 import { PlaybookGraph } from '@/views/organisms/PlaybookGraph';
 import { PlaybookReader } from '@/views/organisms/PlaybookReader';
 import { RefReader } from '@/views/organisms/RefReader';
@@ -25,6 +26,9 @@ export const StudioPage = () => {
                     <Card className="relative min-w-0 flex-1 overflow-hidden">
                         <div className="absolute inset-0 p-1">
                             <PlaybookGraph />
+                        </div>
+                        <div className="absolute left-3 top-3 z-10 max-w-[70%]">
+                            <MapFilters />
                         </div>
                     </Card>
                     <div className="min-h-0 w-[360px] shrink-0">

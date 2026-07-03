@@ -12,7 +12,7 @@ export interface MarkdownProps {
 export const Markdown = ({ children, className }: MarkdownProps) => (
     <div
         className={cn(
-            'prose prose-sm prose-invert max-w-none',
+            'prose prose-sm max-w-none dark:prose-invert',
             'prose-headings:text-foreground prose-p:text-muted-foreground',
             'prose-li:text-muted-foreground prose-strong:text-foreground',
             'prose-code:rounded prose-code:bg-secondary prose-code:px-1 prose-code:py-0.5',
