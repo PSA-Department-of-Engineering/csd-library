@@ -14,7 +14,6 @@ csd-library/
 ├── vitest-intent/       ← publishable TypeScript runtime: intent() for vitest
 ├── playwright-intent/   ← publishable TypeScript runtime: intent() for Playwright e2e
 ├── starlight-theme/     ← publishable TypeScript/CSS package: the shared Starlight look (stylesheet + mermaidConfig)
-├── playbook-studio/     ← local web app (not published): visual browser/editor for the sibling playbook, with intent-gated writes
 ├── slidev-themes/       ← theme catalog (CSS per brand/org) resolved by the bootstrap-slidev-deck skill
 └── bundles/             ← reusable Intent Bundles (claims + enforcement) consuming the runtimes
     ├── adr/             ← ADR bundle: lifecycle claims for decision records on Starlight sites
@@ -31,7 +30,6 @@ csd-library/
 | `playwright-intent`| TS+Playwright runtime: the `intent()` wrapper for browser e2e | Any frontend project doing CSD-style e2e |
 | `starlight-theme`  | Shared Starlight look: a token-based stylesheet (warm dark palette + Mermaid contrast layer) plus the `astro-mermaid` `mermaidConfig` object | Any Starlight docs site, via `customCss` + a config import |
 | `bundles/<topic>/` | Packaged claim set + per-runner test impls (`impls/pytest/`, `impls/vitest/`, …) | The `apply-intent-bundle` skill drops these into target projects |
-| `playbook-studio`  | Hexagonal FastAPI + React MVVM app that browses and edits the sibling playbook with intent-test-gated writes; dogfoods `pytest-intent`, `vitest-intent`, and `csd-intent` | Run locally via `playbook-studio/devops/start.ps1` |
 | `slidev-themes/`   | Brand/org theme CSS for Slidev decks | The `bootstrap-slidev-deck` skill resolves themes from here |
 
 `starlight-theme` is a *runtime-styling* package (the look) and is independent of the STARLIGHT *intent bundle* under `bundles/starlight/` (the frontmatter + page-structure contract). A docs site can adopt either, both, or neither; the theme is consumed as an npm dependency, while the bundle is copied in by `apply-intent-bundle`.
