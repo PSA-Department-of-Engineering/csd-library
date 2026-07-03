@@ -24,17 +24,24 @@ $workspace  = Split-Path -Parent $csdLibrary
 $backend    = Join-Path $studio 'studio-backend'
 $frontend   = Join-Path $studio 'studio-frontend'
 $py         = Join-Path $backend '.venv\Scripts\python.exe'
-$playbook   = Join-Path $workspace 'ai-coding-prompts'
 
 Write-Host '== Playbook Studio (native dev) ==' -ForegroundColor Cyan
 
-# --- Sanity: the playbook checkout the studio edits must exist ----------------
+# --- Resolve and verify the playbook checkout the studio edits ----------------
+# Convention: ai-coding-prompts cloned as a sibling of csd-library under one
+# workspace. STUDIO_PLAYBOOK_ROOT overrides for non-sibling setups; the spawned
+# backend is pinned to whichever path this check validated.
+$playbook = $env:STUDIO_PLAYBOOK_ROOT
+if ([string]::IsNullOrWhiteSpace($playbook)) {
+    $playbook = Join-Path $workspace 'ai-coding-prompts'
+}
 if (-not (Test-Path (Join-Path $playbook 'AI-PLAYBOOK.md'))) {
     Write-Warning "No playbook checkout found at $playbook."
     Write-Warning 'Clone ai-coding-prompts as a sibling of csd-library (or set STUDIO_PLAYBOOK_ROOT), then re-run.'
     Read-Host 'Press Enter to exit'
     exit 1
 }
+Write-Host "Playbook checkout -> $playbook" -ForegroundColor Green
 
 # --- First-run setup: backend -------------------------------------------------
 if (-not (Test-Path $py)) {
@@ -67,7 +74,7 @@ if (-not (Test-Path (Join-Path $frontend 'src\models\index.ts'))) {
 # --- Launch both servers in their own PowerShell windows -----------------------
 Write-Host 'Studio backend  -> http://127.0.0.1:8907' -ForegroundColor Green
 Start-Process pwsh -ArgumentList '-NoExit', '-Command',
-    "`$Host.UI.RawUI.WindowTitle = 'Playbook Studio backend (:8907)'; `$env:PORT='8907'; & '$py' -m studio.adapters.inbound.http.run" `
+    "`$Host.UI.RawUI.WindowTitle = 'Playbook Studio backend (:8907)'; `$env:PORT='8907'; `$env:STUDIO_PLAYBOOK_ROOT='$playbook'; & '$py' -m studio.adapters.inbound.http.run" `
     -WorkingDirectory $backend
 
 Write-Host 'Studio frontend -> http://localhost:5199' -ForegroundColor Green
