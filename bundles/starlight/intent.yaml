@@ -116,3 +116,14 @@ INT-STARLIGHT-010:
     component: PageStructure
     type: contract
   criticality: medium
+
+INT-STARLIGHT-011:
+  version: 1.0.0
+  status: active
+  statement: "Internal markdown link targets MUST be relative to the current page: no link or image target in doc prose may be root-absolute (start with `/`). Code blocks are exempt (link syntax there is just text)."
+  rationale: "Astro's `base` prefixes generated navigation and asset URLs but never rewrites hand-written hrefs, so a root-absolute internal link escapes the site's base path and 404s the moment the site serves under a portal prefix (DOCS_BASE) - a live docs site linked /lifecycle/ instead of ../lifecycle/ and broke exactly this way."
+  test:
+    scope: unit
+    component: ContentCollection
+    type: invariant
+  criticality: high

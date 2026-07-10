@@ -25,8 +25,11 @@ These claims read each page's body (the markdown after the frontmatter) and are 
 | INT-STARLIGHT-008 | Every page contains at least one level-2 heading | medium |
 | INT-STARLIGHT-009 | A `type: Flow` page contains a Mermaid `sequenceDiagram` and a steps section (a `## Steps` heading OR an ordered list) | high |
 | INT-STARLIGHT-010 | A `type: Guide` page contains a numbered procedure (an ordered list OR at least two headings beginning with a number) | medium |
+| INT-STARLIGHT-011 | Internal markdown link targets are relative to the current page: no root-absolute (`/...`) link or image targets in prose; code blocks exempt | high |
 
 The type enum (INT-STARLIGHT-004) allows {Overview, Guide, Standard, Reference, Template, Intent, Flow}: Template and Intent match REF-Documentation 7.3, and Flow covers sequence-diagram pages.
+
+Base-safe linking (INT-STARLIGHT-011) exists because Astro's `base` prefixes generated navigation and asset URLs but never rewrites hand-written hrefs: a root-absolute internal link escapes the base path and 404s the moment the site serves under a portal prefix (`DOCS_BASE`).
 
 ## Runners
 
@@ -76,6 +79,9 @@ The bundle's vitest impl (`impls/vitest/starlight.test.ts`) is a normal vitest t
 Manual SemVer in `bundle.yaml` for now. Once Git tracks the playbook, bumps come via Conventional Commits (`feat(starlight):` minor, `fix(starlight):` patch, `feat(starlight)!:` major).
 
 ## Changelog
+
+### 0.3.0 - 2026-07-10
+Adds base-safe linking. New claim INT-STARLIGHT-011: internal markdown link and image targets in prose must be relative (no root-absolute `/...` targets; code blocks exempt), because Astro's `base` never rewrites hand-written hrefs and a root-absolute link 404s under a portal prefix (`DOCS_BASE`).
 
 ### 0.2.0 - 2026-06-14
 Adds generic page-structure enforcement. New claims INT-STARLIGHT-007 (intro prose before the first level-2 heading), INT-STARLIGHT-008 (at least one level-2 heading), INT-STARLIGHT-009 (Flow pages need a `sequenceDiagram` plus steps), and INT-STARLIGHT-010 (Guide pages need a numbered procedure). Expands the INT-STARLIGHT-004 type enum to {Overview, Guide, Standard, Reference, Template, Intent, Flow}. Ships generic page skeletons under `templates/`.

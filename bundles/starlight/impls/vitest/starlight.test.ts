@@ -340,4 +340,28 @@ describe("STARLIGHT bundle", () => {
       ).toEqual([]);
     },
   );
+
+  intent(
+    "INT-STARLIGHT-011",
+    "internal links are relative: no root-absolute markdown link targets",
+    () => {
+      // Astro's `base` prefixes generated navigation and assets but never rewrites
+      // hand-written hrefs, so [x](/page/) escapes the site's base path and 404s the
+      // moment the site serves under a portal prefix (DOCS_BASE). Code is exempt:
+      // link syntax inside fences or inline code is just text.
+      const CODE_RE = /```[\s\S]*?```|`[^`\n]*`/g;
+      const ABSOLUTE_LINK_RE = /!?\[[^\]]*\]\(\s*(\/[^)\s]*)/g;
+      const offenders: string[] = [];
+      for (const d of docs) {
+        const prose = d.body.replace(CODE_RE, "");
+        for (const m of prose.matchAll(ABSOLUTE_LINK_RE)) {
+          offenders.push(`${d.path}: ${m[1]}`);
+        }
+      }
+      expect(
+        offenders,
+        `root-absolute link targets escape the site base (DOCS_BASE) and 404 under the portal; write them relative to the current page: ${offenders.join("; ")}`,
+      ).toEqual([]);
+    },
+  );
 });
