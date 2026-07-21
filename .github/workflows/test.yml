@@ -7,6 +7,10 @@ name: tests
 on:
   push:
     branches: [main]
+  # Manual re-trigger: a queued run once wedged at GitHub's dispatch layer
+  # (stuck "queued" across two attempts while runners sat idle); dispatching a
+  # fresh run is the reliable recovery.
+  workflow_dispatch:
   pull_request:
     branches: [main]
 
