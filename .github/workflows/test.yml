@@ -12,7 +12,7 @@ on:
 
 jobs:
   python:
-    runs-on: ubuntu-latest
+    runs-on: arc-dind
     strategy:
       fail-fast: false
       matrix:
@@ -46,7 +46,7 @@ jobs:
 
   csd-intent-self-audit:
     needs: python
-    runs-on: ubuntu-latest
+    runs-on: arc-dind
     defaults:
       run:
         working-directory: csd-intent
@@ -62,7 +62,7 @@ jobs:
         run: csd-intent . --tests-dir tests --fail-on any
 
   node:
-    runs-on: ubuntu-latest
+    runs-on: arc-dind
     strategy:
       fail-fast: false
       matrix:
@@ -88,7 +88,7 @@ jobs:
         run: npm test
 
   intent-audits:
-    runs-on: ubuntu-latest
+    runs-on: arc-dind
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
