@@ -34,6 +34,7 @@ __all__ = [
     "VERSION_PATTERN",
     "check_schema",
     "parse_intent_yaml",
+    "top_level_keys",
 ]
 
 # Accept either canonical `INT-NNN` (CSD-INTENT-01 §3.1) or our extended
@@ -62,6 +63,15 @@ def parse_intent_yaml(path: Path) -> dict[str, dict[str, Any]]:
         if isinstance(key, str) and key.startswith("INT-") and isinstance(value, dict):
             out[key] = value
     return out
+
+
+def top_level_keys(path: Path) -> list[str]:
+    """Sorted top-level YAML keys, for diagnosing a zero-claims schema mismatch."""
+    text = path.read_text(encoding="utf-8")
+    data = yaml.safe_load(text) or {}
+    if not isinstance(data, dict):
+        return []
+    return sorted(str(key) for key in data.keys())
 
 
 def _scope_and_test(claim: dict[str, Any]) -> tuple[str | None, dict[str, Any] | None]:

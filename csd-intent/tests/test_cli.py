@@ -77,6 +77,27 @@ def test_cli_relative_tests_dir_anchors_to_project_root(
     assert "CLEAN" in out
 
 
+@intent('INT-CSD-007')
+def test_cli_zero_claims_exits_nonzero_under_fail_on_schema(tmp_path: Path, capsys) -> None:
+    """The `spec.claims[]` reproduction from issue #5 must not report CLEAN."""
+    non_canonical = """
+apiVersion: csd.foundry/v1
+kind: Intent
+metadata:
+  name: task-api
+spec:
+  claims:
+    - id: CSD-001
+      name: ci-pipeline
+"""
+    (tmp_path / "intent.yaml").write_text(non_canonical, encoding="utf-8")
+    rc = main([str(tmp_path), "--fail-on", "schema"])
+    out = capsys.readouterr().out
+    assert rc == 1
+    assert "CLEAN" not in out
+    assert "no top-level INT-* claims" in out
+
+
 def test_cli_version_prints_and_exits(capsys) -> None:
     rc = main(["--version"])
     out = capsys.readouterr().out

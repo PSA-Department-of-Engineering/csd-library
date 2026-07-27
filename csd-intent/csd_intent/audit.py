@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 
-from .schema import check_schema, parse_intent_yaml
+from .schema import check_schema, parse_intent_yaml, top_level_keys
 from .walker import collect_attestations, find_nested_intent_projects
 
 __all__ = [
@@ -107,6 +107,19 @@ def audit(
 
     claims = parse_intent_yaml(intent_path)
     report.claim_count = len(claims)
+
+    # A file present with nothing the parser recognises is schema drift, not an
+    # empty-but-valid project: report it loudly rather than a silent CLEAN (#5).
+    if not claims:
+        keys = top_level_keys(intent_path)
+        found = f"found keys: {', '.join(keys)}" if keys else "the file has no top-level keys"
+        report.violations.append(
+            AuditViolation(
+                ViolationKind.SCHEMA,
+                None,
+                f"intent.yaml has no top-level INT-* claims; {found}",
+            )
+        )
 
     # Schema
     for msg in check_schema(claims):
