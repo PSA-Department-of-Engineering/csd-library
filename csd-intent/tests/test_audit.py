@@ -146,6 +146,35 @@ INT-001:
     assert report.unattested == []
 
 
+@intent('INT-CSD-007')
+def test_zero_claims_flagged_as_schema_violation(tmp_path: Path) -> None:
+    """A non-canonical schema (e.g. `spec.claims[]`) parses to zero INT-* keys.
+
+    That must not read as an empty-but-valid project: it's schema drift and
+    should fail loudly rather than report CLEAN (issue #5).
+    """
+    non_canonical = """
+apiVersion: csd.foundry/v1
+kind: Intent
+metadata:
+  name: task-api
+spec:
+  claims:
+    - id: CSD-001
+      name: ci-pipeline
+      description: "CI pipeline runs lint, test, audit, and conformance."
+"""
+    project = _scaffold(tmp_path, non_canonical)
+    report = audit(project)
+    assert not report.ok
+    assert report.claim_count == 0
+    schema_violations = [v for v in report.violations if v.kind == ViolationKind.SCHEMA]
+    assert schema_violations
+    message = schema_violations[0].message
+    assert "no top-level INT-* claims" in message
+    assert "apiVersion" in message and "kind" in message and "spec" in message
+
+
 def test_missing_intent_yaml(tmp_path: Path) -> None:
     report = audit(tmp_path)
     assert not report.ok

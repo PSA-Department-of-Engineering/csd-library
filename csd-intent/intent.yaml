@@ -68,3 +68,14 @@ INT-CSD-006:
     component: CLI
     type: contract
   criticality: high
+
+INT-CSD-007:
+  version: 1.0.0
+  status: active
+  statement: "An intent.yaml that parses to zero canonical INT-* claims is reported as a schema violation, not a clean audit."
+  rationale: "A file present with nothing the parser recognises is schema drift, not an empty-but-valid project; a silent CLEAN masks it from the gate that is supposed to catch it (issue #5)."
+  test:
+    scope: unit
+    component: Auditor
+    type: behavior
+  criticality: high
