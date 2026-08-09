@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/playwright-intent-v2.0.0...playwright-intent-v2.0.1) (2026-08-09)
+
+
+### Bug Fixes
+
+* **playwright-intent:** correct the csd-intent install, which pointed at a name that does not exist ([3c76495](https://github.com/PSA-Department-of-Engineering/csd-library/commit/3c76495233ffefeded6c1a94e8f21a753f7861ac))
+
 ## [2.0.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/playwright-intent-v1.0.1...playwright-intent-v2.0.0) (2026-08-09)
 
 
