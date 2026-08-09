@@ -65,8 +65,10 @@ Peer dependency: `@playwright/test >= 1.40`.
 
 To validate your `intent.yaml` against CSD-INTENT-01 and check that every claim has a test:
 
+`csd-intent` is not on PyPI — it installs from a pinned git tag on this repo (see ADR-0001), so the bare name resolves to nothing:
+
 ```bash
-pip install csd-intent
+pip install "csd-intent @ git+https://github.com/PSA-Department-of-Engineering/csd-library.git@csd-intent-v0.3.2#subdirectory=csd-intent"
 csd-intent /path/to/your/project
 ```
 
