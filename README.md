@@ -61,7 +61,7 @@ Skills and references in the playbook point here via `../csd-library/...`.
 
 ## Releasing
 
-Releases are automated with [release-please](https://github.com/googleapis/release-please) through the org's shared CI (`PSA-Department-of-Engineering/ci` → `library.yml`). The decision, and why it diverges from the services' auto-cut model, is recorded in [ADR-0002](docs/adr/0002-release-automation.md); per-package distribution targets are [ADR-0001](docs/adr/0001-private-package-distribution.md).
+Releases are automated with [release-please](https://github.com/googleapis/release-please) through the org's shared CI (`PSA-Department-of-Engineering/ci` → `library.yml`). The decision, and why it diverges from the services' auto-cut model, is recorded in [ADR-0002](docs/adr/0002-release-automation.md). Distribution targets: npm packages go to the public npm registry with provenance ([ADR-0003](docs/adr/0003-public-npm-distribution.md)); Python packages install from a pinned git tag ([ADR-0001](docs/adr/0001-private-package-distribution.md), whose npm half ADR-0003 supersedes).
 
 How a release happens:
 
@@ -69,7 +69,7 @@ How a release happens:
 2. release-please maintains one **release PR per package**, accumulating the version bump + CHANGELOG from those commits. This is the only PR in the flow.
 3. The repo's tests (`.github/workflows/test.yml`) run on that PR. Merge it when you want to cut the release; the merge is the release gate.
 4. On merge, release-please tags `<pkg>-vX.Y.Z`, creates the GitHub release, and:
-   - **npm** (`vitest-intent`, `playwright-intent`): publishes to GitHub Packages.
+   - **npm** (`vitest-intent`, `playwright-intent`, `starlight-theme`): publishes to the public npm registry with a sigstore provenance attestation. Consumers install with no `.npmrc` and no token (see ADR-0003).
    - **Python** (`pytest-intent`, `csd-intent`): nothing more to push - the tag *is* the release; consumers `pip install` it (see ADR-0001).
 
 Because those bumps are computed from the commit messages, a committed `.pre-commit-config.yaml` ships a bypassable local `commit-msg` hook that checks each message is a Conventional Commit before it lands. Install it once per clone (the `.git/hooks` install is not committed, only the config is):
