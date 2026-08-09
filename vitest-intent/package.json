@@ -1,6 +1,6 @@
 {
   "name": "@psa-department-of-engineering/vitest-intent",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "The intent() wrapper for vitest - links a test to one or more CSD intent claims (INT-NNN). Spec validation and cross-runtime coverage live in the standalone `csd-intent` CLI.",
   "keywords": [
     "vitest",

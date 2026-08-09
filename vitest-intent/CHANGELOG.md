@@ -2,6 +2,24 @@
 
 All notable changes to vitest-intent. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [2.0.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/vitest-intent-v1.0.1...vitest-intent-v2.0.0) (2026-08-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* updated intent tests & added playwright-intent
+
+### Features
+
+* publish intent testing packages ([7fba066](https://github.com/PSA-Department-of-Engineering/csd-library/commit/7fba06654169102e072398eca1b025abe13b0b42))
+* updated intent tests & added playwright-intent ([7f66d1c](https://github.com/PSA-Department-of-Engineering/csd-library/commit/7f66d1cb67a5271d8089edcbff8bea80e4113cc1))
+
+
+### Bug Fixes
+
+* **vitest-intent:** document the public npm install, not the GitHub Packages one ([228c2ab](https://github.com/PSA-Department-of-Engineering/csd-library/commit/228c2abc8180a2095e76d8ee8ede65203070892d))
+* **vitest-intent:** publish to the public npm registry ([e7b8dcf](https://github.com/PSA-Department-of-Engineering/csd-library/commit/e7b8dcf74a93cb419117b73e2b09a01900dedd4b))
+
 ## [1.0.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/vitest-intent-v1.0.0...vitest-intent-v1.0.1) (2026-08-09)
 
 
