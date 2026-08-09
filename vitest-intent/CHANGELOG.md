@@ -2,6 +2,13 @@
 
 All notable changes to vitest-intent. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [1.0.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/vitest-intent-v1.0.0...vitest-intent-v1.0.1) (2026-08-09)
+
+
+### Bug Fixes
+
+* **vitest-intent:** publish to the public npm registry ([e7b8dcf](https://github.com/PSA-Department-of-Engineering/csd-library/commit/e7b8dcf74a93cb419117b73e2b09a01900dedd4b))
+
 ## [1.0.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/vitest-intent-v0.2.1...vitest-intent-v1.0.0) (2026-06-13)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/playwright-intent-v1.0.0...playwright-intent-v1.0.1) (2026-08-09)
+
+
+### Bug Fixes
+
+* **playwright-intent:** publish to the public npm registry ([2ea3d45](https://github.com/PSA-Department-of-Engineering/csd-library/commit/2ea3d45bfa148894bb6bbd5f94eca84be2cdee13))
+
 ## [1.0.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/playwright-intent-v0.1.1...playwright-intent-v1.0.0) (2026-06-13)
 
 

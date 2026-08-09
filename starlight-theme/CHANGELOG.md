@@ -2,6 +2,13 @@
 
 All notable changes to starlight-theme. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [1.0.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/starlight-theme-v1.0.0...starlight-theme-v1.0.1) (2026-08-09)
+
+
+### Bug Fixes
+
+* **starlight-theme:** publish to the public npm registry ([bd886e2](https://github.com/PSA-Department-of-Engineering/csd-library/commit/bd886e279b029728cb2464820fe76d1ff7e8719c))
+
 ## 1.0.0 (2026-06-14)
 
 
