@@ -2,6 +2,13 @@
 
 All notable changes to vitest-intent. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [2.0.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/vitest-intent-v2.0.0...vitest-intent-v2.0.1) (2026-08-09)
+
+
+### Bug Fixes
+
+* **vitest-intent:** correct the csd-intent install, which pointed at a name that does not exist ([afbbeea](https://github.com/PSA-Department-of-Engineering/csd-library/commit/afbbeeacfe31cd4419d39d37097515935fe12b62))
+
 ## [2.0.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/vitest-intent-v1.0.1...vitest-intent-v2.0.0) (2026-08-09)
 
 

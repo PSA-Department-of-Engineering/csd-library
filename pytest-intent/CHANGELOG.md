@@ -2,6 +2,13 @@
 
 All notable changes to pytest-intent are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [0.2.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/pytest-intent-v0.2.0...pytest-intent-v0.2.1) (2026-08-09)
+
+
+### Bug Fixes
+
+* **pytest-intent:** pin the csd-intent install example to the current tag ([4bfd524](https://github.com/PSA-Department-of-Engineering/csd-library/commit/4bfd524d9112173015504a832f6a74cc23e7e1c5))
+
 ## [Unreleased]
 
 ### Added
