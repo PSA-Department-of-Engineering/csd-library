@@ -22,12 +22,9 @@ The CSS is fully token-based: it defines the palette once and the Mermaid layer 
 
 ## Install
 
-Published privately to GitHub Packages under the org scope. Map the scope once (in `.npmrc`), then install by the scoped name:
+Published to the public npm registry. No `.npmrc` and no token — install it like any other package:
 
 ```bash
-echo '@psa-department-of-engineering:registry=https://npm.pkg.github.com' >> .npmrc
-# auth: a read:packages PAT -> //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
-
 npm install @psa-department-of-engineering/starlight-theme
 ```
 
