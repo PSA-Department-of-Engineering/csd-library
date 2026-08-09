@@ -1,9 +1,14 @@
 # ADR-0001: Private distribution of csd-library packages
 
-- **adr_status:** Decided
+- **adr_status:** Superseded
 - **Date:** 2026-06-11
 - **Deciders:** Rafael Pires
 - **Applies to:** `vitest-intent`, `pytest-intent`, `csd-intent` (and future intent packages in this repo)
+- **Superseded by:** [ADR-0003](0003-public-npm-distribution.md), **in its npm half only**
+
+> **The npm decision below no longer holds.** GitHub Packages requires an auth token to read even a public package, so the arrangement here survived the repo going public as friction with nothing left to protect — and it made any consumer repo unforkable. npm packages now ship to the public npm registry under the same scope; see [ADR-0003](0003-public-npm-distribution.md).
+>
+> **The Python decision below still holds.** `pytest-intent` and `csd-intent` are still installed from a pinned git tag on this repository, which needs no credential now that the repo is public. Everything in this ADR about git-tag installs, per-package SemVer, and the `<pkg>-vX.Y.Z` tag namespace remains current.
 
 ## Context
 
