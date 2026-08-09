@@ -22,7 +22,7 @@
     "url": "https://github.com/PSA-Department-of-Engineering/csd-library/issues"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "type": "module",
   "main": "./dist/index.js",
