@@ -49,7 +49,7 @@ pip install -e path/to/csd-library/pytest-intent
 To validate your `intent.yaml` against CSD-INTENT-01 and check that every claim has a test:
 
 ```bash
-pip install "csd-intent @ git+https://github.com/PSA-Department-of-Engineering/csd-library.git@csd-intent-v0.1.0#subdirectory=csd-intent"
+pip install "csd-intent @ git+https://github.com/PSA-Department-of-Engineering/csd-library.git@csd-intent-v0.3.2#subdirectory=csd-intent"
 csd-intent /path/to/your/project
 ```
 
