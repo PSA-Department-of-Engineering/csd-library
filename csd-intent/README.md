@@ -27,7 +27,7 @@ project (Python via AST, TS/JS via regex), reads `intent.yaml`, and answers:
 
 ```bash
 # Private install, pinned to a release tag:
-pip install "csd-intent @ git+https://github.com/PSA-Department-of-Engineering/csd-library.git@csd-intent-v0.1.0#subdirectory=csd-intent"
+pip install "csd-intent @ git+https://github.com/PSA-Department-of-Engineering/csd-library.git@csd-intent-v0.3.2#subdirectory=csd-intent"
 
 # Local dev against a csd-library checkout:
 pip install -e path/to/csd-library/csd-intent
