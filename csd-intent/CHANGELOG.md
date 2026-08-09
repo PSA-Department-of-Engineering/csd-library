@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.3.2...csd-intent-v0.3.3) (2026-08-09)
+
+
+### Bug Fixes
+
+* **csd-intent:** pin the install example to the current tag ([bddac48](https://github.com/PSA-Department-of-Engineering/csd-library/commit/bddac48e1015eb18963f93eac400ab768d85710c))
+
 ## [0.3.2](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.3.1...csd-intent-v0.3.2) (2026-07-27)
 
 
