@@ -1,7 +1,7 @@
 {
-  "vitest-intent": "1.0.0",
-  "playwright-intent": "1.0.0",
-  "starlight-theme": "1.0.0",
+  "vitest-intent": "1.0.1",
+  "playwright-intent": "1.0.1",
+  "starlight-theme": "1.0.1",
   "pytest-intent": "0.2.0",
   "csd-intent": "0.3.2"
 }
