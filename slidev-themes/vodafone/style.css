@@ -264,3 +264,8 @@
   color: var(--vf-muted);
   line-height: 1.5;
 }
+
+/* Slidev client-UI repair: the goto dialog (key: g) hides by sliding up
+   only 80px; its stale results list stays parked over the slide. Slidev
+   disables the input when inactive, so hide the dialog on that state. */
+#slidev-goto-dialog:has(#slidev-goto-input:disabled) { display: none !important; }

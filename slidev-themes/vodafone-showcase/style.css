@@ -1,0 +1,636 @@
+/* vodafone-showcase v1.
+   The showcase grammar: near-black warm stage, glass surfaces, one brand
+   accent with glow, dense structured figures, and an AMBIENT animation
+   layer: always-on loops in the connective tissue only.
+
+   Doctrine:
+   - Motion never carries meaning, and never moves anything you read.
+     Flows, halos, rings, and pulses animate; cards, tiles, and text
+     never do (entrances excepted: once, settling into place).
+   - Base styles ARE the final static state; entrance keyframes only
+     describe the journey in (a `from` block, never a `to`).
+   - Slow tempos (2.6s-5.4s), small amplitudes, desynchronized loops.
+   - Typography in SVG figures is sized by CLASS ONLY: a font-size
+     presentation attribute is captured by UnoCSS attributify and
+     compiled on the rem scale (13.5 becomes 3.375rem). Never use one.
+   - SVG internals never animate transforms of content groups (no
+     compositing: whole-figure repaint). Halo softness comes from
+     radial gradients, never filter blur.
+   - Print and reduced-motion render the true resting slide. */
+
+
+:root {
+  --k-accent:      #E60000;
+  --k-accent-2:    #FF3B3B;
+  --k-accent-soft: #FF7A7A;
+  --k-accent-deep: #8C0F0F;
+  --k-glow:        rgba(230, 0, 0, 0.45);
+
+  --k-good:        #2BB673;
+
+  --k-stage-0:     #08080B;
+  --k-stage-1:     #101015;
+  --k-stage-tint:  #1A1320;
+
+  --k-txt:         #F5F5F7;
+  --k-sub:         #9A9AA6;
+  --k-mut:         #6E6E7E;
+  --k-ghost:       rgba(255, 255, 255, 0.05);
+
+  --k-glass:       rgba(255, 255, 255, 0.045);
+  --k-glass-hl:    rgba(230, 0, 0, 0.08);
+  --k-glass-deep:  rgba(230, 0, 0, 0.16);
+  --k-line:        rgba(255, 255, 255, 0.12);
+  --k-line-soft:   rgba(255, 255, 255, 0.08);
+
+  --k-r-chip:      980px;
+  --k-r-card:      14px;
+  --k-r-spot:      22px;
+
+  --k-font:        -apple-system, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --k-font-mono:   ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
+
+  --slidev-theme-primary:    var(--k-accent);
+  --slidev-theme-text:       var(--k-txt);
+  --slidev-theme-background: var(--k-stage-0);
+}
+
+/* ── Slidev client-UI repair ─────────────────────── */
+/* The goto dialog (key: g) hides by sliding up only 80px (-top-20);
+   its autocomplete list keeps the last results rendered below the
+   input, poking into the slide. Slidev disables the input when the
+   dialog is inactive, so hide the whole dialog on that state. */
+
+#slidev-goto-dialog:has(#slidev-goto-input:disabled) { display: none !important; }
+
+/* ── Stage ───────────────────────────────────────── */
+
+.slidev-layout {
+  font-family: var(--k-font);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--k-txt);
+  background:
+    radial-gradient(90% 70% at 12% 108%, rgba(140, 18, 19, 0.10) 0%, rgba(140, 18, 19, 0) 60%),
+    radial-gradient(140% 120% at 70% -10%, var(--k-stage-tint) 0%, var(--k-stage-1) 38%, var(--k-stage-0) 100%);
+  padding: 46px 48px 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.slidev-layout h1 {
+  font-weight: 700;
+  font-size: 31px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--k-txt);
+  margin: 0 0 6px;
+}
+
+.slidev-layout p { color: var(--k-sub); }
+.slidev-layout strong { font-weight: 600; color: var(--k-txt); }
+.slidev-layout em { color: var(--k-sub); font-style: italic; }
+
+.slidev-layout .text-sm { font-size: 16.5px; line-height: 1.47; color: var(--k-sub); text-wrap: balance; }
+.slidev-layout .text-xs { font-size: 13px; line-height: 1.5; }
+
+.slidev-layout ul { margin-top: 4px; padding-left: 17px; }
+.slidev-layout ul li { margin: 4px 0; color: var(--k-sub); line-height: 1.5; font-size: 13px; }
+.slidev-layout ul li::marker { color: var(--k-accent); }
+
+.k-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--k-accent-2);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.k-lede { font-size: 15.5px; line-height: 1.45; color: var(--k-sub); margin: 0 0 12px; max-width: 95ch; text-wrap: balance; }
+
+.k-kicker {
+  font-size: 20px;
+  line-height: 1.45;
+  font-weight: 600;
+  letter-spacing: -0.008em;
+  color: var(--k-sub);
+  max-width: 52ch;
+}
+
+.k-note { font-size: 11.5px; color: var(--k-mut); font-weight: 600; }
+
+/* ── Surfaces ────────────────────────────────────── */
+
+.k-card {
+  background: var(--k-glass);
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-r-card);
+  padding: 14px 17px;
+  position: relative;
+}
+
+.k-card--hl   { background: var(--k-glass-hl);   border-color: var(--k-accent); }
+.k-card--deep { background: var(--k-glass-deep); border-color: var(--k-accent); }
+
+.k-ct { font-size: 14.5px; font-weight: 700; color: var(--k-txt); margin-bottom: 3px; }
+.k-cs { font-size: 12px; font-weight: 300; color: var(--k-sub); line-height: 1.5; }
+
+.k-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 2px 9px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--k-line-soft);
+  border-radius: 4px;
+  color: var(--k-mut);
+}
+
+.k-tag--red { border-color: rgba(230, 0, 0, 0.55); color: var(--k-accent-soft); }
+
+.k-card--tagged { padding-bottom: 36px; }
+.k-card--tagged .k-tag { position: absolute; bottom: 12px; left: 17px; }
+
+.k-alert {
+  background: var(--k-glass);
+  border: 1px solid var(--k-line-soft);
+  border-left: 3px solid var(--k-accent);
+  border-radius: 0 var(--k-r-card) var(--k-r-card) 0;
+  padding: 11px 18px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--k-sub);
+  box-shadow: -12px 0 28px -18px var(--k-glow);
+}
+
+.k-alert p { margin: 2px 0; }
+
+.k-chip {
+  display: inline-block;
+  font-size: 11.5px;
+  padding: 4px 13px;
+  background: var(--k-glass);
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-r-chip);
+  color: var(--k-sub);
+  font-weight: 600;
+}
+
+.k-chip--hl { border-color: var(--k-accent); color: var(--k-accent-soft); background: var(--k-glass-hl); }
+.k-chip--s { font-size: 10.5px; padding: 3px 10px; }
+
+.k-gate-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--k-sub);
+  font-weight: 600;
+}
+
+.k-gate-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--k-accent);
+  box-shadow: 0 0 8px var(--k-glow);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Stat tile: big red figure on glass */
+.k-stat {
+  background: var(--k-glass);
+  border: 1px solid var(--k-line-soft);
+  border-radius: var(--k-r-card);
+  padding: 15px 14px 12px;
+  text-align: center;
+  position: relative;
+}
+
+.k-stat-value {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--k-accent-2);
+  line-height: 1.05;
+  text-shadow: 0 0 24px rgba(230, 0, 0, 0.35);
+}
+
+.k-stat-label { font-size: 11px; font-weight: 400; color: var(--k-mut); margin-top: 4px; }
+
+.k-stat--hero { background: var(--k-glass-hl); border-color: var(--k-accent); }
+.k-stat--hero .k-stat-value { font-size: 46px; }
+
+/* Bare figures: no surface, for stat rows that do not need a card. */
+.k-stat--bare { background: none; border: none; padding: 4px 8px; }
+.k-stat--bare .k-stat-value { font-size: 30px; }
+.k-stat--bare.k-stat--hero .k-stat-value { font-size: 40px; color: var(--k-accent-2); }
+
+/* Card as a link: whole surface clickable, quiet until hovered.
+   border-style pinned: Slidev's default anchor styling dashes it. */
+a.k-card { display: block; text-decoration: none; cursor: pointer; border: 1px solid var(--k-line) !important; border-radius: var(--k-r-card); }
+a.k-card:hover { border-color: var(--k-accent) !important; box-shadow: 0 0 26px -8px var(--k-glow); }
+
+a.k-chip { text-decoration: none; border-style: solid !important; }
+a.k-chip:hover { box-shadow: 0 0 18px -6px var(--k-glow); }
+a.k-card .k-cu { font-size: 10.5px; color: var(--k-accent-soft); font-weight: 600; margin-top: 6px; }
+
+/* Ghost numeral: oversized index filling dark voids */
+.k-ghost {
+  position: absolute;
+  font-size: 92px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--k-ghost);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+/* Zone: a labeled region grouping part of a composition */
+.k-zone {
+  border: 1px solid var(--k-line-soft);
+  border-radius: var(--k-r-card);
+  background: rgba(255, 255, 255, 0.018);
+  padding: 10px 14px;
+  position: relative;
+}
+
+.k-zone--crown { background: rgba(230, 0, 0, 0.05); border-color: rgba(230, 0, 0, 0.35); }
+.k-zone--dark  { background: rgba(0, 0, 0, 0.35); }
+
+.k-zone-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--k-mut);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.k-zone--crown .k-zone-label { color: var(--k-accent-soft); }
+
+/* Live badge dot */
+.k-live-dot { position: relative; display: inline-block; width: 9px; height: 9px; flex-shrink: 0; }
+.k-live-dot::before {
+  content: ""; position: absolute; inset: 0;
+  border-radius: 50%; background: var(--k-accent-2);
+}
+.k-live-dot::after {
+  content: ""; position: absolute; inset: -3px;
+  border-radius: 50%; border: 1.5px solid var(--k-accent-2);
+  opacity: 0; animation: k-ping 2.6s ease-out infinite;
+}
+
+@keyframes k-ping { 0% { opacity: 0.9; transform: scale(0.5); } 100% { opacity: 0; transform: scale(2.1); } }
+
+/* ── Ambient layer: connective tissue only ───────── */
+
+.k-live-flow {
+  fill: none;
+  stroke: var(--k-accent);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-dasharray: 9 9;
+  animation: k-dash 1.05s linear infinite;
+  filter: drop-shadow(0 0 4px var(--k-glow));
+}
+
+/* Loop distances must be exact multiples of each dash period or the
+   loop restart snaps: base 9+9=18 -> -36; dim 2+8=10 -> -40; good
+   1.5+9=10.5 -> -42. */
+
+.k-live-flow--dim {
+  stroke: #3F3F4C;
+  stroke-width: 1.8;
+  stroke-dasharray: 2 8;
+  animation-name: k-dash-dim;
+  animation-duration: 3.2s;
+  opacity: 0.8;
+  filter: none;
+}
+
+.k-live-flow--fine { stroke-width: 1.8; }
+
+.k-live-flow--good {
+  stroke: var(--k-good);
+  stroke-width: 1.9;
+  stroke-dasharray: 1.5 9;
+  animation-name: k-dash-good;
+  animation-duration: 3.4s;
+  opacity: 0.85;
+  filter: none;
+}
+
+@keyframes k-dash { to { stroke-dashoffset: -36; } }
+@keyframes k-dash-dim { to { stroke-dashoffset: -40; } }
+@keyframes k-dash-good { to { stroke-dashoffset: -42; } }
+
+/* Halo: motion only; softness from the element's own gradient paint. */
+.k-halo { opacity: 0.55; animation: k-halo 4.2s ease-in-out infinite; }
+.k-halo--b { animation-duration: 5.4s; animation-delay: -1.7s; }
+
+@keyframes k-halo { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.85; } }
+
+.k-halo-blob {
+  position: absolute;
+  background: radial-gradient(closest-side, rgba(255, 59, 59, 0.30) 0%, rgba(255, 59, 59, 0) 70%);
+  animation: k-halo 4.2s ease-in-out infinite;
+  will-change: opacity;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Softer, wider falloff: use with generous sizes to avoid banding. */
+.k-halo-blob--stats {
+  left: 50%;
+  top: 50%;
+  width: 560px;
+  height: 260px;
+  transform: translate(-50%, -50%);
+}
+
+.k-halo-blob--soft {
+  background: radial-gradient(closest-side, rgba(255, 59, 59, 0.16) 0%, rgba(255, 59, 59, 0.07) 45%, rgba(255, 59, 59, 0) 74%);
+}
+
+/* Ring: radar ping on a featured SVG dot. Decorative; invisible at rest. */
+.k-ring {
+  animation: k-ring 2.6s ease-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+
+@keyframes k-ring {
+  0%   { opacity: 0.9; transform: scale(0.5); }
+  100% { opacity: 0;   transform: scale(2.4); }
+}
+
+.k-ring--b { animation-delay: -1.3s; }
+
+/* Entrances: once, settling into place. Base state IS the destination. */
+.k-rise { animation: k-rise 0.8s cubic-bezier(0.2, 0.75, 0.25, 1); }
+.k-rise--2 { animation: k-rise 0.8s cubic-bezier(0.2, 0.75, 0.25, 1) 0.10s backwards; }
+.k-rise--3 { animation: k-rise 0.8s cubic-bezier(0.2, 0.75, 0.25, 1) 0.20s backwards; }
+.k-rise--4 { animation: k-rise 0.8s cubic-bezier(0.2, 0.75, 0.25, 1) 0.30s backwards; }
+.k-rise--5 { animation: k-rise 0.8s cubic-bezier(0.2, 0.75, 0.25, 1) 0.42s backwards; }
+
+@keyframes k-rise { from { opacity: 0; transform: translateY(12px); } }
+
+/* ── SVG figure vocabulary ───────────────────────── */
+
+.k-fig { width: 100%; height: auto; display: block; margin: auto; }
+
+/* Connector strip: no auto margins, so it butts against the rows it
+   joins (auto-margin is what leaves a gap between arrows and tiles). */
+.k-fig--flush { margin: 0; }
+.k-fig--h58 { height: 58px; }
+.k-fig--h96 { height: 96px; }
+.k-fig--h20 { height: 20px; }
+
+svg text { font-family: var(--k-font); }
+
+.ks-glass       { fill: var(--k-glass);      stroke: var(--k-line);   stroke-width: 1; }
+.ks-glass--hl   { fill: var(--k-glass-hl);   stroke: var(--k-accent); stroke-width: 1.6; }
+.ks-glass--deep { fill: var(--k-glass-deep); stroke: var(--k-accent); stroke-width: 1.2; }
+
+/* Solid twins: same look over the stage, but OPAQUE. Use when a line is
+   routed behind the box; glass fills are translucent and would ghost it. */
+.ks-solid       { fill: #0F0F14; stroke: var(--k-line);   stroke-width: 1; }
+.ks-solid--hl   { fill: #1F0D13; stroke: var(--k-accent); stroke-width: 1.6; }
+.ks-solid--deep { fill: #290E13; stroke: var(--k-accent); stroke-width: 1.2; }
+.ks-panel       { fill: rgba(255, 255, 255, 0.018); stroke: var(--k-line-soft); stroke-width: 1; }
+.ks-panel--crown{ fill: rgba(230, 0, 0, 0.05);   stroke: rgba(230, 0, 0, 0.35); stroke-width: 1; }
+.ks-panel--dark { fill: rgba(0, 0, 0, 0.35);       stroke: var(--k-line-soft); stroke-width: 1; }
+
+.ks-b     { fill: var(--k-sub); font-weight: 300; font-size: 13px; }
+.ks-t     { fill: var(--k-txt); font-weight: 700; font-size: 15px; }
+.ks-t--sm { font-size: 13.5px; }
+.ks-s     { fill: var(--k-sub); font-weight: 300; font-size: 11.5px; }
+.ks-m     { fill: var(--k-mut); font-weight: 400; font-size: 10.5px; }
+.ks-tag   { fill: var(--k-mut); font-weight: 700; font-size: 10px; letter-spacing: 1.6px; }
+.ks-tag--red { fill: var(--k-accent-soft); font-weight: 800; font-size: 10px; letter-spacing: 1.6px; }
+.ks-zone  { fill: var(--k-mut); font-weight: 700; font-size: 10px; letter-spacing: 2.2px; }
+.ks-good  { fill: var(--k-good); font-weight: 600; font-size: 10.5px; }
+.ks-dot   { fill: var(--k-accent); }
+.ks-mid   { text-anchor: middle; }
+.ks-mono  { font-family: var(--k-font-mono); font-size: 11.5px; fill: var(--k-mut); }
+.ks-mono--on { fill: var(--k-txt); font-weight: 600; }
+.ks-mono--an { fill: var(--k-accent-soft); }
+
+.ks-ico { stroke: var(--k-accent-soft); stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Var-driven figure atoms: pages carry no literal colors. */
+.ks-bdot   { fill: var(--k-mut); }
+.ks-sep    { stroke: var(--k-line-soft); }
+.ks-dashed { stroke: rgba(255, 255, 255, 0.25); }
+.ks-plate  { fill: rgba(255, 255, 255, 0.03); stroke: var(--k-line-soft); }
+.ks-mask   { fill: var(--k-stage-1); }
+.ks-frame  { stroke: rgba(230, 0, 0, 0.4); }
+.ks-hstop  { stop-color: var(--k-accent-2); }
+.ks-zone--red { fill: var(--k-accent-soft); }
+.k-ring    { stroke: var(--k-accent-2); }
+
+/* ── Corpus tree (HTML) ──────────────────────────── */
+
+.k-tree { padding: 6px 4px 2px; }
+
+.k-tree-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  font-family: var(--k-font-mono);
+  font-size: 11.5px;
+  color: var(--k-mut);
+  padding: 3px 0;
+  white-space: nowrap;
+}
+
+.k-tree-line .t-on { color: var(--k-txt); font-weight: 600; }
+.k-tree-line .t-an { color: var(--k-accent-soft); }
+
+/* ── Chrome (global-top.vue) ─────────────────────── */
+
+.cf-mark {
+  position: absolute;
+  top: 18px;
+  left: 30px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  color: var(--k-accent);
+  z-index: 40;
+}
+
+.cf-head {
+  position: absolute;
+  top: 17px;
+  right: 30px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  z-index: 40;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.cf-head-section { color: var(--k-mut); }
+.cf-head-num { color: #3F3F4C; border-left: 1px solid var(--k-line-soft); padding-left: 10px; }
+
+.cf-legal {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: #44444E;
+  z-index: 40;
+}
+
+/* ── Title slide (the starting-slide template) ───── */
+/* The layout every deck opens with. Slots, top to bottom:
+   .k-title-brand (the brand, stated big), .k-eyebrow (context line),
+   h1 (deck title), .k-kicker (subtitle), an optional hero block,
+   .k-title-meta (presenter · date). Apply class="k-cover" on the slide;
+   the chrome suppresses the running head there. */
+
+.slidev-layout.k-cover { justify-content: center; padding: 54px 64px; }
+
+.slidev-layout.k-cover h1 {
+  font-size: 50px;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  margin: 10px 0 16px;
+}
+
+.k-title-brand {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.5em;
+  color: var(--k-accent);
+  margin-bottom: 30px;
+}
+
+.k-title-meta {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--k-mut);
+}
+
+.k-title-meta .k-gate-dot { width: 5px; height: 5px; box-shadow: none; }
+
+.k-band {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+  position: relative;
+}
+
+.k-chip-card {
+  position: relative;
+  background: var(--k-glass);
+  border: 1px solid var(--k-line);
+  border-radius: 16px;
+  padding: 14px 22px;
+  text-align: center;
+  z-index: 1;
+}
+
+.k-chip-card--hl { background: var(--k-glass-hl); border-color: var(--k-accent); border-width: 1.6px; padding: 17px 26px; }
+
+.kc-t { font-size: 15px; font-weight: 700; color: var(--k-txt); }
+.kc-s { font-size: 11.5px; font-weight: 300; color: var(--k-sub); margin-top: 3px; }
+
+.k-connector { flex-shrink: 0; width: 120px; height: 8px; }
+.k-connector--s { width: 48px; }
+
+.k-cover-date { margin-top: 24px; font-size: 12px; font-weight: 600; color: var(--k-mut); }
+
+/* ── Section divider ─────────────────────────────── */
+
+.slidev-layout.k-section { justify-content: center; padding: 54px 72px; }
+
+.slidev-layout.k-section h1 {
+  font-size: 58px;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  margin: 12px 0 14px;
+}
+
+.k-section-sub { font-size: 19px; font-weight: 600; color: var(--k-sub); max-width: 56ch; }
+
+.k-section-num {
+  position: absolute;
+  top: 44px;
+  right: 64px;
+  font-size: 150px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--k-ghost);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.k-section-rail { margin-top: 34px; width: 46%; height: 8px; }
+
+/* Centered variant (the DPC grammar): big title mid-stage. */
+.slidev-layout.k-section--center { align-items: center; text-align: center; }
+.k-section--center .k-section-sub { margin-inline: auto; }
+.k-section--center .k-section-rail { margin-inline: auto; }
+
+/* ── Agenda ──────────────────────────────────────── */
+
+.k-agenda { display: flex; flex-direction: column; flex: 1 1 0; min-height: 0; margin-top: 6px; }
+
+.k-agenda-row {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border-bottom: 1px solid var(--k-line-soft);
+}
+
+.k-agenda-row:last-child { border-bottom: none; }
+
+.k-agenda-num {
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--k-accent-2);
+  width: 46px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.k-agenda-t { font-size: 17px; font-weight: 700; color: var(--k-txt); }
+.k-agenda-s { font-size: 12.5px; font-weight: 400; color: var(--k-mut); margin-left: auto; text-align: right; }
+
+/* ── Fill helpers ────────────────────────────────── */
+
+.slidev-layout .k-fill { flex: 1 1 0; min-height: 0; grid-auto-rows: 1fr; }
+
+/* ── Print, export, reduced motion ───────────────── */
+
+@media print {
+  * { animation: none !important; transition: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
