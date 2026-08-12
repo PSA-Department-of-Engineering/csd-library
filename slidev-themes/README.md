@@ -25,7 +25,7 @@ A theme is only half a template, so the other half lives once, in [`_starter/`](
 | `celfocus-apple-static` | `k` | The Apple grammar extended with the showcase taxonomy, rendered statically. |
 | `vodafone-showcase` | `k` | Vodafone showcase (dark). Same taxonomy and doctrine as `celfocus-showcase`; cool stage, Vodafone red, SF Pro stack. |
 
-All `k`-prefixed themes render the same deck pages: content decks keep one master `pages/` set and swap `style.css` (see the ADC deck-8 series and its `sync-variants.ps1` for the mechanical propagation pattern). Pages must carry no literal colors: figure atoms (`ks-bdot`, `ks-sep`, `ks-plate`, `ks-mask`, `ks-frame`, `ks-hstop`, `ks-dashed`) exist so every theme restyles them.
+Sharing the `k` prefix does **not** mean sharing pages. `celfocus` defines 33 `k-` classes and the showcases define 69; the two statics carry 103–106, being a base theme plus the showcase vocabulary with motion stripped. A page written against one lineage renders unstyled against another — measured, not assumed. Re-skinning is a property of a *deck* that needs several variants: that deck pins the subset it uses, keeps one master `pages/` set, and propagates mechanically (see the ADC deck-8 series and its `sync-variants.ps1`); no other deck inherits the constraint. Pages must carry no literal colors: figure atoms (`ks-bdot`, `ks-sep`, `ks-plate`, `ks-mask`, `ks-frame`, `ks-hstop`, `ks-dashed`) exist so every theme restyles them.
 
 ## The showcase family
 

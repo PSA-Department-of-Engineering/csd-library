@@ -4,9 +4,18 @@ The pages half of a theme. A theme in this catalog is a `style.css` (plus `meta.
 this folder is everything else a new deck needs — the templated pages, the chrome
 component, and the scaffold — so "use the templates" means layouts, not just colours.
 
-One starter serves every theme in the family on purpose. All of them speak the same `k-`
-class taxonomy, so one `pages/` set renders under any of them; that invariant is the point
-of the family, and duplicating the pages per theme would quietly break it.
+**Scope: the showcase family only** (`celfocus-showcase`, `-light`, `celfocus-apple-showcase`,
+`vodafone-showcase`). These pages are not universal and were never validated as such —
+measured against the catalog, they leave 11 classes undefined under the two static themes
+(the whole `k-agenda*` family, `k-section-num`, `k-section-sub`, `k-rise--2..5`) and 29
+undefined under `celfocus`, whose 33-class `k-` vocabulary is a different one that happens to
+share the prefix.
+
+Each theme is to ship its own `pages/`, because a template's job is to demonstrate what is
+idiomatic in *that* theme — a static theme's content page should draw the same argument
+without the ambient layer, not inherit a page that reaches for entrances it does not
+implement. This folder is the showcase family's set until that lands. See the
+`slidev-theming` flyer for the taxonomy and the tiers.
 
 ## Start a deck as a delivery
 
