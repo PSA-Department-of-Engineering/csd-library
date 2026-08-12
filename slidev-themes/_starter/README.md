@@ -8,7 +8,18 @@ One starter serves every theme in the family on purpose. All of them speak the s
 class taxonomy, so one `pages/` set renders under any of them; that invariant is the point
 of the family, and duplicating the pages per theme would quietly break it.
 
-## Start a deck
+## Start a deck as a delivery
+
+[`delivery-request.md`](delivery-request.md) is the fill-in request for commissioning a deck
+through the Foundry line: paste it into the Console's **establish** box and it becomes the
+repo's `.delivery/request.md` and the requirement spine. It pins the things a deck delivery
+gets wrong otherwise — that the design phase storyboards rather than invents a visual
+language, and that "done" includes a PDF that is actually a PDF.
+
+No Dockerfile or chart lives here on purpose: `establish` already scaffolds `devops/`, `k8s/`
+and the workflows, and a second copy in this catalog would drift against it.
+
+## Start a deck by hand
 
 ```
 mkdir my-deck && cd my-deck
