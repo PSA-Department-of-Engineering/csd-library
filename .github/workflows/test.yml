@@ -104,3 +104,16 @@ jobs:
           pip install -e csd-intent
       - name: Audit starlight-theme
         run: csd-intent starlight-theme --fail-on any
+
+  # The theme catalog is a source asset, not a package, so it has no test suite of its
+  # own - but it does have an invariant worth gating: a theme must be usable on its own.
+  # The checker needs no dependencies (node builtins only), so this job installs nothing.
+  themes:
+    runs-on: arc-dind
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check theme self-containment
+        run: node slidev-themes/check-themes.mjs
