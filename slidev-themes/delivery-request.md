@@ -56,11 +56,11 @@ Write our own words. Do not lift a source's text onto a slide.
 
 ## Look and feel
 
-Adopt the `<theme-name>` theme from the csd-library slidev-themes catalog, verbatim, and the
-`_starter/` pages with it. **The design phase's job is the storyboard, not a new visual
-language**: choose the running order and the figure per page, and record the choice. Do not
-author a new theme, and do not invent taxonomy classes inside pages — a visual that does not
-exist in `style.css` either gets added to `style.css` or does not get used.
+Adopt the `<theme-name>` theme from the csd-library slidev-themes catalog whole, and start from
+its own templates. **The design phase's job is the storyboard, not a new visual language**:
+choose the running order and the figure per page, and record the choice. Do not author a new
+theme, and do not invent classes inside pages — a visual that does not exist in the theme's
+`style.css` either gets added there or does not get used.
 
 <Any brand constraint the theme does not already carry: classification line, a logo lockup,
 a language.>
@@ -84,8 +84,8 @@ shorter one.
   few kilobytes is the failure mode here, so check the file size against its sibling exports.
 - Zero overflow on every slide, and no SVG text outside its figure. Measure both; an overflow
   check alone cannot see SVG text escaping.
-- No literal colours anywhere in `pages/`, so the deck still renders under the sibling themes
-  in the family. Prove it by rendering it under one of them.
+- No literal colours anywhere in `pages/`, and no class the theme does not define. Prove it:
+  the catalog's `check-themes.mjs` is the gate, and it must pass against the deck's own pages.
 - Reads complete as a static page: nothing that carries meaning may depend on an animation
   having run.
 
