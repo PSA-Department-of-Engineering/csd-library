@@ -1,0 +1,62 @@
+# Starter
+
+The pages half of a theme. A theme in this catalog is a `style.css` (plus `meta.json`);
+this folder is everything else a new deck needs — the templated pages, the chrome
+component, and the scaffold — so "use the templates" means layouts, not just colours.
+
+One starter serves every theme in the family on purpose. All of them speak the same `k-`
+class taxonomy, so one `pages/` set renders under any of them; that invariant is the point
+of the family, and duplicating the pages per theme would quietly break it.
+
+## Start a deck
+
+```
+mkdir my-deck && cd my-deck
+cp -r <catalog>/slidev-themes/_starter/*        .
+cp    <catalog>/slidev-themes/<theme>/style.css .
+npm install && npm run dev
+```
+
+Then rename `pages/t*.md` into your real pages (`01-…`, `02-…`), and list them in
+`slides.md` in order. `t1-title.md` is the cover: `slides.md` carries its markup inline
+because the cover is the deck's own frontmatter slide.
+
+## The templates
+
+| Page | What it is |
+| --- | --- |
+| `t1-title.md` | The branded title slide: brand, eyebrow, title, kicker, rail, meta |
+| `t2-agenda.md` | The agenda ledger: numbered rows, title + subtitle per row |
+| `t3-section.md` | A section divider: ghost numeral, eyebrow, title, sub, rail |
+| `t4-content.md` | The ordinary content page: title, lede, figure, bottom alert |
+
+`t4-content.md` is the one to read first — it carries the rules that are expensive to
+rediscover, as comments at the point where you would break them.
+
+## Rules that outrank taste
+
+1. **No inline styles and no `<style>` blocks in pages.** Every visual belongs in the
+   theme's `style.css`, including one-off heights (`.k-fig--h96`) — that is what keeps one
+   `pages/` set renderable under every theme.
+2. **No literal colours in pages.** Use the figure atoms (`ks-bdot`, `ks-sep`, `ks-plate`,
+   `ks-mask`, `ks-frame`, `ks-hstop`, `ks-dashed`) so a theme can restyle them.
+3. **Typography inside SVG by class only.** UnoCSS attributify captures a
+   `font-size="13.5"` presentation attribute and recompiles it on the rem scale — 13.5
+   becomes 54px. Use `.ks-t`, `.ks-m`, `.ks-tag`.
+4. **Motion never carries meaning.** Ambient loops live in connective tissue only; the base
+   styles are the final resting state, so print and reduced-motion render the true slide.
+   Nothing you read may move.
+5. **Measure geometry, don't eyeball it.** An overflow check cannot see SVG text escaping
+   its figure. Sample paths (`getPointAtLength`) against rect bounds when a connector looks
+   wrong.
+
+## Scaffold notes
+
+`package.json` pins Slidev and the two Inter families the apple themes need; drop those two
+dependencies if your theme uses system fonts. `global-top.vue` is the persistent chrome
+(wordmark, section/page header, legal footer) — set the two constants at the top of its
+script block, and note it hides itself on any slide whose `class` contains `k-cover`.
+
+Every theme's `style.css` already carries the Slidev goto-dialog repair
+(`#slidev-goto-dialog:has(#slidev-goto-input:disabled)`); without it the `g` dialog leaves
+a stale result list over the slide.

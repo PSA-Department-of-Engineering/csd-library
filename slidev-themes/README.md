@@ -12,6 +12,8 @@ Each theme is a directory:
 
 `prefix` is the namespace for the theme's utility classes (e.g. `vf-footer`, `k-alert`). Themes are immutable per brand: meaningful variations get a new directory here; project-specific one-offs use the skill's `--theme-css` flag instead.
 
+A theme is only half a template, so the other half lives once, in [`_starter/`](_starter/): the templated pages (title, agenda, section divider, content), the `global-top.vue` chrome, and the scaffold. It is shared rather than copied per theme because every `k`-prefixed theme renders the same pages — duplicating them would break the invariant that makes the family a family. Start a deck by copying `_starter/` plus one theme's `style.css`.
+
 | Theme | Prefix | Notes |
 |---|---|---|
 | `vodafone` | `vf` | Vodafone corporate. Red accent on white, Inter sans, full standard taxonomy. |
