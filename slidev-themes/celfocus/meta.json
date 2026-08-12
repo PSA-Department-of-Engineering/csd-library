@@ -1,4 +1,18 @@
 {
   "prefix": "k",
-  "description": "Celfocus corporate theme: terracotta accent, editorial feel with optional serif kicker, full standard class taxonomy plus Celfocus-specific extras (eyebrow, kicker, big, huge, tag)."
+  "description": "Celfocus corporate theme: terracotta accent, editorial feel with optional serif kicker, full standard class taxonomy plus Celfocus-specific extras (eyebrow, kicker, big, huge, tag).",
+  "tiers": [
+    "core"
+  ],
+  "chrome": [],
+  "pages": [
+    "cover",
+    "agenda",
+    "section",
+    "content",
+    "stats",
+    "references",
+    "thanks-qa"
+  ],
+  "requires": {}
 }

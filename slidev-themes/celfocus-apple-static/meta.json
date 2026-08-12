@@ -1,4 +1,30 @@
 {
   "prefix": "k",
-  "description": "The Apple grammar (deck-5 lineage: Inter, apple neutrals, radius tiers) extended with the showcase k- taxonomy rendered statically."
+  "description": "The Apple grammar (deck-5 lineage: Inter, apple neutrals, radius tiers) extended with the showcase k- taxonomy rendered statically.",
+  "tiers": [
+    "core",
+    "atoms"
+  ],
+  "chrome": [
+    "cf-mark",
+    "cf-head",
+    "cf-head-section",
+    "cf-head-num",
+    "cf-legal"
+  ],
+  "pages": [
+    "cover",
+    "agenda",
+    "section",
+    "content",
+    "stats",
+    "references",
+    "thanks-qa"
+  ],
+  "requires": {
+    "npm": [
+      "@fontsource-variable/inter",
+      "@fontsource-variable/inter-tight"
+    ]
+  }
 }

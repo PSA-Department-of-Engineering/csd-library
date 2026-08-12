@@ -4,12 +4,9 @@ class: k-section k-section--center
 section: Section name
 ---
 
-<!-- Section divider. The ghost numeral is decorative and sits behind the text; the
-     `k-section--center` modifier is what centres the stack. Covers and dividers both
-     suppress the running chrome, so keep `class:` intact.
-
-     Dividers are optional: they help a long deck breathe and read as noise in a short
-     one. Add them last, once the running order has settled. -->
+<!-- Section divider. The ghost numeral sits behind the text; `k-section--center` centres
+     the stack. Dividers help a long deck breathe and read as noise in a short one - add
+     them once the running order has settled, not before. -->
 
 <div class="k-section-num">01</div>
 

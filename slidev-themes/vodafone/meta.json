@@ -1,4 +1,18 @@
 {
   "prefix": "vf",
-  "description": "Vodafone corporate theme: red accent on white, Inter sans, full standard class taxonomy."
+  "description": "Vodafone corporate theme: red accent on white, Inter sans, full standard class taxonomy.",
+  "tiers": [
+    "core"
+  ],
+  "chrome": [],
+  "pages": [
+    "cover",
+    "agenda",
+    "section",
+    "content",
+    "stats",
+    "references",
+    "thanks-qa"
+  ],
+  "requires": {}
 }

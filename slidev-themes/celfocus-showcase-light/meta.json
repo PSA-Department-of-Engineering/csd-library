@@ -1,4 +1,37 @@
 {
   "prefix": "k",
-  "description": "Celfocus showcase, light: warm paper stage, white tiles, brand red rationed, same k- taxonomy and ambient layer as celfocus-showcase; one deck renders under either."
+  "description": "Celfocus showcase, light: warm paper stage, white tiles, brand red rationed, same k- taxonomy and ambient layer as celfocus-showcase; one deck renders under either.",
+  "tiers": [
+    "core",
+    "atoms",
+    "ambient"
+  ],
+  "chrome": [
+    "cf-mark",
+    "cf-head",
+    "cf-head-section",
+    "cf-head-num",
+    "cf-legal",
+    "cf-head-deck"
+  ],
+  "pages": [
+    "cover",
+    "agenda",
+    "section",
+    "content",
+    "stats",
+    "references",
+    "thanks-qa"
+  ],
+  "requires": {
+    "assets": [
+      "/fonts/Aptos-Light.ttf",
+      "/fonts/Aptos-Regular.ttf",
+      "/fonts/Aptos-Italic.ttf",
+      "/fonts/Aptos-SemiBold.ttf",
+      "/fonts/Aptos-Bold.ttf",
+      "/fonts/Aptos-ExtraBold.ttf"
+    ],
+    "note": "Aptos ships with Microsoft 365 and is not redistributed here; place the files under the deck's public/fonts/."
+  }
 }

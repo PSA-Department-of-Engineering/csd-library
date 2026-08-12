@@ -4,10 +4,10 @@ class: k-cover
 section: Title
 ---
 
-<!-- The starting-slide template. The deck's own cover lives inline in slides.md
-     (it is that file's frontmatter slide); keep this copy for any second title
-     slide — a part break, a hand-off to another presenter, a closing card.
-     Keep the slot order: brand, eyebrow, title, kicker, rail, meta. -->
+<!-- Cover. The `k-cover` class on the frontmatter is what the chrome reads to hide the
+     wordmark and running header, so keep it. Slot order: brand, eyebrow, title, kicker,
+     rail, meta. The k-rise--N steps only stagger the arrival; the base state is the
+     finished slide, so a print or a paused deck reads complete. -->
 
 <div class="k-title-brand k-rise">B R A N D</div>
 
@@ -16,7 +16,7 @@ section: Title
 # Presentation title
 
 <div class="k-kicker k-rise--3">
-One sentence that frames what this deck is and who it is for.
+One sentence framing what this deck is and who it is for. Two lines at most.
 </div>
 
 <svg class="k-section-rail k-rise--4" viewBox="0 0 560 8" aria-hidden="true"><path class="k-live-flow" d="M 4 4 H 556" /></svg>
@@ -24,7 +24,5 @@ One sentence that frames what this deck is and who it is for.
 <div class="k-title-meta k-rise--5">
   <span>Presenter Name</span>
   <span class="k-gate-dot"></span>
-  <span>Month Year</span>
-  <span class="k-gate-dot"></span>
-  <span>Classification</span>
+  <span class="k-cover-date">Month Year</span>
 </div>

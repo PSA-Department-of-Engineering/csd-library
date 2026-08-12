@@ -1,9 +1,11 @@
-<!-- Persistent chrome: wordmark, section + page header, legal footer. Registered by
-     Slidev automatically because of the filename. It hides the wordmark and header on
-     any slide whose frontmatter `class` contains `k-cover`, so covers and section
-     dividers stay clean; the footer stays on every slide.
+<!-- Persistent chrome for this theme: wordmark, running section + page header, legal
+     footer. Slidev registers it by filename. It hides the wordmark and header on any
+     slide whose frontmatter `class` contains `k-cover`, so the cover and the close stay
+     clean; the legal line stays on every slide.
 
-     Set the two constants below and nothing else needs editing. -->
+     The classes emitted here are the ones meta.json declares as this theme's chrome, and
+     check-themes.mjs holds the two in step. Set the constants below; nothing else here
+     needs editing. -->
 <template>
   <div>
     <div v-if="!isCover" class="cf-mark">{{ WORDMARK }}</div>
@@ -24,8 +26,8 @@ const LEGAL = 'BRAND © 2026 – ALL RIGHTS RESERVED · CLASSIFICATION: CONFIDEN
 
 const nav = useNav()
 
-// `section:` is per-page frontmatter; the header reads it rather than the theme
-// hard-coding a running title.
+// `section:` is per-page frontmatter, so the running header reads the page rather than
+// the theme hard-coding a title.
 const frontmatter = computed(() => nav.currentSlideRoute.value?.meta?.slide?.frontmatter ?? {})
 const isCover = computed(() => String(frontmatter.value.class ?? '').includes('k-cover'))
 const section = computed(() => frontmatter.value.section ?? '')

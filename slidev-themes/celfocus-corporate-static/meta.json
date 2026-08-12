@@ -1,4 +1,40 @@
 {
   "prefix": "k",
-  "description": "The 2026 corporate template (Aptos, logo chrome, paper texture) extended with the showcase k- taxonomy rendered statically: no motion, plain dashed flows."
+  "description": "The 2026 corporate template (Aptos, logo chrome, paper texture) extended with the showcase k- taxonomy rendered statically: no motion, plain dashed flows.",
+  "tiers": [
+    "core",
+    "atoms"
+  ],
+  "chrome": [
+    "cf-mark",
+    "cf-head",
+    "cf-head-section",
+    "cf-head-num",
+    "cf-legal",
+    "cf-head-deck",
+    "cf-head-titles",
+    "cf-logo"
+  ],
+  "pages": [
+    "cover",
+    "agenda",
+    "section",
+    "content",
+    "stats",
+    "references",
+    "thanks-qa"
+  ],
+  "requires": {
+    "assets": [
+      "/fonts/Aptos-Light.ttf",
+      "/fonts/Aptos-Regular.ttf",
+      "/fonts/Aptos-Italic.ttf",
+      "/fonts/Aptos-SemiBold.ttf",
+      "/fonts/Aptos-Bold.ttf",
+      "/fonts/Aptos-ExtraBold.ttf",
+      "/celfocus-texture.png",
+      "/celfocus-lockup.png"
+    ],
+    "note": "Aptos ships with Microsoft 365 and is not redistributed here; place the files under the deck's public/fonts/. The lockup and texture are brand assets, supplied per deck."
+  }
 }

@@ -11,7 +11,9 @@ Two things to do before you drive scope:
   names a file which isn't there fails the fresh-eyes gate, which checks that the record's
   claims trace to the request.
 - **Pick the theme by name** from this catalog. The design phase adopts it; it does not
-  prototype a new one.
+  prototype a new one. Copy that theme's folder whole — `style.css`, `meta.json`,
+  `global-top.vue`, `package.json` and its own `pages/` — and supply whatever its
+  `meta.requires` declares (fonts, brand marks) under the deck's `public/`.
 
 Delete this header and the angle-bracket guidance; keep the prose voice — estimatekit ingests
 it verbatim, so vague sentences mint vague requirements.

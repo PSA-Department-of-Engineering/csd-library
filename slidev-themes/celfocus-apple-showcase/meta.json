@@ -1,4 +1,32 @@
 {
   "prefix": "k",
-  "description": "Celfocus over the Apple grammar, showcase edition: white/#F5F5F7 stage, Inter type, apple neutrals, ambient layer kept; shares the k- taxonomy."
+  "description": "Celfocus over the Apple grammar, showcase edition: white/#F5F5F7 stage, Inter type, apple neutrals, ambient layer kept; shares the k- taxonomy.",
+  "tiers": [
+    "core",
+    "atoms",
+    "ambient"
+  ],
+  "chrome": [
+    "cf-mark",
+    "cf-head",
+    "cf-head-section",
+    "cf-head-num",
+    "cf-legal",
+    "cf-head-deck"
+  ],
+  "pages": [
+    "cover",
+    "agenda",
+    "section",
+    "content",
+    "stats",
+    "references",
+    "thanks-qa"
+  ],
+  "requires": {
+    "npm": [
+      "@fontsource-variable/inter",
+      "@fontsource-variable/inter-tight"
+    ]
+  }
 }
