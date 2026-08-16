@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 
-from .schema import check_schema, parse_intent_yaml, top_level_keys
+from .schema import DuplicateKeyError, check_schema, parse_intent_yaml, top_level_keys
 from .walker import collect_attestations, find_nested_intent_projects
 
 __all__ = [
@@ -105,7 +105,15 @@ def audit(
         )
         return report
 
-    claims = parse_intent_yaml(intent_path)
+    # A repeated key resolves last-wins in YAML itself, so the earlier claim is gone
+    # before any check runs and its markers now attest the survivor. Nothing further
+    # in this audit would be true of the spec its author wrote, so stop here (#12).
+    try:
+        claims = parse_intent_yaml(intent_path)
+    except DuplicateKeyError as exc:
+        report.violations.append(AuditViolation(ViolationKind.SCHEMA, None, str(exc)))
+        return report
+
     report.claim_count = len(claims)
 
     # A file present with nothing the parser recognises is schema drift, not an

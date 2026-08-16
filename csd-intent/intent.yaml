@@ -79,3 +79,14 @@ INT-CSD-007:
     component: Auditor
     type: behavior
   criticality: high
+
+INT-CSD-008:
+  version: 1.0.0
+  status: active
+  statement: "A repeated key in intent.yaml is refused at parse time and reported as a schema violation, never resolved last-wins."
+  rationale: "YAML drops the earlier claim silently, so a duplicate id un-enforces one claim and re-points its markers at the survivor while the audit still prints CLEAN (issue #12)."
+  test:
+    scope: unit
+    component: SchemaValidator
+    type: invariant
+  criticality: critical

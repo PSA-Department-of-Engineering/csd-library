@@ -175,6 +175,43 @@ spec:
     assert "apiVersion" in message and "kind" in message and "spec" in message
 
 
+@intent('INT-CSD-008')
+def test_duplicate_claim_id_flagged_as_schema_violation(tmp_path: Path) -> None:
+    """A repeated claim id must fail the audit, not silently drop the first claim.
+
+    YAML resolves the duplicate last-wins before the auditor sees the data, so the
+    earlier claim disappears and the marker written for it now attests the survivor
+    - while the audit prints CLEAN (issue #12).
+    """
+    duplicate = """
+INT-001:
+  version: 1.0.0
+  status: active
+  statement: "The first claim, which vanishes."
+  criticality: high
+  test: {scope: unit, component: KittenGuard, type: invariant}
+INT-001:
+  version: 1.0.0
+  status: active
+  statement: "The second claim, which survives under the same id."
+  criticality: high
+  test: {scope: unit, component: KittenGuard, type: invariant}
+"""
+    project = _scaffold(
+        tmp_path,
+        duplicate,
+        py_body="from pytest_intent import intent\n@intent('INT-001')\ndef test_kittens(): pass\n",
+    )
+    report = audit(project)
+    assert not report.ok
+    schema_violations = [v for v in report.violations if v.kind == ViolationKind.SCHEMA]
+    assert schema_violations
+    message = schema_violations[0].message
+    assert "duplicate key `INT-001`" in message
+    assert "line 2" in message and "line 8" in message
+    assert "CLEAN" not in report.format()
+
+
 def test_missing_intent_yaml(tmp_path: Path) -> None:
     report = audit(tmp_path)
     assert not report.ok
