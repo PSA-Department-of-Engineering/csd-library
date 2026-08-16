@@ -33,3 +33,13 @@ INT-ADR-003:
     component: Decisions
     type: invariant
   criticality: high
+INT-ADR-004:
+  version: 1.0.0
+  status: active
+  statement: "When the decisions collection has an index page, its `## Current` table MUST list exactly the ADR pages that are not superseded (`adr_status` other than `Superseded`), one row each, carrying that page's own title and `adr_status`."
+  rationale: "The index restates what the records already declare in frontmatter, and a restatement no test compares is a hand-maintained copy: a record added, retitled, or re-statused leaves a stale table behind. Comparing the table against the records makes the propagation mechanical, so a drifted index fails the build instead of misleading a reader."
+  test:
+    scope: integration
+    component: Decisions
+    type: invariant
+  criticality: medium
