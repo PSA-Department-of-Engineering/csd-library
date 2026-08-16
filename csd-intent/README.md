@@ -96,6 +96,22 @@ INT-NNN:
 For projects still on the legacy flat-`scope:` shape, the tool accepts it (with
 no warning) - that's a migration concession, not a recommendation.
 
+### Duplicate keys are refused
+
+`intent.yaml` is parsed with a loader that raises on a repeated key rather than
+resolving it last-wins. A claim id reused by accident would otherwise delete the
+earlier claim before any check could see it - and every marker written for that
+claim would silently start attesting the survivor, with the audit still printing
+`CLEAN`. The duplicate is reported as a schema violation naming both lines:
+
+```
+SCHEMA (1):
+  [schema] intent.yaml: duplicate key `INT-GATE-006` (first declared on line 42,
+  declared again on line 187); YAML would silently keep only the last one
+```
+
+Merge keys still work: `<<: *base` plus an explicit override is not a duplicate.
+
 ## License
 
 MIT.

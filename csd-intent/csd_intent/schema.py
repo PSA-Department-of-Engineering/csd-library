@@ -20,6 +20,7 @@ accepted with a warning so projects can migrate incrementally.
 from __future__ import annotations
 
 import re
+from collections.abc import Hashable
 from pathlib import Path
 from typing import Any
 
@@ -32,6 +33,7 @@ __all__ = [
     "VALID_STATUS",
     "VALID_TYPE",
     "VERSION_PATTERN",
+    "DuplicateKeyError",
     "check_schema",
     "parse_intent_yaml",
     "top_level_keys",
@@ -52,10 +54,62 @@ VALID_CRITICALITY = {"critical", "high", "medium", "low"}
 REQUIRED_TOP = {"version", "status", "statement", "criticality"}
 
 
-def parse_intent_yaml(path: Path) -> dict[str, dict[str, Any]]:
-    """Parse an intent.yaml. Returns {claim_id: claim_dict}. Non-INT keys ignored."""
+_MERGE_TAG = "tag:yaml.org,2002:merge"
+
+
+class DuplicateKeyError(ValueError):
+    """A mapping in intent.yaml declares the same key twice.
+
+    YAML's own resolution is last-wins and silent, so a repeated claim id destroys
+    the earlier claim before any check can see it: the claim stops being enforced
+    and every marker written for it silently re-points at the survivor (issue #12).
+    A duplicate id has no valid interpretation, so the parse refuses it.
+    """
+
+    def __init__(self, key: object, first_line: int, second_line: int) -> None:
+        self.key = key
+        self.first_line = first_line
+        self.second_line = second_line
+        super().__init__(
+            f"duplicate key `{key}` (first declared on line {first_line}, "
+            f"declared again on line {second_line}); YAML would silently keep only "
+            f"the last one"
+        )
+
+
+class _UniqueKeySafeLoader(yaml.SafeLoader):
+    """SafeLoader that refuses a repeated mapping key instead of resolving last-wins."""
+
+    def construct_mapping(self, node: yaml.MappingNode, deep: bool = False) -> dict[Any, Any]:
+        # Scan the raw key nodes before the base class flattens merge keys (`<<`),
+        # so a legitimate merge-plus-override is not mistaken for a duplicate.
+        seen: dict[Any, int] = {}
+        for key_node, _ in node.value:
+            if key_node.tag == _MERGE_TAG:
+                continue  # `<<` is expanded by the base class, and an override is legal
+            key = self.construct_object(key_node, deep=deep)
+            if not isinstance(key, Hashable):
+                continue  # the base constructor reports unhashable keys itself
+            line = key_node.start_mark.line + 1
+            if key in seen:
+                raise DuplicateKeyError(key, seen[key], line)
+            seen[key] = line
+        return super().construct_mapping(node, deep=deep)
+
+
+def _load(path: Path) -> Any:
+    """Load a YAML document, refusing duplicate mapping keys (`DuplicateKeyError`)."""
     text = path.read_text(encoding="utf-8")
-    data = yaml.safe_load(text) or {}
+    return yaml.load(text, Loader=_UniqueKeySafeLoader)
+
+
+def parse_intent_yaml(path: Path) -> dict[str, dict[str, Any]]:
+    """Parse an intent.yaml. Returns {claim_id: claim_dict}. Non-INT keys ignored.
+
+    Raises `DuplicateKeyError` when the file declares the same key twice: dropping
+    one of them silently is never the right answer (issue #12).
+    """
+    data = _load(path) or {}
     if not isinstance(data, dict):
         return {}
     out: dict[str, dict[str, Any]] = {}
@@ -67,8 +121,7 @@ def parse_intent_yaml(path: Path) -> dict[str, dict[str, Any]]:
 
 def top_level_keys(path: Path) -> list[str]:
     """Sorted top-level YAML keys, for diagnosing a zero-claims schema mismatch."""
-    text = path.read_text(encoding="utf-8")
-    data = yaml.safe_load(text) or {}
+    data = _load(path) or {}
     if not isinstance(data, dict):
         return []
     return sorted(str(key) for key in data.keys())
