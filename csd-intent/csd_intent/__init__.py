@@ -13,7 +13,7 @@ Public API:
     audit(project_dir, intent_path=None, test_dirs=None) -> AuditReport
     audit_tree(project_dir) -> list[AuditReport]
     AuditReport, AuditViolation
-    parse_intent_yaml(path)
+    parse_intent_yaml(path)  # raises DuplicateKeyError on a repeated key
     check_schema(claims)
     collect_attestations(test_dirs)
     find_nested_intent_projects(root)
@@ -24,7 +24,7 @@ from __future__ import annotations
 from importlib.metadata import PackageNotFoundError, version
 
 from .audit import AuditReport, AuditViolation, audit, audit_tree
-from .schema import check_schema, parse_intent_yaml
+from .schema import DuplicateKeyError, check_schema, parse_intent_yaml
 from .walker import collect_attestations, find_nested_intent_projects
 
 try:
@@ -35,6 +35,7 @@ except PackageNotFoundError:
 __all__ = [
     "AuditReport",
     "AuditViolation",
+    "DuplicateKeyError",
     "__version__",
     "audit",
     "audit_tree",
