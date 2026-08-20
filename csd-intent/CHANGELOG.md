@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.4](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.3.3...csd-intent-v0.3.4) (2026-08-20)
+
+
+### Bug Fixes
+
+* csd-intent refuses a duplicate claim id at parse time ([#12](https://github.com/PSA-Department-of-Engineering/csd-library/issues/12)) ([65e15d2](https://github.com/PSA-Department-of-Engineering/csd-library/commit/65e15d2d32b513ec1d3e3b6bbba563598d37c5a7))
+
 ## [0.3.3](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.3.2...csd-intent-v0.3.3) (2026-08-09)
 
 
