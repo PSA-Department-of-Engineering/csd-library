@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "csd-intent"
-version = "0.3.3"
+version = "0.3.4"
 description = "Cross-runtime audit tool for CSD intent specifications. Validates intent.yaml against CSD-INTENT-01 and verifies each claim is attested by at least one test across pytest, vitest, Playwright, or any other runner using the standard intent() marker."
 readme = "README.md"
 requires-python = ">=3.10"
