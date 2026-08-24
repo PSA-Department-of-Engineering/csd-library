@@ -75,4 +75,4 @@ All four packages published and install-verified (2026-06-11):
 - `pytest-intent` 0.2.0 → git tag `pytest-intent-v0.2.0`.
 - `csd-intent` 0.1.0 → git tag `csd-intent-v0.1.0`.
 
-Consumers migrated off `file:`/`-e`: git-switchboard, SolveOS (night-approver + homelab-platform applied in working tree, pending commit alongside in-progress work). The `bootstrap-*` generators and the `apply-intent-bundle` validator emit/accept the published installs.
+Consumers migrated off `file:`/`-e`: git-switchboard, SolveOS (night-approver + foundry-platform applied in working tree, pending commit alongside in-progress work). The `bootstrap-*` generators and the `apply-intent-bundle` validator emit/accept the published installs.

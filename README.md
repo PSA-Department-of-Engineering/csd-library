@@ -2,7 +2,7 @@
 
 Reusable implementation artifacts for projects following CSD methodology. Anything that helps implement, test, or scaffold a CSD-aligned project lives here. Methodology stays separate (the canonical CSD source); this folder is the *implementation* counterpart.
 
-The Playbook (`ai-coding-prompts/`) stays separate too - it covers many topics beyond CSD (Java, FastAPI, Frontend, PowerShell, …), so `csd-library` can grow without dragging unrelated guidance along.
+The Playbook (`playbook/`) stays separate too - it covers many topics beyond CSD (Java, FastAPI, Frontend, PowerShell, …), so `csd-library` can grow without dragging unrelated guidance along.
 
 ## Layout
 
@@ -53,7 +53,7 @@ This repo and the playbook are designed to be cloned as siblings:
 
 ```
 <workspace>/
-├── ai-coding-prompts/   ← the playbook
+├── playbook/   ← the playbook
 └── csd-library/         ← this repo
 ```
 

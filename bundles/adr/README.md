@@ -20,7 +20,7 @@ Reusable Intent Bundle for Architecture Decision Records published as docs pages
 ## Apply
 
 ```bash
-python ../../ai-coding-prompts/skills/apply-intent-bundle/apply.py \
+python ../../playbook/skills/apply-intent-bundle/apply.py \
   --bundle adr \
   --target <path-to-starlight-project>
 ```
