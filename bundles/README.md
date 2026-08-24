@@ -1,8 +1,8 @@
 # Intent Bundles
 
-Reusable, importable Intent Specifications + their enforcement tests, packaged together. See `../../ai-coding-prompts/REF-Intent-Bundle.md` for the contract.
+Reusable, importable Intent Specifications + their enforcement tests, packaged together. See `../../playbook/REF-Intent-Bundle.md` for the contract.
 
-Apply a bundle to a project via the `apply-intent-bundle` Skill (master at `../../ai-coding-prompts/skills/apply-intent-bundle/`).
+Apply a bundle to a project via the `apply-intent-bundle` Skill (master at `../../playbook/skills/apply-intent-bundle/`).
 
 ## Bundles in this folder
 

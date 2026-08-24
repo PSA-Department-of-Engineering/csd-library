@@ -1,6 +1,6 @@
 # Slidev theme catalog
 
-Brand- and organization-specific deck themes for the `bootstrap-slidev-deck` skill (master copy in the sibling `ai-coding-prompts` playbook). The skill resolves themes from its built-in `themes/` directory first, then from this catalog (override with `--themes-root`). Nothing here is published as a package — themes are source assets, read from a clone.
+Brand- and organization-specific deck themes for the `bootstrap-slidev-deck` skill (master copy in the sibling `playbook` clone). The skill resolves themes from its built-in `themes/` directory first, then from this catalog (override with `--themes-root`). Nothing here is published as a package — themes are source assets, read from a clone.
 
 ## A theme is self-contained
 

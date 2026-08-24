@@ -56,7 +56,7 @@ These are starting points, not enforced artifacts; the intent claims are what th
 ## Apply
 
 ```bash
-python ../../ai-coding-prompts/skills/apply-intent-bundle/apply.py \
+python ../../playbook/skills/apply-intent-bundle/apply.py \
   --bundle starlight \
   --target <path-to-starlight-project>
 ```
