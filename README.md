@@ -67,7 +67,7 @@ How a release happens:
 
 1. Land work on `main` as usual, with Conventional Commits scoped by package (`feat(pytest-intent): …`) so only that package's version moves. Day-to-day commits go straight to `main`; no PR is required.
 2. release-please maintains one **release PR per package**, accumulating the version bump + CHANGELOG from those commits. This is the only PR in the flow.
-3. The repo's tests (`.github/workflows/test.yml`) run on that PR. Merge it when you want to cut the release; the merge is the release gate.
+3. The repo's tests (`.github/workflows/test.yml`) run on that PR. Merge it when you want to cut the release; the merge is the release gate. **Merge by rebase, never squash**: a squash merge appends a `Co-authored-by: github-actions[bot]` trailer, which the org's no-co-author hygiene gate rejects, killing the release run before release-please cuts the tags (a merged release PR then stays pending until the next push or a `workflow_dispatch` of release.yml re-drives it). A rebase merge lands the bot's own clean `chore: release main` commit as-is.
 4. On merge, release-please tags `<pkg>-vX.Y.Z`, creates the GitHub release, and:
    - **npm** (`vitest-intent`, `playwright-intent`, `starlight-theme`): publishes to the public npm registry with a sigstore provenance attestation. Consumers install with no `.npmrc` and no token (see ADR-0003).
    - **Python** (`csd-intent`, `csd-pytest-intent`): publishes to PyPI via trusted publishing, with PEP 740 provenance attestations. Consumers `pip install` the bare name, no git URL (see ADR-0004).
