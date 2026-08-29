@@ -12,6 +12,11 @@ name: release
 on:
   push:
     branches: [main]
+  # Recovery lever: re-drive release-please by hand when a push's run died before
+  # it (e.g. the hygiene gate refusing a squash-merge's auto-added co-author
+  # trailer). A merged release PR stays pending until a run cuts it; this cuts it
+  # without inventing a commit.
+  workflow_dispatch:
 
 jobs:
   release:
