@@ -17,6 +17,17 @@ on:
   # trailer). A merged release PR stays pending until a run cuts it; this cuts it
   # without inventing a commit.
   workflow_dispatch:
+    inputs:
+      publish-paths:
+        description: >-
+          Recovery only: JSON array of package dirs (e.g. ["csd-intent"]) to run the
+          PyPI publish for at main's current versions. For a release whose tag was cut
+          but whose upload died on CI plumbing. Not a republish path in the ADR-0003
+          "burned release" sense: PyPI never accepts a filename twice and the job
+          skips existing files, so this can only COMPLETE a stuck release, never
+          reissue one.
+        required: false
+        default: ''
 
 jobs:
   release:
@@ -34,13 +45,18 @@ jobs:
   # necessity: PyPI trusted publishing validates the OIDC token's job_workflow_ref
   # claim, and for a job inside a reusable workflow that claim names ci/library.yml -
   # never the release.yml this repo's PyPI publishers are registered against
-  # (pypi/warehouse#11096). A job defined in THIS file keeps the claim right, and the
-  # logic still lives once in ci's publish-pypi composite action, which mounting here
-  # does not disturb the claim. Fans out over the packages release-please actually cut;
-  # the action itself skips npm directories (their publish is library.yml's).
+  # (pypi/warehouse#11096). The steps are inline rather than a ci composite for an
+  # upstream reason of their own: pypa/gh-action-pypi-publish derives its Docker
+  # invocation from github.action_repository, which nested in a cross-repo composite
+  # names the composite's repo and yields an invalid image reference. Fans out over
+  # the packages release-please actually cut (or, on dispatch, over publish-paths -
+  # see the input's description); npm directories are skipped here, mirroring the npm
+  # job skipping Python ones.
   publish-pypi:
     needs: release
-    if: needs.release.outputs.paths_released != '' && needs.release.outputs.paths_released != '[]'
+    if: |
+      (github.event_name == 'workflow_dispatch' && inputs.publish-paths != '') ||
+      (needs.release.outputs.paths_released != '' && needs.release.outputs.paths_released != '[]')
     # GitHub-hosted for the same reason library.yml pins publish-npm there: publishing
     # a public artifact to a public registry has no business riding on homelab uptime.
     runs-on: ubuntu-latest
@@ -50,8 +66,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        path: ${{ fromJSON(needs.release.outputs.paths_released) }}
+        path: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.publish-paths || needs.release.outputs.paths_released) }}
     steps:
-      - uses: PSA-Department-of-Engineering/ci/.github/actions/publish-pypi@main
+      - uses: actions/checkout@v4
+      - name: Build ${{ matrix.path }}
+        id: build
+        run: |
+          if [ -f "${{ matrix.path }}/pyproject.toml" ]; then
+            echo "python=true" >> "$GITHUB_OUTPUT"
+            cd "${{ matrix.path }}"
+            pipx run build --sdist --wheel
+          else
+            echo "python=false" >> "$GITHUB_OUTPUT"
+            echo "${{ matrix.path }} has no pyproject.toml (npm package); library.yml's npm job publishes it, nothing to do here."
+          fi
+      # No credential, deliberately: each PyPI project names this repo + release.yml
+      # as a trusted publisher (pending publishers cover a first release), so PyPI
+      # mints a short-lived token from the run's OIDC token and records PEP 740
+      # provenance attestations from the same identity. skip-existing so a re-run of
+      # a partially-failed fan-out does not die on the file that already landed.
+      - name: Publish ${{ matrix.path }} to PyPI
+        if: steps.build.outputs.python == 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          path: ${{ matrix.path }}
+          packages-dir: ${{ matrix.path }}/dist
+          skip-existing: true
+          verbose: true
