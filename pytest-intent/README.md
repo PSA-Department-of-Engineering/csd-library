@@ -2,6 +2,8 @@
 
 **The `@intent` decorator for pytest - links a test function to one or more CSD intent claims.**
 
+> Published on PyPI as [`csd-pytest-intent`](https://pypi.org/project/csd-pytest-intent/) - the bare name `pytest-intent` belongs to an unrelated plugin there. The import name is `pytest_intent` either way.
+
 > CSD (Cognitive Software Delivery) is a language-agnostic methodology. This package is one specific implementation, scoped to Python projects using pytest.
 
 ## What this package is
@@ -37,8 +39,8 @@ That's the entire public surface.
 ## Install
 
 ```bash
-# Private install, pinned to a release tag:
-pip install "pytest-intent @ git+https://github.com/PSA-Department-of-Engineering/csd-library.git@pytest-intent-v0.2.0#subdirectory=pytest-intent"
+# From PyPI (the distribution is csd-pytest-intent; the import stays pytest_intent):
+pip install csd-pytest-intent
 
 # Local dev against a csd-library checkout:
 pip install -e path/to/csd-library/pytest-intent
@@ -49,7 +51,7 @@ pip install -e path/to/csd-library/pytest-intent
 To validate your `intent.yaml` against CSD-INTENT-01 and check that every claim has a test:
 
 ```bash
-pip install "csd-intent @ git+https://github.com/PSA-Department-of-Engineering/csd-library.git@csd-intent-v0.3.2#subdirectory=csd-intent"
+pip install csd-intent
 csd-intent /path/to/your/project
 ```
 

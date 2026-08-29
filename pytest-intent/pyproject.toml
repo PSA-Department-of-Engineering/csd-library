@@ -3,7 +3,11 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pytest-intent"
+# Distribution name only: PyPI already carries an unrelated `pytest-intent`
+# (celestialorb's requirement-coverage plugin), so the published name takes the
+# library's csd- prefix. The import name stays `pytest_intent`, and this package
+# registers no pytest plugin entry point, so nothing but the install line changes.
+name = "csd-pytest-intent"
 version = "0.2.1"
 description = "The @intent decorator for pytest - links a test function to one or more CSD intent claims (INT-NNN). Spec validation and cross-runtime coverage live in the standalone `csd-intent` CLI."
 readme = "README.md"
