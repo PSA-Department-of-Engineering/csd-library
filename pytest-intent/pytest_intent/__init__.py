@@ -12,7 +12,9 @@ from importlib.metadata import PackageNotFoundError, version
 from .decorator import intent
 
 try:
-    __version__ = version("pytest-intent")
+    # The distribution is csd-pytest-intent (the bare name is taken on PyPI by an
+    # unrelated project - see ADR-0004); only the import name is pytest_intent.
+    __version__ = version("csd-pytest-intent")
 except PackageNotFoundError:
     __version__ = "0.0.0+unknown"
 
