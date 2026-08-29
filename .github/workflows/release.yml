@@ -2,10 +2,11 @@
 # release logic lives once in PSA-Department-of-Engineering/ci, so it cannot drift.
 #
 # On push to main, release-please maintains a per-package release PR (npm + Python)
-# from Conventional Commits; merging that PR cuts the tag + GitHub release and
-# publishes the npm packages to the public npm registry. Day-to-day work still pushes
-# straight to main - the only PR in the flow is release-please's bot-authored
-# release PR. See docs/adr/0002-release-automation.md.
+# from Conventional Commits; merging that PR cuts the tag + GitHub release, publishes
+# the npm packages to the public npm registry, and publishes the Python packages to
+# PyPI (the publish-pypi job below). Day-to-day work still pushes straight to main -
+# the only PR in the flow is release-please's bot-authored release PR. See
+# docs/adr/0002-release-automation.md and docs/adr/0004-public-pypi-distribution.md.
 name: release
 
 on:
@@ -23,3 +24,29 @@ jobs:
       pull-requests: write
       id-token: write
     secrets: inherit
+
+  # The one job that lives here rather than in the shared library.yml, out of
+  # necessity: PyPI trusted publishing validates the OIDC token's job_workflow_ref
+  # claim, and for a job inside a reusable workflow that claim names ci/library.yml -
+  # never the release.yml this repo's PyPI publishers are registered against
+  # (pypi/warehouse#11096). A job defined in THIS file keeps the claim right, and the
+  # logic still lives once in ci's publish-pypi composite action, which mounting here
+  # does not disturb the claim. Fans out over the packages release-please actually cut;
+  # the action itself skips npm directories (their publish is library.yml's).
+  publish-pypi:
+    needs: release
+    if: needs.release.outputs.paths_released != '' && needs.release.outputs.paths_released != '[]'
+    # GitHub-hosted for the same reason library.yml pins publish-npm there: publishing
+    # a public artifact to a public registry has no business riding on homelab uptime.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # the OIDC token PyPI exchanges for a short-lived upload token
+    strategy:
+      fail-fast: false
+      matrix:
+        path: ${{ fromJSON(needs.release.outputs.paths_released) }}
+    steps:
+      - uses: PSA-Department-of-Engineering/ci/.github/actions/publish-pypi@main
+        with:
+          path: ${{ matrix.path }}
