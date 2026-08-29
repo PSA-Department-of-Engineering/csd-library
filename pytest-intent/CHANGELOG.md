@@ -2,6 +2,13 @@
 
 All notable changes to pytest-intent are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [0.3.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/pytest-intent-v0.2.1...pytest-intent-v0.3.0) (2026-08-29)
+
+
+### Features
+
+* **pytest-intent:** rename the distribution to csd-pytest-intent for PyPI ([22d9ff4](https://github.com/PSA-Department-of-Engineering/csd-library/commit/22d9ff4cf1d4e7f8325ff2fbe515fe9218fdc965))
+
 ## [0.2.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/pytest-intent-v0.2.0...pytest-intent-v0.2.1) (2026-08-09)
 
 
