@@ -87,7 +87,7 @@ INT-NNN:
   statement: "..."              # >= 10 chars, RFC 2119 language
   rationale: "..."              # optional but recommended
   test:
-    scope: integration          # unit | integration | e2e
+    scope: integration          # unit | integration | e2e | llm
     component: SwitchFlow
     type: behavior              # invariant | behavior | contract
   criticality: critical         # critical | high | medium | low
