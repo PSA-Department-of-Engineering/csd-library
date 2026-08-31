@@ -164,6 +164,13 @@ def audit(
             continue
         if status == "draft":
             continue
+        # `llm` scope carries no marker by construction (CSD-INTENT-01 section 3.3):
+        # a reviewer judges the claim and records the verdict in its review record,
+        # so there is no test file for the walker to find and none is owed.
+        claim = claims[cid]
+        scope = (claim.get("test") or {}).get("scope") or claim.get("scope")
+        if scope == "llm":
+            continue
         report.violations.append(
             AuditViolation(
                 ViolationKind.UNATTESTED, cid, "no @intent / intent() marker references this claim"

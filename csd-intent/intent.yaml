@@ -90,3 +90,14 @@ INT-CSD-008:
     component: SchemaValidator
     type: invariant
   criticality: critical
+
+INT-CSD-009:
+  version: 1.0.0
+  status: active
+  statement: "A claim binding at `llm` scope is accepted by the schema and is never reported unattested for want of a marker, because a reviewer's recorded verdict attests it rather than a test run."
+  rationale: "CSD-INTENT-01 section 3.3's judged scope. A claim about meaning - whether a statement is falsifiable, whether a message explains its failure - cannot be decided by a runner, and a mechanical test that approximates the answer is a green that means nothing. The auditor must therefore accept the scope and stop asking for a marker that does not exist, or every judged claim reads as a coverage gap."
+  test:
+    scope: unit
+    component: Auditor
+    type: behavior
+  criticality: high
