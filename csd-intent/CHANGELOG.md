@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.4.0...csd-intent-v0.5.0) (2026-08-31)
+
+
+### Features
+
+* **csd-intent:** accept `llm` scope and attest it without a marker ([f40996e](https://github.com/PSA-Department-of-Engineering/csd-library/commit/f40996e35a1ce72af484141e829cf562177c3e48))
+
+
+### Bug Fixes
+
+* **csd-intent:** guard the scope read and refuse a marker on an llm claim ([83fb9d7](https://github.com/PSA-Department-of-Engineering/csd-library/commit/83fb9d738e23608f0c01442968e1fc6550814a74))
+
+
+### Documentation
+
+* **csd-intent:** name llm in the README's scope comment ([5cd8060](https://github.com/PSA-Department-of-Engineering/csd-library/commit/5cd8060040f84e0024034e1b6bc6faf797e4167f))
+
 ## [0.4.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.3.4...csd-intent-v0.4.0) (2026-08-29)
 
 
