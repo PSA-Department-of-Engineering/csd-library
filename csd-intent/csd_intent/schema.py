@@ -45,7 +45,9 @@ ID_PATTERN = re.compile(r"^INT-[A-Z0-9-]+$")
 VERSION_PATTERN = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
 
 VALID_STATUS = {"draft", "active", "deprecated"}
-VALID_SCOPE = {"unit", "integration", "e2e"}
+# `llm` is CSD-INTENT-01 section 3.3's judged scope: a claim a runner cannot decide,
+# attested by a reviewer's recorded verdict in its review record rather than by a test.
+VALID_SCOPE = {"unit", "integration", "e2e", "llm"}
 VALID_TYPE = {"invariant", "behavior", "contract"}
 VALID_CRITICALITY = {"critical", "high", "medium", "low"}
 

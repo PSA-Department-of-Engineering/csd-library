@@ -237,3 +237,27 @@ def test_format_violation_message(tmp_path: Path) -> None:
     assert "UNATTESTED" in text
     assert "INT-001" in text
     assert "INT-002" in text
+
+
+@intent('INT-CSD-009')
+def test_llm_scope_is_valid_and_needs_no_marker(tmp_path: Path) -> None:
+    """A judged claim carries no marker by construction, so coverage must not ask for one."""
+    report = audit(
+        _scaffold(
+            tmp_path,
+            intent_body=(
+                "INT-001:\n"
+                "  version: 1.0.0\n"
+                "  status: active\n"
+                '  statement: "Every active claim states a falsifiable condition."\n'
+                "  test:\n"
+                "    scope: llm\n"
+                "    component: ClaimSet\n"
+                "    type: invariant\n"
+                "  criticality: high\n"
+            ),
+        )
+    )
+    assert report.ok, report.format()
+    assert not [v for v in report.violations if v.kind is ViolationKind.SCHEMA]
+    assert "INT-001" not in report.unattested
