@@ -27,7 +27,6 @@ from typing import Any
 import yaml
 
 __all__ = [
-    "effective_scope",
     "ID_PATTERN",
     "VALID_CRITICALITY",
     "VALID_SCOPE",
@@ -36,6 +35,7 @@ __all__ = [
     "VERSION_PATTERN",
     "DuplicateKeyError",
     "check_schema",
+    "effective_scope",
     "parse_intent_yaml",
     "top_level_keys",
 ]
