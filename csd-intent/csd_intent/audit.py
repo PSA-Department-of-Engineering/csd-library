@@ -6,7 +6,13 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 
-from .schema import DuplicateKeyError, check_schema, parse_intent_yaml, top_level_keys
+from .schema import (
+    DuplicateKeyError,
+    check_schema,
+    effective_scope,
+    parse_intent_yaml,
+    top_level_keys,
+)
 from .walker import collect_attestations, find_nested_intent_projects
 
 __all__ = [
@@ -22,6 +28,7 @@ class ViolationKind(str, Enum):
     SCHEMA = "schema"
     ORPHAN = "orphan"
     UNATTESTED = "unattested"
+    MISMARKED = "mismarked"
 
 
 @dataclass(frozen=True)
@@ -70,7 +77,12 @@ class AuditReport:
             f"intent.yaml ({self.intent_path}): {self.claim_count} claims, "
             f"{len(self.violations)} violation(s)."
         ]
-        for kind in (ViolationKind.SCHEMA, ViolationKind.ORPHAN, ViolationKind.UNATTESTED):
+        for kind in (
+            ViolationKind.SCHEMA,
+            ViolationKind.ORPHAN,
+            ViolationKind.UNATTESTED,
+            ViolationKind.MISMARKED,
+        ):
             items = by_kind.get(kind, [])
             if not items:
                 continue
@@ -141,6 +153,21 @@ def audit(
     attested_ids = set(attestations.keys())
     report.attested_claims = claim_ids & attested_ids
 
+    # Mismarked: a marker on an `llm` claim. Such a claim is attested by a
+    # reviewer's recorded verdict (CSD-INTENT-01 section 3.3), so a marker means a
+    # test was written to approximate a judgement no runner can make - the
+    # meaningless green the scope exists to prevent, and invisible unless said here.
+    for cid in sorted(claim_ids & attested_ids):
+        if effective_scope(claims[cid]) == "llm":
+            report.violations.append(
+                AuditViolation(
+                    ViolationKind.MISMARKED,
+                    cid,
+                    "`llm` scope is attested by a recorded reviewer verdict, not by a test; "
+                    "remove the marker, or bind the claim at a scope a runner can decide",
+                )
+            )
+
     # Orphans: marker references a claim that does not exist
     for cid in sorted(attested_ids - claim_ids):
         refs = attestations.get(cid, [])
@@ -167,9 +194,7 @@ def audit(
         # `llm` scope carries no marker by construction (CSD-INTENT-01 section 3.3):
         # a reviewer judges the claim and records the verdict in its review record,
         # so there is no test file for the walker to find and none is owed.
-        claim = claims[cid]
-        scope = (claim.get("test") or {}).get("scope") or claim.get("scope")
-        if scope == "llm":
+        if effective_scope(claims[cid]) == "llm":
             continue
         report.violations.append(
             AuditViolation(
