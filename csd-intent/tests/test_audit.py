@@ -261,3 +261,29 @@ def test_llm_scope_is_valid_and_needs_no_marker(tmp_path: Path) -> None:
     assert report.ok, report.format()
     assert not [v for v in report.violations if v.kind is ViolationKind.SCHEMA]
     assert "INT-001" not in report.unattested
+
+
+@intent('INT-CSD-010')
+def test_marker_on_llm_claim_is_a_violation(tmp_path: Path) -> None:
+    """A mechanical test standing in for a judgement must not read as attestation."""
+    report = audit(
+        _scaffold(
+            tmp_path,
+            intent_body=(
+                "INT-001:\n"
+                "  version: 1.0.0\n"
+                "  status: active\n"
+                '  statement: "Every active claim states a falsifiable condition."\n'
+                "  test:\n"
+                "    scope: llm\n"
+                "    component: ClaimSet\n"
+                "    type: invariant\n"
+                "  criticality: high\n"
+            ),
+            py_body="from pytest_intent import intent\n@intent('INT-001')\ndef test_approximation(): pass\n",
+        )
+    )
+    assert not report.ok
+    kinds = [v.kind for v in report.violations]
+    assert ViolationKind.MISMARKED in kinds, report.format()
+    assert ViolationKind.UNATTESTED not in kinds

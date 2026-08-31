@@ -4,7 +4,7 @@ Usage:
   csd-intent [PROJECT_DIR]
              [--intent PATH]
              [--tests-dir DIR]...
-             [--fail-on schema|orphan|unattested|any|none]
+             [--fail-on schema|orphan|unattested|mismarked|any|none]
              [--quiet]
              [--version]
 
@@ -31,7 +31,13 @@ _FAIL_MAP = {
     "schema": {ViolationKind.SCHEMA},
     "orphan": {ViolationKind.ORPHAN},
     "unattested": {ViolationKind.UNATTESTED},
-    "any": {ViolationKind.SCHEMA, ViolationKind.ORPHAN, ViolationKind.UNATTESTED},
+    "mismarked": {ViolationKind.MISMARKED},
+    "any": {
+        ViolationKind.SCHEMA,
+        ViolationKind.ORPHAN,
+        ViolationKind.UNATTESTED,
+        ViolationKind.MISMARKED,
+    },
     "none": set(),
 }
 

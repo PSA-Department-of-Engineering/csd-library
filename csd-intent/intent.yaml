@@ -101,3 +101,14 @@ INT-CSD-009:
     component: Auditor
     type: behavior
   criticality: high
+
+INT-CSD-010:
+  version: 1.0.0
+  status: active
+  statement: "A test marker on a claim bound at `llm` scope is reported as a violation rather than counted as attestation."
+  rationale: "An `llm` claim is attested by a recorded reviewer verdict, so a marker means someone wrote a mechanical test to approximate a judgement no runner can make. Counting it as attestation makes that approximation invisible and green, which is the exact failure the scope exists to prevent."
+  test:
+    scope: unit
+    component: Auditor
+    type: invariant
+  criticality: high

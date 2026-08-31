@@ -8,7 +8,7 @@ Validates the canonical claim shape:
       statement: "..."             # required
       rationale: "..."             # optional in CSD; recommended
       test:
-        scope: unit | integration | e2e
+        scope: unit | integration | e2e | llm
         component: "..."
         type: invariant | behavior | contract
       criticality: critical | high | medium | low
@@ -27,6 +27,7 @@ from typing import Any
 import yaml
 
 __all__ = [
+    "effective_scope",
     "ID_PATTERN",
     "VALID_CRITICALITY",
     "VALID_SCOPE",
@@ -127,6 +128,15 @@ def top_level_keys(path: Path) -> list[str]:
     if not isinstance(data, dict):
         return []
     return sorted(str(key) for key in data.keys())
+
+
+def effective_scope(claim: dict[str, Any]) -> str | None:
+    """The claim's scope, from the nested `test` block or the legacy top-level field.
+
+    The single reader of a claim's scope: callers that re-derive it drop the type
+    guards below and traceback on a malformed `test:` value instead of reporting it.
+    """
+    return _scope_and_test(claim)[0]
 
 
 def _scope_and_test(claim: dict[str, Any]) -> tuple[str | None, dict[str, Any] | None]:
