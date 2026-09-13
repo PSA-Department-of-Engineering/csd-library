@@ -25,5 +25,5 @@ export interface StarlightThemeMermaidConfig {
 
 export const mermaidConfig: StarlightThemeMermaidConfig = {
   flowchart: { curve: "basis", nodeSpacing: 50, rankSpacing: 60, padding: 14, useMaxWidth: true },
-  themeVariables: { fontFamily: "ui-sans-serif, system-ui, sans-serif", fontSize: "14px" },
+  themeVariables: { fontFamily: "Segoe UI, Arial, sans-serif", fontSize: "14px" },
 };

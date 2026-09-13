@@ -2,7 +2,7 @@
  * @psa-department-of-engineering/starlight-theme - the shared Starlight look.
  *
  * One source of truth for the docs-site theme, consumed in two parts:
- *   - the stylesheet (warm dark palette override + a token-based Mermaid contrast
+ *   - the stylesheet (PSA Dark/Light palettes + a token-based Mermaid contrast
  *     layer), wired through Starlight:
  *       customCss: ['@psa-department-of-engineering/starlight-theme/styles.css']
  *   - the `mermaidConfig` object, spread into the astro-mermaid integration:
