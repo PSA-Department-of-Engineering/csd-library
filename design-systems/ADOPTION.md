@@ -17,7 +17,7 @@ Each organization maintains its concrete branding in source. Application adoptio
 
 ## Press audit, 2026-09-13
 
-Library's application and published house briefs are adopted. Notes, Plans and Slides completed their software builds separately from the design work; build completion was not design acceptance. Their PSA application and output changes are committed and pushed, with release verification in progress. The next rollout covers the other Foundry applications.
+Library's application and published house briefs are adopted. Notes, Plans and Slides maintain their PSA application and output appearance in the sources described below. Each rollout verifies its tested revision, published images, promotion and live interface separately. Build completion alone is not design acceptance. The next rollout covers the other Foundry applications.
 
 Notes and Slides own their app styling in the shared CSS, shell and local appearance component. Plans uses the same arrangement, with its canonical renderer scoped to the rendered document so its colours cannot overwrite application controls. All three app backgrounds carry open side fields and rising, fading particles in Light/Dark, with hidden-page pause and reduced-motion support. Notes' current MoM source is mechanically vendored from Playbook; Plans uses one renderer for the cockpit and standalone export. Slides' PSA-default build passes the catalog gate and produces a checked PDF. Issued outputs retain their stored bytes.
 
