@@ -1,0 +1,33 @@
+{
+  "prefix": "ds",
+  "description": "PSA Molten / Dark",
+  "tiers": [
+    "core",
+    "ambient"
+  ],
+  "chrome": [
+    "ds-ambient",
+    "ds-brand",
+    "ds-dot",
+    "ds-embers",
+    "ds-glow",
+    "ds-stream",
+    "ds-wordmark"
+  ],
+  "pages": [
+    "agenda",
+    "content",
+    "cover",
+    "diagram",
+    "references",
+    "section",
+    "stats",
+    "thanks-qa"
+  ],
+  "identity": "psa",
+  "mode": "dark",
+  "requires": {
+    "assets": [],
+    "note": "Licensed brand fonts are supplied by the installation. System fallbacks are supported."
+  }
+}

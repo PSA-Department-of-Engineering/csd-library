@@ -1,0 +1,39 @@
+/* Shared roles for slides and reading instruments. Content stays still. */
+#slidev-goto-dialog:has(#slidev-goto-input:disabled){display:none!important}
+.slidev-slide-content,.print-slide-container{background:var(--ds-canvas)!important;color:var(--ds-ink);isolation:isolate}
+.print-slide-container{position:relative!important;overflow:hidden}
+.slidev-layout{background:transparent!important;color:var(--ds-ink);font-family:var(--ds-sans);padding:100px 58px 44px!important;font-size:19px}
+.slidev-layout h1{font-size:42px;font-weight:500;line-height:1.12;letter-spacing:-.04em;color:var(--ds-ink);margin-bottom:24px}
+.slidev-layout h2{font-size:27px;color:var(--ds-ink)}
+.slidev-layout p,.slidev-layout li{line-height:1.5}
+.ds-cover h1{font-size:65px;max-width:700px;line-height:1.04;letter-spacing:-.05em;margin:38px 0 24px}
+.ds-eyebrow{font:11px var(--ds-mono);text-transform:uppercase;letter-spacing:.18em;color:var(--ds-link);margin-bottom:16px}
+.ds-lede{font-size:23px;max-width:650px;line-height:1.45;color:var(--ds-muted)}
+.ds-note{font:12px var(--ds-mono);color:var(--ds-muted);margin-top:22px}
+.ds-grid-two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.ds-flow{display:grid;grid-template-columns:1fr 20px 1fr 20px 1fr;gap:12px;align-items:center}.ds-arrow{font-size:24px;color:var(--ds-link)}
+.ds-card{background:color-mix(in srgb,var(--ds-surface) 66%,transparent);backdrop-filter:blur(18px);border:1px solid var(--ds-line);border-radius:var(--ds-radius);padding:24px}
+.ds-solid .ds-card{background:var(--ds-surface);backdrop-filter:none}
+.ds-card h2{margin:0 0 14px}.ds-card p{font-size:18px;margin:0;color:var(--ds-muted)}
+.ds-rule{height:2px;width:54px;background:var(--ds-brand);margin:18px 0 24px}
+.ds-stat{font-size:64px;line-height:1.2;letter-spacing:-.05em;color:var(--ds-link)}
+.ds-list{display:grid;gap:16px;padding-left:24px}.ds-list li::marker{color:var(--ds-link)}
+.ds-brand{position:absolute;top:29px;left:58px;display:flex;align-items:center;gap:13px;color:var(--ds-ink);z-index:3;pointer-events:none;font-family:var(--ds-sans)}
+.ds-wordmark{font:700 37px/1 var(--ds-sans);letter-spacing:-.075em}.ds-dot{color:var(--ds-brand)}
+.ds-logo{width:128px;height:auto}.ds-unit{border-left:1px solid var(--ds-line);padding-left:13px;font-size:16px;font-weight:500}
+.ds-speechmark{width:37px;height:37px;display:block}.ds-lockup-text{font-size:17px;line-height:1.1;border-left:1px solid var(--ds-line);padding-left:13px}.ds-lockup-text small{display:block;font:8px var(--ds-mono);letter-spacing:.14em;margin-top:6px}.ds-flag{width:22px;height:auto}
+.ds-ambient{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.ds-glow{position:absolute;inset:-15%;background:radial-gradient(ellipse at 88% 50%,color-mix(in srgb,var(--ds-brand) 18%,transparent),transparent 50%);animation:ds-glow 29s ease-in-out infinite alternate}
+.ds-stream{width:100%;height:100%;fill:none;stroke:var(--ds-brand);stroke-width:.65;opacity:.3;animation:ds-flow 34s ease-in-out infinite alternate}
+.ds-grid{position:absolute;inset:0;background-image:linear-gradient(color-mix(in srgb,var(--ds-brand) 9%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--ds-brand) 9%,transparent) 1px,transparent 1px);background-size:40px 40px}
+.ds-orbit,.ds-arcs{position:absolute;width:430px;height:430px;right:-155px;top:45px;opacity:.3;animation:ds-flow 31s ease-in-out infinite alternate}
+.ds-orbit i,.ds-arcs i{position:absolute;inset:0;border:1px solid var(--ds-brand);border-radius:50%}.ds-orbit i:nth-child(2),.ds-arcs i:nth-child(2){inset:36px}.ds-orbit i:nth-child(3),.ds-arcs i:nth-child(3){inset:72px}.ds-arcs{right:-260px;width:630px;height:630px;top:-50px}
+.ds-embers{position:absolute;inset:0;overflow:hidden}.ds-embers i{position:absolute;bottom:-12px;left:9%;width:3px;height:3px;border-radius:50%;background:var(--ds-brand);animation:ds-rise 24s linear infinite;opacity:0}.ds-embers i:nth-child(3n){left:86%;animation-duration:32s;animation-delay:-8s}.ds-embers i:nth-child(3n+1){left:95%;animation-delay:-15s}.ds-embers i:nth-child(4n){left:4%;animation-delay:-21s}.ds-embers i:nth-child(5n){left:72%;animation-delay:-11s}
+.ds-motion-off .ds-ambient *{animation:none!important}
+.slidev-slide-content:has(.ds-motion-off) .ds-ambient *{animation:none!important}
+html[data-ds-hidden="true"] .ds-ambient *{animation-play-state:paused!important}
+@keyframes ds-glow{to{transform:translate(-3%,5%) scale(1.07)}}
+@keyframes ds-flow{to{transform:translate(15px,-12px) rotate(3deg)}}
+@keyframes ds-rise{0%{opacity:0;transform:translateY(0)}15%{opacity:.45}70%,100%{opacity:0;transform:translate(18px,-530px)}}
+@media(prefers-reduced-motion:reduce){.ds-ambient *{animation:none!important}}
+@media print{.ds-ambient *{animation:none!important}.ds-card{backdrop-filter:none;background:var(--ds-surface)}}

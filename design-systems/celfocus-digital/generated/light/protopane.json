@@ -1,0 +1,28 @@
+{
+  "slug": "celfocus-digital-light",
+  "name": "Celfocus Digital / Light",
+  "category": "Foundry identities",
+  "source": "https://psa-library.chaos-architect.dev/celfocus-digital-design-system.html",
+  "tokens": {
+    "--background": "0.00 0.00% 97.25%",
+    "--foreground": "352.50 17.39% 9.02%",
+    "--card": "0.00 0.00% 100.00%",
+    "--card-foreground": "352.50 17.39% 9.02%",
+    "--primary": "357.91 81.38% 51.57%",
+    "--primary-foreground": "0.00 0.00% 100.00%",
+    "--secondary": "0.00 0.00% 97.25%",
+    "--secondary-foreground": "352.50 17.39% 9.02%",
+    "--muted": "0.00 0.00% 97.25%",
+    "--muted-foreground": "0.00 0.00% 30.20%",
+    "--accent": "0.00 0.00% 97.25%",
+    "--accent-foreground": "352.50 17.39% 9.02%",
+    "--destructive": "352.78 62.44% 41.76%",
+    "--destructive-foreground": "0.00 0.00% 97.25%",
+    "--border": "20.00 6.67% 82.35%",
+    "--input": "20.00 6.67% 82.35%",
+    "--ring": "211.15 79.59% 38.43%",
+    "--radius": "0.625rem",
+    "--font-sans": "\"Aptos\",\"Segoe UI\",Arial,sans-serif"
+  },
+  "guidance": "# Celfocus Digital\n\nUse the Celfocus 2026 corporate palette and Aptos typography, with the official transparent Celfocus vector wordmark and a separate Digital descriptor.\n\n## Identity\n\nThe original vector remains graphite on Light and white on Dark. Preserve its proportions. Never redraw it, add a plaque, or enlarge a low-resolution raster as a substitute. The corporate motif is a secondary asset and remains within its native resolution.\n\n## Modes and materials\n\nDark and Light use identity.json, including the corporate red and neutral ladder. Glass has a translucent fill and blur; Solid has an opaque fill. Use opaque surfaces for tables and forms. Selected controls have an inverse fill and a checkmark.\n\n## Motion and type\n\nUse peripheral arcs, slow light and sparse rising particles. Keep text still; freeze for reduced motion and print and pause hidden documents. Supply licensed Aptos assets from the installation. Segoe UI and Arial are fallbacks.\n\n## Exchange\n\nThe shared ds- slide vocabulary supports the three interchangeable identities. Existing corporate templates keep their specialized classes and remain available.\n"
+}

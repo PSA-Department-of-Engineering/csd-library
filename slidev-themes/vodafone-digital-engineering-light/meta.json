@@ -1,0 +1,42 @@
+{
+  "prefix": "ds",
+  "description": "Vodafone Portugal Digital Engineering / Light",
+  "tiers": [
+    "core",
+    "ambient"
+  ],
+  "chrome": [
+    "ds-ambient",
+    "ds-brand",
+    "ds-embers",
+    "ds-flag",
+    "ds-glow",
+    "ds-grid",
+    "ds-lockup-text",
+    "ds-orbit",
+    "ds-speechmark"
+  ],
+  "pages": [
+    "agenda",
+    "content",
+    "cover",
+    "diagram",
+    "references",
+    "section",
+    "stats",
+    "thanks-qa"
+  ],
+  "identity": "vodafone-digital-engineering",
+  "mode": "light",
+  "requires": {
+    "assets": [
+      "/fonts/Vodafone-300.woff2",
+      "/fonts/Vodafone-400.woff2",
+      "/fonts/Vodafone-500.woff2",
+      "/fonts/Vodafone-600.woff2",
+      "/fonts/Vodafone-700.woff2",
+      "/fonts/Vodafone-800.woff2"
+    ],
+    "note": "Licensed brand fonts are supplied by the installation. System fallbacks are supported."
+  }
+}

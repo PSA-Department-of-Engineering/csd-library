@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Foundry identity kit</title>
+<style>
+body{margin:0;background:#eae5dd;color:#252322;font:15px 'Segoe UI',Arial,sans-serif}header{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:20px 28px;background:#fffcf7;border-bottom:1px solid #cfc5ba}h1{font-size:18px;margin:0 auto 0 0}select,button{font:inherit;border:1px solid #615b56;border-radius:6px;padding:8px 12px;background:transparent;color:inherit}button[aria-pressed=true]{background:#252322;color:#fffcf7}main{max-width:1100px;margin:28px auto;padding:0 20px}iframe{width:100%;height:640px;border:0;background:#0c0c0e;box-shadow:0 12px 40px #25232220}p{color:#615b56;line-height:1.5}a{color:#a23d00}
+</style></head><body><header><h1>Foundry identity kit</h1><select id="identity" aria-label="Identity"><option value="psa">PSA Molten</option><option value="vodafone-digital-engineering">Vodafone Portugal Digital Engineering</option><option value="celfocus-digital">Celfocus Digital</option></select><button id="light" aria-pressed="false">Light</button><button id="solid" aria-pressed="false">Solid</button><button id="motion" aria-pressed="true">Motion</button></header>
+<main><iframe id="preview" title="Selected identity"></iframe><p>Generated from the same source as the Slidev themes, Press styles and Protopane presets. This portable preview uses the available system fonts; branded font files are supplied by each installation.</p></main>
+<script type="application/json" id="previews">__PREVIEWS__</script>
+<script>
+const previews=JSON.parse(document.getElementById('previews').textContent);
+const identity=document.getElementById('identity'),frame=document.getElementById('preview');
+const controls=['light','solid','motion'].map(id=>document.getElementById(id));
+function render(){let key=identity.value+(controls[0].getAttribute('aria-pressed')==='true'?'-light':'');let html=previews[key];const extra=(controls[1].getAttribute('aria-pressed')==='true'?' ds-solid':'')+(controls[2].getAttribute('aria-pressed')==='false'?' ds-motion-off':'');frame.srcdoc=html.replace('class="slidev-slide-content"','class="slidev-slide-content'+extra+'"');}
+controls.forEach(button=>button.onclick=()=>{button.setAttribute('aria-pressed',button.getAttribute('aria-pressed')!=='true');render()});identity.onchange=render;render();
+</script></body></html>

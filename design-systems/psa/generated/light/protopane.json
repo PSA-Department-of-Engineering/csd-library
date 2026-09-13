@@ -1,0 +1,28 @@
+{
+  "slug": "psa-light",
+  "name": "PSA Molten / Light",
+  "category": "Foundry identities",
+  "source": "https://psa-library.chaos-architect.dev/psa-design-system.html",
+  "tokens": {
+    "--background": "40.00 31.03% 94.31%",
+    "--foreground": "20.00 4.23% 13.92%",
+    "--card": "37.50 100.00% 98.43%",
+    "--card-foreground": "20.00 4.23% 13.92%",
+    "--primary": "26.05 95.00% 52.94%",
+    "--primary-foreground": "26.40 60.98% 8.04%",
+    "--secondary": "36.92 23.64% 89.22%",
+    "--secondary-foreground": "20.00 4.23% 13.92%",
+    "--muted": "36.92 23.64% 89.22%",
+    "--muted-foreground": "27.27 6.01% 35.88%",
+    "--accent": "36.92 23.64% 89.22%",
+    "--accent-foreground": "20.00 4.23% 13.92%",
+    "--destructive": "352.78 62.44% 41.76%",
+    "--destructive-foreground": "40.00 31.03% 94.31%",
+    "--border": "31.43 17.95% 77.06%",
+    "--input": "31.43 17.95% 77.06%",
+    "--ring": "211.15 79.59% 38.43%",
+    "--radius": "0.625rem",
+    "--font-sans": "\"Segoe UI Variable\",\"Segoe UI\",Arial,sans-serif"
+  },
+  "guidance": "# PSA Molten\n\nGraphite and warm porcelain, orange light, precise typography and slow open ribbons. The approved visual reference is the PSA design system brief in PSA Library.\n\n## Identity\n\nUse the lowercase `psa.` wordmark in Segoe UI, bold and tightly spaced. The point is the brand orange. Keep the wordmark clear of the ribbons; never enclose it in a contour blob.\n\n## Modes and materials\n\nDark and Light use the exact roles in identity.json. Glass is a translucent surface with blur and a visible edge; Solid is opaque. Forms and dense tables use Solid. Selected controls use an inverse fill and a checkmark. Orange text uses the link token, which is darker on Light.\n\n## Motion\n\nSlow open ribbons and sparse rising molten points live at the edges. Keep the reading column still and uncluttered. Both modes have ambient motion. Respect reduced motion, pause when hidden, and freeze for print. Use ds-motion-off for a static deck, ds-solid for opaque cards.\n\n## Typography and exchange\n\nSegoe UI Variable / Segoe UI / Arial; Cascadia Code / Consolas for labels. The shared ds- slide vocabulary supports switching between all three identities without rewriting page content. Specialized legacy templates retain their own vocabulary.\n"
+}

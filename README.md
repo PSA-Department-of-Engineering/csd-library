@@ -6,6 +6,8 @@ The Playbook (`playbook/`) stays separate too - it covers many topics beyond CSD
 
 ## Layout
 
+`design-systems/` is the canonical identity catalog for tokens, marks, guidance and generated Slidev, Press and Protopane projections. See [Foundry design systems](design-systems/README.md) for defaults and regeneration.
+
 ```
 csd-library/
 ├── README.md            ← you are here

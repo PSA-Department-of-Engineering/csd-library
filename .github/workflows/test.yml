@@ -15,6 +15,18 @@ on:
     branches: [main]
 
 jobs:
+  design-systems:
+    runs-on: arc-dind
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python design-systems/generate.py --check
+      - run: node slidev-themes/check-themes.mjs
   python:
     runs-on: arc-dind
     strategy:
