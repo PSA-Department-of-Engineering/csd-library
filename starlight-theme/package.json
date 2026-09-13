@@ -1,7 +1,7 @@
 {
   "name": "@psa-department-of-engineering/starlight-theme",
   "version": "1.1.0",
-  "description": "The shared Starlight look for every docs site: a warm dark palette override plus a token-based Mermaid contrast layer (stylesheet), and the matching astro-mermaid mermaidConfig. One source of truth, consumed via Starlight customCss + a config import.",
+  "description": "PSA Molten Dark/Light documentation palettes and a token-based Mermaid contrast layer, consumed through Starlight customCss.",
   "keywords": [
     "starlight",
     "astro",

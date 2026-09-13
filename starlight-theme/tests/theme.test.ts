@@ -21,7 +21,7 @@ describe("mermaidConfig", () => {
   intent("INT-SLT-001", "carries only theme-neutral layout + font choices", () => {
     expect(mermaidConfig).toEqual({
       flowchart: { curve: "basis", nodeSpacing: 50, rankSpacing: 60, padding: 14, useMaxWidth: true },
-      themeVariables: { fontFamily: "ui-sans-serif, system-ui, sans-serif", fontSize: "14px" },
+      themeVariables: { fontFamily: "Segoe UI, Arial, sans-serif", fontSize: "14px" },
     });
   });
 
@@ -35,9 +35,10 @@ describe("mermaidConfig", () => {
 describe("styles.css", () => {
   const css = readFileSync(fileURLToPath(new URL("../styles.css", import.meta.url)), "utf8");
 
-  intent("INT-SLT-003", "re-hues the dark base ramp (warm palette override)", () => {
+  intent("INT-SLT-003", "defines both PSA reading appearances", () => {
     expect(css).toContain(":root[data-theme='dark']");
     expect(css).toContain("--sl-color-accent");
+    expect(css).toContain(":root[data-theme='light']");
   });
 
   intent("INT-SLT-004", "maps the Mermaid layer to Starlight tokens", () => {

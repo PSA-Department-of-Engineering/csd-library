@@ -31,8 +31,8 @@ INT-SLT-002:
 INT-SLT-003:
   version: 1.0.0
   status: active
-  statement: "styles.css MUST override the dark base ramp under :root[data-theme='dark'], including the --sl-color-accent scale."
-  rationale: "The warm dark palette is the shared look; sites consume it by importing the stylesheet, not by redefining ramps locally."
+  statement: "styles.css MUST define Dark and Light reading palettes, including the --sl-color-accent scale."
+  rationale: "The PSA reading palette is the shared look; sites consume it by importing the stylesheet, not by redefining ramps locally."
   test:
     scope: unit
     component: Stylesheet
@@ -53,7 +53,7 @@ INT-SLT-004:
 INT-SLT-005:
   version: 1.0.0
   status: active
-  statement: "The Mermaid layer of styles.css MUST NOT declare hardcoded colour values; the dark-palette block is the single place colours are defined."
+  statement: "The Mermaid layer of styles.css MUST NOT declare hardcoded colour values; the palette blocks are the places colours are defined."
   rationale: "A hardcoded colour in the diagram layer silently diverges from the palette on the next re-hue."
   test:
     scope: unit

@@ -1,69 +1,107 @@
-/* @psa-department-of-engineering/starlight-theme - the shared docs-site stylesheet.
-   Wire it once via Starlight customCss:
-     customCss: ['@psa-department-of-engineering/starlight-theme/styles.css']
-   This file is the single source of truth for the theme; do not copy it per site.
-   See REF-StarlightDocs section 8.1 ("consume the shared theme package"). */
+/* Shared PSA Molten documentation palette; consumers import this file. */
+/* PSA Molten: site-local semantic palette and ambient motion. */
 
-/* ============================================================================
-   Dark theme: mirror Claude's app palette
-   ============================================================================
-   Starlight's stock dark theme is a cool, blue-tinted gray (hue 224). Claude's
-   desktop dark mode is warmer and calmer: a warm charcoal background, cream text,
-   and a terracotta accent. We mirror that by overriding only the dark-mode *base*
-   tokens. Starlight derives every semantic token from these (--sl-color-text, -bg,
-   -bg-nav/-sidebar, -hairline, and the link/accent colors are all var() refs to
-   the ramp below), so the whole dark UI, and the Mermaid layer further down which
-   reads the same tokens, shifts warm from this one place. Light mode is left on
-   Starlight's defaults.
 
-   Anchors: warm charcoal background (~#262624, like claude.ai), Pampas cream text
-   (#F4F3EE), terracotta accent (~oklch(0.70 0.14 45), the Crail / Claude-orange
-   family). Values kept at Starlight's own lightness steps, re-hued warm, so every
-   contrast ratio it ships with is preserved. */
-:root[data-theme='dark'] {
-  /* Warm neutral ramp (hue ~40, low saturation): --sl-color-white is the cream
-     ink, --sl-color-black the warm charcoal page background. */
-  --sl-color-white: hsl(40, 33%, 96%);
-  --sl-color-gray-1: hsl(40, 18%, 87%);
-  --sl-color-gray-2: hsl(40, 11%, 72%);
-  --sl-color-gray-3: hsl(40, 8%, 53%);
-  --sl-color-gray-4: hsl(40, 7%, 37%);
-  --sl-color-gray-5: hsl(40, 8%, 25%);
-  --sl-color-gray-6: hsl(40, 9%, 16%);
-  --sl-color-black: hsl(40, 9%, 12%);
 
-  /* Terracotta accent: links, active sidebar item, focus rings. accent-high is
-     the lighter tint Starlight uses for link text on the dark background. */
-  --sl-color-accent-low: hsl(16, 40%, 22%);
-  --sl-color-accent: hsl(16, 62%, 60%);
-  --sl-color-accent-high: hsl(20, 68%, 80%);
+:root,
+::backdrop,
+:root[data-theme='dark'],
+[data-theme='dark'] ::backdrop {
+  
+  --sl-color-white: #f7f4ef;
+  --sl-color-gray-1: #f7f4ef;
+  --sl-color-gray-2: #eae5dc; 
+  --sl-color-gray-3: #b0aaa4; 
+  --sl-color-gray-4: #837c74;
+  --sl-color-gray-5: #383638;
+  --sl-color-gray-6: #171719; 
+  --sl-color-black: #0c0c0e; 
+
+  
+  --sl-color-accent-low: #392518; 
+  --sl-color-accent: #f97815; 
+  --sl-color-accent-high: #ffad70; 
+
+  --sl-color-text: var(--sl-color-gray-2);
+  --sl-color-text-accent: var(--sl-color-accent-high);
+  --sl-color-text-invert: var(--sl-color-black); 
+  --sl-color-bg: var(--sl-color-black);
+  --sl-color-bg-nav: #171719;
+  --sl-color-bg-sidebar: #171719;
+  --sl-color-bg-inline-code: #242124;
+  --sl-color-bg-accent: var(--sl-color-accent-high);
+
+  
+  --sl-color-hairline-light: rgba(255, 255, 255, 0.1);
+  --sl-color-hairline: rgba(255, 255, 255, 0.08);
+  --sl-color-hairline-shade: #383638;
+
+  --sl-color-backdrop-overlay: hsla(50, 12%, 6%, 0.66);
 }
 
-/* ============================================================================
-   Mermaid palette
-   ============================================================================
-   astro-mermaid runs with autoTheme: light maps to the stock 'default' Mermaid
-   theme, dark to 'dark'. Those stock palettes (beige #ffffde subgraphs, lavender
-   #ECECFF nodes, beige #fff5ad notes) read as generic and clash with the site.
-   A single mermaidConfig spans both modes, so any fixed themeVariables would be
-   wrong in one of them.
 
-   So we restyle the rendered SVG here, once, against Starlight's --sl-color-*
-   tokens. Those tokens invert between light and dark on their own (--sl-color-white
-   is always the strongest ink, --sl-color-black always the page background, and the
-   grays scale consistently), so this one rule set adapts to both themes with no
-   per-mode duplication. Defining it once in this shared package is the "consume the
-   shared theme package" rule of REF-StarlightDocs section 8.1: a single global layer
-   in one place, not per-diagram hand-styling and not a per-site copy.
+:root[data-theme='light'],
+[data-theme='light'] ::backdrop {
+  
+  --sl-color-white: #252321;
+  --sl-color-gray-1: #0c0c0e; 
+  --sl-color-gray-2: #252321;
+  --sl-color-gray-3: #615b54; 
+  --sl-color-gray-4: #837c74;
+  --sl-color-gray-5: #cfc5ba;
+  --sl-color-gray-6: #eae5dc; 
+  --sl-color-gray-7: #fffaf5; 
+  --sl-color-black: #fffaf5;
 
-   autoTheme is kept so anything not mapped below (error states, tooltips, neo
-   shadows) still picks sane light/dark defaults.
+  
+  --sl-color-accent-low: #f6e0ce; 
+  --sl-color-accent: #a23d00; 
+  --sl-color-accent-high: #7c3000; 
 
-   Why !important: Mermaid scopes its own rules by the SVG's random id
-   (#mermaid-xxxx .node rect { ... }), whose id selector outranks any plain class
-   selector we can write, and a few shapes also carry inline styles. !important on
-   the leaf element wins over both, regardless of that specificity gap. */
+  --sl-color-text: var(--sl-color-gray-1);
+  --sl-color-text-accent: var(--sl-color-accent);
+  --sl-color-text-invert: var(--sl-color-black); 
+  --sl-color-bg: #f5f2ed; 
+  --sl-color-bg-nav: #fffaf5;
+  --sl-color-bg-sidebar: #f7f4ef;
+  --sl-color-bg-inline-code: #eae5dc;
+  --sl-color-bg-accent: var(--sl-color-accent);
 
+  
+  --sl-color-hairline-light: #cfc5ba;
+  --sl-color-hairline: #cfc5ba;
+  --sl-color-hairline-shade: #cfc5ba;
+
+  --sl-color-backdrop-overlay: hsla(45, 8%, 35%, 0.6);
+}
+
+
+[data-theme='dark'] .sl-markdown-content code:not(:where(.not-content *)) {
+  color: #ffad70; 
+}
+[data-theme='light'] .sl-markdown-content code:not(:where(.not-content *)) {
+  color: #a23d00; 
+}
+
+
+.expressive-code {
+  --ec-brdRad: 0.4rem; 
+}
+:root[data-theme='dark'] .expressive-code {
+  --ec-codeBg: var(--sl-color-gray-6);
+  --ec-codeFg: #f7f4ef; 
+  --ec-focusBrd: var(--sl-color-gray-4);
+}
+
+:root[data-theme='light'] .expressive-code.expressive-code:not([data-theme='dark']) {
+  --ec-codeBg: var(--sl-color-gray-7);
+  --ec-codeFg: #252321;
+  --ec-focusBrd: var(--sl-color-gray-4);
+}
+
+
+
+:root {--sl-font:"Segoe UI Variable","Segoe UI",Arial,sans-serif;--sl-font-mono:"Cascadia Code",Consolas,monospace;}
 .mermaid {
   /* Two-step surface hierarchy, both relative to the page background:
      raised shapes (nodes, participant boxes) sit one step toward the ink;

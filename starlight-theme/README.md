@@ -9,7 +9,7 @@
 A runtime-styling package with two consumable parts:
 
 1. **A stylesheet** (`styles.css`) with two layers:
-   - a dark-mode palette override that re-hues Starlight's `:root[data-theme='dark']` base tokens to warm charcoal / cream / terracotta (mirrors Claude's app palette);
+   - the PSA Molten Dark/Light palettes: graphite, ivory and accessible orange, with Segoe UI and Cascadia typography;
    - a token-based Mermaid contrast layer that maps the rendered `.mermaid` SVG to Starlight's `--sl-color-*` tokens, so flowcharts and sequence diagrams keep correct contrast in both light and dark.
 2. **A `mermaidConfig` object** for the [`astro-mermaid`](https://www.npmjs.com/package/astro-mermaid) integration: the theme-neutral layout and font choices (flowchart curve, spacing, padding, `useMaxWidth`, font family and size). Diagram colour is not set here; it lives in the stylesheet against the `--sl-color-*` tokens, which flip with the active theme.
 
