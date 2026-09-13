@@ -2,6 +2,13 @@
 
 All notable changes to starlight-theme. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [1.2.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/starlight-theme-v1.1.0...starlight-theme-v1.2.0) (2026-09-13)
+
+
+### Features
+
+* **starlight-theme:** apply PSA documentation palettes ([2d2eb94](https://github.com/PSA-Department-of-Engineering/csd-library/commit/2d2eb94b43f2e70b7f3cc5f1cce6875424daccf3))
+
 ## [1.1.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/starlight-theme-v1.0.1...starlight-theme-v1.1.0) (2026-08-09)
 
 
