@@ -18,6 +18,8 @@ The six Dark/Light themes are `psa`, `vodafone-digital-engineering`, `celfocus-d
 
 ## Consumers
 
+Material and motion are authored decisions in each theme or application. The review gallery exposes controls to demonstrate the design; those controls are not application requirements. Normal consumers respect accessibility preferences and may offer Light/Dark. Their own source files remain the maintenance points for branding and composition.
+
 Protopane imports `generated/<mode>/protopane.json` as packaged presets. Press embeds the PSA palette into its own authored templates during maintenance. psa-slides and the Slidev scaffold use a plain `psa` code default; individual decks can select any catalog theme. Other organizations adapt their copies in source.
 
 Updating this catalog requires updating and releasing the affected consumer. Existing frozen artifacts retain their approved appearance. Application UI adoption is tracked separately.
@@ -25,3 +27,5 @@ Updating this catalog requires updating and releasing the affected consumer. Exi
 ## Brand assets
 
 The Celfocus wordmark is the official transparent SVG; Vodafone's speechmark and flag retain their original geometry. Licensed fonts are supplied privately by the consuming installation. The public catalog declares their family names and system fallback stacks.
+
+The theme validator reports these external font paths as consumer requirements. A passing vocabulary check verifies classes and page templates; it does not prove licensed fonts are installed. Verify the actual font faces in the target installation before accepting corporate-brand output. PSA uses system fonts and needs no private font package.
