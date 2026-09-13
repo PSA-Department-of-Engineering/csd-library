@@ -13,11 +13,13 @@ Publish the catalog first, then consumer repositories. Verify CI and the serving
 
 Licensed fonts are private consumer assets. Preserve original filenames and review actual rendered typography. Existing artifacts retain their appearance until deliberately regenerated.
 
-Application UI adoption is deferred. Begin with one application's palette, logo and shared stylesheet, review it, then proceed application by application. Each organization maintains its concrete branding in source.
+Each organization maintains its concrete branding in source. Application adoption uses each consumer's shared stylesheet, wordmark and authored background composition. Light/Dark is a reading preference; material and motion are authored choices.
 
 ## Press audit, 2026-09-13
 
-The operator has accepted Library, Notes, Plans and Slides for this rollout; Slides' remaining chart work belongs to its build task. The next rollout covers the other Foundry applications.
+Library's application and published house briefs are adopted. Notes, Plans and Slides completed their software builds separately from the design work; build completion was not design acceptance. Their PSA application and output changes are committed and pushed, with release verification in progress. The next rollout covers the other Foundry applications.
+
+Notes and Slides own their app styling in the shared CSS, shell and local appearance component. Plans uses the same arrangement, with its canonical renderer scoped to the rendered document so its colours cannot overwrite application controls. All three app backgrounds carry open side fields and rising, fading particles in Light/Dark, with hidden-page pause and reduced-motion support. Notes' current MoM source is mechanically vendored from Playbook; Plans uses one renderer for the cockpit and standalone export. Slides' PSA-default build passes the catalog gate and produces a checked PDF. Issued outputs retain their stored bytes.
 
 The catalog palette/projection drift check and all 15 theme vocabulary checks pass. Six identity covers render with their original marks in Light/Dark. Corporate font files remain consumer-supplied; verify their loaded faces in each corporate installation.
 
