@@ -16,4 +16,4 @@ Keep ambient motion in backgrounds and connective elements. Text stays still. Fr
 
 ## Exchange
 
-The shared ds- vocabulary supports the interchangeable themes. The original vodafone-pt-digital catalog theme preserves the ADC shell's vfd- vocabulary for existing decks.
+Each slide theme owns its classes, layout and chrome. Review page composition when selecting a different theme.

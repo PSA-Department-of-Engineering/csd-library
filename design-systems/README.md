@@ -1,26 +1,27 @@
 # Foundry design systems
 
-The canonical shared home for PSA Molten, Vodafone Portugal Digital Engineering and Celfocus Digital. Each identity has its approved semantic colours, typography, original marks and design guidance. The published PSA Library briefs are the approval references linked by identity.json.
+The shared home for PSA Molten, Vodafone Portugal Digital Engineering and Celfocus Digital: approved semantic colours, typography, original marks and guidance. Each identity's `identity.json` links its approved PSA Library brief.
 
-## One source, generated consumers
+## Source ownership
 
-Edit identity.json for tokens, DESIGN.md for guidance, or templates/ for shared layouts. Run `python design-systems/generate.py`; CI uses `--check` to detect drift. Generated files are committed consumer projections and must not be edited by hand.
-
-| Consumer | Projection |
+| Concern | Edit here |
 |---|---|
-| Slidev and psa-slides | slidev-themes/psa, vodafone-digital-engineering, celfocus-digital and their -light variants |
-| Protopane | Each identity's generated/dark/protopane.json and generated/light/protopane.json |
-| Press instruments | Each identity's generated mode-specific press.css |
-| Application adoption | Semantic tokens.css; application rollout is a separate activity |
+| Palette and typography | `<identity>/identity.json` |
+| Brand guidance and original artwork | `<identity>/DESIGN.md` and `assets/` |
+| Slide layout, motion and surfaces | `../slidev-themes/<theme>/style.css` |
+| Slide logo and background markup | Each theme's `global-top.vue` |
+| Slide content structures | Each theme's `pages/` |
 
-The three new slide themes share ds- content roles. A deck can switch among them without editing its pages. Existing catalog themes remain selectable; their specialized vocabularies may require page adaptation.
+Run `python design-systems/generate.py` after changing palette or guidance. It converts approved colours to Protopane tokens, writes standalone CSS variables, updates only the palette block in each slide stylesheet, and refreshes the review gallery. `--check` detects drift. Theme layout, chrome, metadata and pages are authored independently.
 
-## Installation choice
+The six Dark/Light themes are `psa`, `vodafone-digital-engineering`, `celfocus-digital` and their `-light` variants. The original ADC deck theme is available as `vodafone-pt-digital`. Each theme documents its content classes; changing a deck's theme may require adapting its pages.
 
-defaults.json selects this catalog's defaults. A copied installation can change that one file. Press accepts PRESS_IDENTITY and PRESS_MODE; the Slidev scaffold accepts PRESS_SLIDE_THEME or an explicit --theme. psa-slides uses PSA_SLIDES_DEFAULT_THEME, set by its chart's defaultTheme value. A deck's explicit choice takes precedence and is stored with the deck.
+## Consumers
 
-Each consumer depends on this catalog. Changing a colour means editing one identity and regenerating, then updating the consuming release. It does not rewrite existing frozen artifacts or automatically deploy applications.
+Protopane imports `generated/<mode>/protopane.json` as packaged presets. Press embeds the PSA palette into its own authored templates during maintenance. psa-slides and the Slidev scaffold use a plain `psa` code default; individual decks can select any catalog theme. Other organizations adapt their copies in source.
+
+Updating this catalog requires updating and releasing the affected consumer. Existing frozen artifacts retain their approved appearance. Application UI adoption is tracked separately.
 
 ## Brand assets
 
-The marks are extracted from the approved briefs. The Celfocus wordmark is the official transparent SVG; Vodafone's speechmark and flag retain their original geometry. Fonts remain licensed installation assets and are not distributed by this public repository. Supply the Vodafone and Aptos font files through a private asset directory. The themes declare matching family names and system fallback stacks.
+The Celfocus wordmark is the official transparent SVG; Vodafone's speechmark and flag retain their original geometry. Licensed fonts are supplied privately by the consuming installation. The public catalog declares their family names and system fallback stacks.

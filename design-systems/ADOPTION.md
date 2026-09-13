@@ -1,24 +1,16 @@
 # Adoption and release
 
-The identity source is design-systems/<identity>/identity.json with its original assets and DESIGN.md guidance. Shared templates generate the consumer projections. defaults.json selects this installation's identity and reading/deck modes.
+The source is `design-systems/<identity>/identity.json`, original assets and `DESIGN.md`. Layouts belong to each consumer's authored styles and templates.
 
-## Prepared consumers
-
-| Repository | Consumer change |
+| Repository | Responsibility |
 |---|---|
-| csd-library | Three identity definitions, six generated themes, original Vodafone ADC theme, Press CSS, Protopane JSON and interactive preview |
-| protopane | Exact packaged presets in both modes, imported mechanically from this catalog |
-| playbook | Press identity layer for reading instruments and their email output; installation-aware Slidev scaffold |
-| psa-slides | Persistent default theme selection; complete theme chrome/assets adoption; configurable private assets and browser executable |
+| csd-library | Three approved palettes and marks, six authored slide themes, original ADC theme, token projections and review gallery |
+| protopane | Exact packaged Dark/Light presets imported from the catalog |
+| playbook | PSA palettes embedded in each Press template; PSA-default Slidev scaffold |
+| psa-slides | PSA code default for new decks; selected theme's stylesheet, chrome and assets |
 
-## Release order
+Publish the catalog first, then consumer repositories. Verify CI and the serving Protopane and psa-slides versions. Refresh the installed Playbook skills. Verify the six live presets and a new deck's persisted theme and build output.
 
-1. Review preview.html and the generated document/deck examples.
-2. Publish the csd-library catalog commit first.
-3. Publish Protopane and psa-slides, then verify their serving releases. The psa-slides chart defaultTheme selects its installation identity; chart changes require the installation's chart pin to advance.
-4. Publish the Playbook and refresh installed skills so the active harness uses the shared Press layer and updated scaffold.
-5. Verify a newly created deck's persisted theme and built output, and the six presets returned by the live Protopane library.
+Licensed fonts are private consumer assets. Preserve original filenames and review actual rendered typography. Existing artifacts retain their appearance until deliberately regenerated.
 
-Licensed fonts are installation assets. Supply them under the consumer's private asset directory and retain their original filenames. The public catalog uses the approved font-family declarations with fallback stacks. Existing artifacts retain their frozen appearance until deliberately regenerated.
-
-Application UI adoption is deferred. Its first step is one application's semantic token mapping, followed by a visual review; extending that mapping across other applications is a separate release scope.
+Application UI adoption is deferred. Begin with one application's palette, logo and shared stylesheet, review it, then proceed application by application. Each organization maintains its concrete branding in source.

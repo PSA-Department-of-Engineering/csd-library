@@ -42,7 +42,7 @@ content pages are built from HTML flow and pipeline components instead of an SVG
 
 ## The catalog
 
-The generated identity families are `psa`, `vodafone-digital-engineering` and `celfocus-digital`, each with a `-light` variant. They share the `ds-` content vocabulary and are generated from `../design-systems/`. `vodafone-pt-digital` carries the original ADC shell and its specialized `vfd-` vocabulary. All these themes remain available alongside the themes below.
+The authored identity families are `psa`, `vodafone-digital-engineering` and `celfocus-digital`, each with a `-light` variant. Each owns its layout, chrome and page templates; palette values are maintained from `../design-systems/`. `vodafone-pt-digital` carries the original ADC shell and its specialized `vfd-` vocabulary. All these themes remain available alongside the themes below.
 
 | Theme | Prefix | Tiers | Chrome | Notes |
 |---|---|---|---|---|

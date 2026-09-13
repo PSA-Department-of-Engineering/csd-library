@@ -16,4 +16,4 @@ Use peripheral arcs, slow light and sparse rising particles. Keep text still; fr
 
 ## Exchange
 
-The shared ds- slide vocabulary supports the three interchangeable identities. Existing corporate templates keep their specialized classes and remain available.
+Each slide theme owns its classes, layout and chrome. Review page composition when selecting a different theme.

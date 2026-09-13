@@ -16,4 +16,4 @@ Slow open ribbons and sparse rising molten points live at the edges. Keep the re
 
 ## Typography and exchange
 
-Segoe UI Variable / Segoe UI / Arial; Cascadia Code / Consolas for labels. The shared ds- slide vocabulary supports switching between all three identities without rewriting page content. Specialized legacy templates retain their own vocabulary.
+Segoe UI Variable / Segoe UI / Arial; Cascadia Code / Consolas for labels. Slide classes and layouts belong to this theme. Its stylesheet and chrome are the visual maintenance points; review page composition when adapting another theme.
