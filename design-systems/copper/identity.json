@@ -1,0 +1,43 @@
+{
+  "id": "copper",
+  "name": "Copper",
+  "source": "https://protopane.chaos-architect.dev/projects/psa-umber-and-tan",
+  "modes": {
+    "dark": {
+      "canvas": "#3a3028",
+      "surface": "#463a30",
+      "raised": "#534438",
+      "ink": "#eae5e1",
+      "muted": "#b5a394",
+      "line": "#5e4e41",
+      "action-ink": "#211308",
+      "link": "#ffad70",
+      "good": "#8bd5b0",
+      "warn": "#f4cd7c",
+      "bad": "#f48b7b",
+      "focus": "#ac9cf7",
+      "sans": "\"Segoe UI Variable\",\"Segoe UI\",Arial,sans-serif",
+      "mono": "\"Cascadia Code\",Consolas,monospace",
+      "radius": "10px",
+      "brand": "#f97815"
+    },
+    "light": {
+      "canvas": "#d0b9a5",
+      "surface": "#d9c6b6",
+      "raised": "#c6a991",
+      "ink": "#302319",
+      "muted": "#5f4631",
+      "line": "#b39e8c",
+      "action-ink": "#211308",
+      "link": "#833100",
+      "good": "#34b234",
+      "warn": "#daaa2f",
+      "bad": "#d35843",
+      "focus": "#8f6cd5",
+      "sans": "\"Segoe UI Variable\",\"Segoe UI\",Arial,sans-serif",
+      "mono": "\"Cascadia Code\",Consolas,monospace",
+      "radius": "10px",
+      "brand": "#f97815"
+    }
+  }
+}
