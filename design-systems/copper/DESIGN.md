@@ -1,0 +1,29 @@
+# Copper
+
+A variant of PSA Molten's colour scheme with its own neutral lines and semantics, developed to correct three things about Molten: an inherited blue-biased dark ladder, semantic colours that sat off the brand's colour wheel, and a light mode with no warm material of its own. Typography, motion, wordmark and brand orange are unchanged from Molten; only the twelve colour roles differ. There is no published brief for Copper yet; the working reference is the ProtoPane project `psa-umber-and-tan`.
+
+## Identity
+
+Same lowercase `psa.` wordmark, same brand orange, same Segoe UI / Cascadia Code pairing as Molten. Copper is a palette variant, not a separate brand.
+
+## The neutral lines
+
+Dark and Light are two different monochromatic lines, not one line flipped, unlike Molten's own dark ladder which is a different hue and saturation from its light one only by inheritance. Copper makes that choice deliberate: both lines hold hue 27, so warm graphite and warm tan read as the same material at two brightnesses.
+
+Dark runs `#3a3028` (canvas, one step darker) through `#463a30` (surface) to `#eae5e1` (ink). Light runs `#d0b9a5` (canvas) through `#d9c6b6` (surface, the lightest step) down to `#302319` (ink). Surface is lighter than canvas in both modes. Light's decorative border is the ink colour blended 18% over the canvas, not a hand-picked hue.
+
+## Semantics
+
+Good, warn, bad and focus take their hues from the harmonies of the brand orange rather than an inherited component-library scale: green and indigo from the Triad, red from the Analogous set, and a yellow-green considered from the Square set before settling back on a conventional amber for warn. Every semantic sits at least 50 degrees from the brand hue on the colour wheel.
+
+In both modes a semantic is a chip or a dot with an `action-ink` label, never coloured running text; no text-companion roles exist. This keeps Copper at the same twelve colour roles as Molten with no growth to the token set.
+
+## Known trade-offs, accepted 2026-09-15
+
+- The light focus colour, `#8f6cd5`, was lightened so its chip clears 4.5:1 with a dark label; as a focus ring on the light canvas it reaches only about 2:1 against the 3:1 the ring needs. No colour on this hue can pass both tests on this canvas; the fix would be a lighter light canvas, which was declined.
+- The brand orange as a fill on the light canvas is about 1.4:1 separation; light buttons need a border or a darker fill to stay findable.
+- The decorative border colour is around 1.6:1 against its canvas in both modes, the same order as Molten's own light line; borders carry no contrast requirement.
+
+## Verification
+
+Every text role clears 4.5:1 against both canvas and surface in both modes (ink 7:1), computed and recorded in the `psa-umber-and-tan` ProtoPane project and its saved swatchbook. Not yet verified: real screens beyond the one dashboard prototyped there, print, or assistive technology.
