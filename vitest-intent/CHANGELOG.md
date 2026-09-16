@@ -2,6 +2,13 @@
 
 All notable changes to vitest-intent. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [2.0.2](https://github.com/PSA-Department-of-Engineering/csd-library/compare/vitest-intent-v2.0.1...vitest-intent-v2.0.2) (2026-09-16)
+
+
+### Bug Fixes
+
+* **docs:** ship the Copper identity addition ([f5634ad](https://github.com/PSA-Department-of-Engineering/csd-library/commit/f5634add86a45da3e5d0f1236a69b39f636993ed))
+
 ## [2.0.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/vitest-intent-v2.0.0...vitest-intent-v2.0.1) (2026-08-09)
 
 
