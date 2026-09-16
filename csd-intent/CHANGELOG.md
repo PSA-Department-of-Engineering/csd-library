@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.5.0...csd-intent-v0.5.1) (2026-09-16)
+
+
+### Bug Fixes
+
+* **docs:** ship the Copper identity addition ([f5634ad](https://github.com/PSA-Department-of-Engineering/csd-library/commit/f5634add86a45da3e5d0f1236a69b39f636993ed))
+
 ## [0.5.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.4.0...csd-intent-v0.5.0) (2026-08-31)
 
 

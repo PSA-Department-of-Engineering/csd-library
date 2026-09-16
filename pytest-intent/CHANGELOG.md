@@ -2,6 +2,13 @@
 
 All notable changes to pytest-intent are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [0.3.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/pytest-intent-v0.3.0...pytest-intent-v0.3.1) (2026-09-16)
+
+
+### Bug Fixes
+
+* **docs:** ship the Copper identity addition ([f5634ad](https://github.com/PSA-Department-of-Engineering/csd-library/commit/f5634add86a45da3e5d0f1236a69b39f636993ed))
+
 ## [0.3.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/pytest-intent-v0.2.1...pytest-intent-v0.3.0) (2026-08-29)
 
 
