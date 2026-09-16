@@ -2,6 +2,14 @@
 
 All notable changes to starlight-theme. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [1.3.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/starlight-theme-v1.3.0...starlight-theme-v1.3.1) (2026-09-16)
+
+
+### Bug Fixes
+
+* **docs:** ship the Copper identity addition ([f5634ad](https://github.com/PSA-Department-of-Engineering/csd-library/commit/f5634add86a45da3e5d0f1236a69b39f636993ed))
+* **starlight-theme:** revert the documentation palette to PSA Molten ([956eda2](https://github.com/PSA-Department-of-Engineering/csd-library/commit/956eda251ddca403e44473c3989c4c506f0d8d78))
+
 ## [1.3.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/starlight-theme-v1.2.0...starlight-theme-v1.3.0) (2026-09-16)
 
 
