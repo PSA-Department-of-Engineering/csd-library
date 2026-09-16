@@ -2,6 +2,21 @@
 
 All notable changes to starlight-theme. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [1.3.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/starlight-theme-v1.2.0...starlight-theme-v1.3.0) (2026-09-16)
+
+
+### Features
+
+* **starlight-theme:** add shared Starlight theme package ([5d501da](https://github.com/PSA-Department-of-Engineering/csd-library/commit/5d501da87be452c8b52d33fae2bcd882e4ade346))
+* **starlight-theme:** apply PSA documentation palettes ([2d2eb94](https://github.com/PSA-Department-of-Engineering/csd-library/commit/2d2eb94b43f2e70b7f3cc5f1cce6875424daccf3))
+* **starlight-theme:** switch the documentation palette from PSA Molten to Copper ([#25](https://github.com/PSA-Department-of-Engineering/csd-library/issues/25)) ([4a0e183](https://github.com/PSA-Department-of-Engineering/csd-library/commit/4a0e183d30e4b05f77eb33a6276501c13e151d43))
+
+
+### Bug Fixes
+
+* **starlight-theme:** document the public npm install, not the GitHub Packages one ([005993e](https://github.com/PSA-Department-of-Engineering/csd-library/commit/005993ee02fa782019a3632f97b171d91e428f55))
+* **starlight-theme:** publish to the public npm registry ([bd886e2](https://github.com/PSA-Department-of-Engineering/csd-library/commit/bd886e279b029728cb2464820fe76d1ff7e8719c))
+
 ## [1.2.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/starlight-theme-v1.1.0...starlight-theme-v1.2.0) (2026-09-13)
 
 
