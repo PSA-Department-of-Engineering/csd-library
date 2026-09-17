@@ -4,12 +4,12 @@
   "source": "https://psa-library.chaos-architect.dev/psa-design-system.html",
   "modes": {
     "dark": {
-      "canvas": "#0c0c0e",
-      "surface": "#171719",
-      "raised": "#202023",
+      "canvas": "#0e0d0c",
+      "surface": "#191817",
+      "raised": "#232120",
       "ink": "#f7f4ef",
       "muted": "#b0adaa",
-      "line": "#383638",
+      "line": "#383736",
       "action-ink": "#211308",
       "link": "#ffad70",
       "good": "#8bd5b0",

@@ -1,5 +1,5 @@
 /* Authored theme. The :root palette is maintained by design-systems/generate.py. */
-:root{color-scheme:dark;--ds-canvas:#0c0c0e;--ds-surface:#171719;--ds-raised:#202023;--ds-ink:#f7f4ef;--ds-muted:#b0adaa;--ds-line:#383638;--ds-action-ink:#211308;--ds-link:#ffad70;--ds-good:#8bd5b0;--ds-warn:#f4cd7c;--ds-bad:#ff969a;--ds-focus:#9dcfff;--ds-sans:"Segoe UI Variable","Segoe UI",Arial,sans-serif;--ds-mono:"Cascadia Code",Consolas,monospace;--ds-radius:10px;--ds-brand:#f97815;}
+:root{color-scheme:dark;--ds-canvas:#0e0d0c;--ds-surface:#191817;--ds-raised:#232120;--ds-ink:#f7f4ef;--ds-muted:#b0adaa;--ds-line:#383736;--ds-action-ink:#211308;--ds-link:#ffad70;--ds-good:#8bd5b0;--ds-warn:#f4cd7c;--ds-bad:#ff969a;--ds-focus:#9dcfff;--ds-sans:"Segoe UI Variable","Segoe UI",Arial,sans-serif;--ds-mono:"Cascadia Code",Consolas,monospace;--ds-radius:10px;--ds-brand:#f97815;}
 /* Shared roles for slides and reading instruments. Content stays still. */
 #slidev-goto-dialog:has(#slidev-goto-input:disabled){display:none!important}
 .slidev-slide-content,.print-slide-container{background:var(--ds-canvas)!important;color:var(--ds-ink);isolation:isolate}
