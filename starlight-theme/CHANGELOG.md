@@ -2,6 +2,13 @@
 
 All notable changes to starlight-theme. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/).
 
+## [1.3.2](https://github.com/PSA-Department-of-Engineering/csd-library/compare/starlight-theme-v1.3.1...starlight-theme-v1.3.2) (2026-09-17)
+
+
+### Bug Fixes
+
+* **starlight-theme:** rehue the dark documentation palette from Zinc to Stone ([1216aca](https://github.com/PSA-Department-of-Engineering/csd-library/commit/1216aca1ef6b70f966fce6bef1cb674eb8c1a5f2))
+
 ## [1.3.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/starlight-theme-v1.3.0...starlight-theme-v1.3.1) (2026-09-16)
 
 
