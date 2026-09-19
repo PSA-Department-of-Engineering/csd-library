@@ -18,7 +18,7 @@ The CSS is fully token-based: it defines the palette once and the Mermaid layer 
 ## What it is NOT
 
 - **Not a Starlight or Astro integration.** `astro-mermaid` must run *before* `starlight()` in the `integrations` array (it transforms ` ```mermaid ` blocks before expressive-code renders them as code). An integration that injected `astro-mermaid` on the site's behalf could not guarantee that ordering, so each site keeps its explicit `mermaid()` / `starlight()` wiring and consumes the stylesheet and config from here.
-- **Not the STARLIGHT intent bundle.** This package is the *look* (CSS + Mermaid config). The [STARLIGHT intent bundle](../bundles/starlight/) is the *contract* (frontmatter + page-structure claims and their tests). They are independent: a site can adopt either, both, or neither. Changing the theme never touches intent claims, and vice versa.
+- **Not the STARLIGHT intent bundle.** This package is the *look* (CSS + Mermaid config). The STARLIGHT intent bundle (it ships with the playbook's `apply-intent-bundle` skill) is the *contract* (frontmatter + page-structure claims and their tests). They are independent: a site can adopt either, both, or neither. Changing the theme never touches intent claims, and vice versa.
 
 ## Install
 

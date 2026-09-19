@@ -16,7 +16,7 @@
  * wiring and consumes the stylesheet and config from here.
  *
  * This is a runtime-styling concern, distinct from the STARLIGHT *intent bundle*
- * (csd-library/bundles/starlight/), which governs page frontmatter and structure
+ * (it ships with the playbook's apply-intent-bundle skill), which governs page frontmatter and structure
  * claims and their tests, not the look.
  */
 
