@@ -13,10 +13,7 @@ csd-library/
 ├── csd-intent/          ← publishable Python CLI: cross-runtime intent.yaml auditor
 ├── vitest-intent/       ← publishable TypeScript runtime: intent() for vitest
 ├── playwright-intent/   ← publishable TypeScript runtime: intent() for Playwright e2e
-├── starlight-theme/     ← publishable TypeScript/CSS package: the shared Starlight look (stylesheet + mermaidConfig)
-└── bundles/             ← reusable Intent Bundles (claims + enforcement) consuming the runtimes
-    ├── adr/             ← ADR bundle: lifecycle claims for decision records on Starlight sites
-    └── starlight/       ← STARLIGHT bundle: 6 claims for Starlight docs sites
+└── starlight-theme/     ← publishable TypeScript/CSS package: the shared Starlight look (stylesheet + mermaidConfig)
 ```
 
 Brand material does not live here: this repository publishes open-source packages, and an organization's identities and deck themes belong with the applications that serve them (the design hub carries the identities, the slides workshop its theme catalog).
@@ -30,17 +27,15 @@ Brand material does not live here: this repository publishes open-source package
 | `vitest-intent`    | TS+vitest runtime: the `intent()` wrapper, same shape as pytest-intent | Any TS/JS project that wants the same |
 | `playwright-intent`| TS+Playwright runtime: the `intent()` wrapper for browser e2e | Any frontend project doing CSD-style e2e |
 | `starlight-theme`  | Shared Starlight look: a token-based stylesheet (warm dark palette + Mermaid contrast layer) plus the `astro-mermaid` `mermaidConfig` object | Any Starlight docs site, via `customCss` + a config import |
-| `bundles/<topic>/` | Packaged claim set + per-runner test impls (`impls/pytest/`, `impls/vitest/`, …) | The `apply-intent-bundle` skill drops these into target projects |
 
-`starlight-theme` is a *runtime-styling* package (the look) and is independent of the STARLIGHT *intent bundle* under `bundles/starlight/` (the frontmatter + page-structure contract). A docs site can adopt either, both, or neither; the theme is consumed as an npm dependency, while the bundle is copied in by `apply-intent-bundle`.
+`starlight-theme` is a *runtime-styling* package (the look) and is independent of the STARLIGHT *intent bundle*, which ships with the playbook's `apply-intent-bundle` skill (the frontmatter + page-structure contract). A docs site can adopt either, both, or neither; the theme is consumed as an npm dependency, while the bundle is copied in by `apply-intent-bundle`.
 
-`bundles/` consumes the runtimes (its impls call into `pytest-intent` / `vitest-intent`). The runtimes themselves don't depend on the bundles.
 
 ## Tooling that drives this
 
 The Playbook hosts the skills that operate on this folder. Cloned as a sibling of `csd-library/`, those skills reach in via relative path:
 
-- `apply-intent-bundle` - applies a bundle from `bundles/<topic>/` to a target project
+- `apply-intent-bundle` - applies an Intent Bundle to a target project (the bundles ship with that skill, in the playbook)
 - `bootstrap-pytest-intent` - wires `pytest-intent` into a Python project
 - `bootstrap-vitest-intent` - wires `vitest-intent` into a JS/TS project
 - `bootstrap-starlight` - scaffolds a Starlight site and (by default) applies the `starlight` bundle
@@ -86,5 +81,5 @@ Versioning is per-package SemVer; `release-please-config.json` and `.release-ple
 ## Naming and growth policy
 
 - New runtimes (e.g. a future `jest-intent`) live as siblings under `csd-library/`.
-- New bundles live under `bundles/<topic>/`.
-- Things that help implement CSD but aren't runtimes or bundles (codemods, example projects, reference data packs) can also live here once they become reusable. Until then, they stay in their host project.
+- Intent Bundles (a claim set plus the tests that hold it) are not here: they ship with the playbook's `apply-intent-bundle` skill, so they are wherever the skill is installed.
+- Things that help implement CSD but aren't runtimes (codemods, example projects, reference data packs) can also live here once they become reusable. Until then, they stay in their host project.
