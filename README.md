@@ -6,8 +6,6 @@ The Playbook (`playbook/`) stays separate too - it covers many topics beyond CSD
 
 ## Layout
 
-`design-systems/` is the canonical identity catalog for tokens, marks, guidance and generated Slidev, Press and Protopane projections. See [Foundry design systems](design-systems/README.md) for defaults and regeneration.
-
 ```
 csd-library/
 ├── README.md            ← you are here
@@ -16,11 +14,12 @@ csd-library/
 ├── vitest-intent/       ← publishable TypeScript runtime: intent() for vitest
 ├── playwright-intent/   ← publishable TypeScript runtime: intent() for Playwright e2e
 ├── starlight-theme/     ← publishable TypeScript/CSS package: the shared Starlight look (stylesheet + mermaidConfig)
-├── slidev-themes/       ← theme catalog (CSS per brand/org) resolved by the bootstrap-slidev-deck skill
 └── bundles/             ← reusable Intent Bundles (claims + enforcement) consuming the runtimes
     ├── adr/             ← ADR bundle: lifecycle claims for decision records on Starlight sites
     └── starlight/       ← STARLIGHT bundle: 6 claims for Starlight docs sites
 ```
+
+Brand material does not live here: this repository publishes open-source packages, and an organization's identities and deck themes belong with the applications that serve them (the design hub carries the identities, the slides workshop its theme catalog).
 
 ## How the pieces relate
 
@@ -32,7 +31,6 @@ csd-library/
 | `playwright-intent`| TS+Playwright runtime: the `intent()` wrapper for browser e2e | Any frontend project doing CSD-style e2e |
 | `starlight-theme`  | Shared Starlight look: a token-based stylesheet (warm dark palette + Mermaid contrast layer) plus the `astro-mermaid` `mermaidConfig` object | Any Starlight docs site, via `customCss` + a config import |
 | `bundles/<topic>/` | Packaged claim set + per-runner test impls (`impls/pytest/`, `impls/vitest/`, …) | The `apply-intent-bundle` skill drops these into target projects |
-| `slidev-themes/`   | Brand/org theme CSS for Slidev decks | The `bootstrap-slidev-deck` skill resolves themes from here |
 
 `starlight-theme` is a *runtime-styling* package (the look) and is independent of the STARLIGHT *intent bundle* under `bundles/starlight/` (the frontmatter + page-structure contract). A docs site can adopt either, both, or neither; the theme is consumed as an npm dependency, while the bundle is copied in by `apply-intent-bundle`.
 
