@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.5.1...csd-intent-v0.6.0) (2026-09-22)
+
+
+### Features
+
+* **csd-intent:** the claim audit emits a machine-readable summary with --json ([#30](https://github.com/PSA-Department-of-Engineering/csd-library/issues/30)) ([6fca82f](https://github.com/PSA-Department-of-Engineering/csd-library/commit/6fca82f1b1aa05c9db24bc2f1cfa3b87a5fc1cdc))
+
+
+### Bug Fixes
+
+* **csd-intent:** the JSON summary survives unparseable YAML and keeps nested claims apart ([#30](https://github.com/PSA-Department-of-Engineering/csd-library/issues/30)) ([fce533f](https://github.com/PSA-Department-of-Engineering/csd-library/commit/fce533fa25c10250252ac4c588f75d5504e2e73a))
+
 ## [0.5.1](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.5.0...csd-intent-v0.5.1) (2026-09-16)
 
 
