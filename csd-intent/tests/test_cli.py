@@ -210,8 +210,9 @@ def test_cli_json_summary_counts_the_audit(tmp_path: Path, capsys) -> None:
     assert datetime.strptime(data["generated_at"], "%Y-%m-%dT%H:%M:%SZ")
 
     assert len(data["projects"]) == 1
-    assert Path(data["projects"][0]["intent_path"]) == (project / "intent.yaml").resolve()
-    assert {k: v for k, v in data["projects"][0].items() if k != "intent_path"} == {
+    entry = data["projects"][0]
+    assert Path(entry["intent_path"]) == (project / "intent.yaml").resolve()
+    assert {k: v for k, v in entry.items() if k not in ("intent_path", "claims_by_id")} == {
         "claims": 5,
         "attested": 1,
         "unattested": 1,
@@ -223,20 +224,23 @@ def test_cli_json_summary_counts_the_audit(tmp_path: Path, capsys) -> None:
         "clean": False,
     }
 
-    assert set(data["claims_by_id"]) == {"INT-001", "INT-002", "INT-003", "INT-004", "INT-005"}
-    assert data["claims_by_id"]["INT-001"] == {
+    # Claim ids are scoped to their project, so the object carries them there and nowhere else.
+    assert "claims_by_id" not in data
+    claims = entry["claims_by_id"]
+    assert set(claims) == {"INT-001", "INT-002", "INT-003", "INT-004", "INT-005"}
+    assert claims["INT-001"] == {
         "status": "active",
         "attested": True,
         "scope": "unit",
         "derived_from": ["REQ-001", "REQ-002"],
     }
-    assert data["claims_by_id"]["INT-004"] == {
+    assert claims["INT-004"] == {
         "status": "deprecated",
         "attested": False,
         "scope": "unit",
         "derived_from": [],
     }
-    assert data["claims_by_id"]["INT-005"] == {
+    assert claims["INT-005"] == {
         "status": "active",
         "attested": False,
         "scope": "llm",
@@ -260,7 +264,7 @@ def test_cli_json_attested_means_what_the_report_means(tmp_path: Path, capsys) -
     assert data["attested"] == len(report.attested_claims) == 2
     assert data["unattested"] == len(report.unattested) == 1
     assert data["violations"] == len(report.violations) == 2  # INT-002 unattested, INT-005 mismarked
-    assert data["claims_by_id"]["INT-005"]["attested"] is True
+    assert data["projects"][0]["claims_by_id"]["INT-005"]["attested"] is True
 
 
 @intent("INT-CSD-011")
@@ -289,26 +293,68 @@ def test_cli_json_missing_intent_yaml_still_prints_the_object(tmp_path: Path, ca
     assert data["clean"] is False
     assert data["claims"] == data["attested"] == 0
     assert data["violations"] == 1
-    assert data["claims_by_id"] == {}
+    assert data["projects"][0]["claims_by_id"] == {}
 
 
 @intent("INT-CSD-011")
-def test_cli_json_nested_projects_sum_counts_and_union_claims(tmp_path: Path, capsys) -> None:
-    """A tree of nested projects folds into one object: counts sum, requirement ids stay distinct."""
+def test_cli_json_unparseable_intent_yaml_still_prints_the_object(tmp_path: Path, capsys) -> None:
+    """A file YAML cannot parse is a schema violation in the object, never an empty stdout."""
+    (tmp_path / "intent.yaml").write_text(
+        "INT-001:\n"
+        "  version: 1.0.0\n"
+        "  status: active\n"
+        "  statement: The audit emits a summary: claims, attested.\n"
+        "  criticality: high\n",
+        encoding="utf-8",
+    )
+    rc = main([str(tmp_path), "--json"])
+    captured = capsys.readouterr()
+    assert rc == 1
+    assert captured.err == ""
+    data = json.loads(captured.out)
+    assert data["clean"] is False
+    assert data["violations"] == 1
+    assert data["claims"] == data["attested"] == 0
+    assert data["projects"][0]["claims_by_id"] == {}
+
+    # The report without the flag names the problem on one line rather than dying on it.
+    rc = main([str(tmp_path)])
+    out = capsys.readouterr().out
+    assert rc == 1
+    assert "[schema] intent.yaml: mapping values are not allowed" in out
+
+
+@intent("INT-CSD-011")
+def test_cli_json_exit_code_follows_fail_on(tmp_path: Path, capsys) -> None:
+    """The object is printed either way; --fail-on decides the exit code exactly as it does for the report."""
+    project = _summary_project(tmp_path)  # INT-002 is unattested
+    rc_none = main([str(project), "--json", "--fail-on", "none"])
+    out_none = capsys.readouterr().out
+    rc_any = main([str(project), "--json", "--fail-on", "any"])
+    out_any = capsys.readouterr().out
+    assert rc_none == 0
+    assert rc_any == 1
+    assert json.loads(out_none)["unattested"] == json.loads(out_any)["unattested"] == 1
+
+
+@intent("INT-CSD-011")
+def test_cli_json_nested_projects_sum_counts_and_keep_claims_apart(tmp_path: Path, capsys) -> None:
+    """A tree of nested projects folds into one object: counts sum, requirement ids stay distinct,
+    and a claim id both projects declare is reported under each project rather than merged."""
     root = _summary_project(tmp_path)
     nested = root / "frontend"
     nested.mkdir()
     (nested / "intent.yaml").write_text(
-        "INT-FE-001:\n"
+        "INT-001:\n"
         "  version: 1.0.0\n"
         "  status: active\n"
-        '  statement: "The frontend claim."\n'
+        '  statement: "The frontend claim, reusing the root project id."\n'
         "  derived_from: [REQ-001, REQ-009]\n"
         "  test: {scope: unit, component: Ui, type: behavior}\n"
         "  criticality: medium\n",
         encoding="utf-8",
     )
-    (nested / "ui.test.ts").write_text("intent('INT-FE-001', 'renders', () => {});\n", encoding="utf-8")
+    (nested / "ui.test.ts").write_text("intent('INT-001', 'renders', () => {});\n", encoding="utf-8")
 
     rc = main([str(root), "--json"])
     data = json.loads(capsys.readouterr().out)
@@ -318,11 +364,30 @@ def test_cli_json_nested_projects_sum_counts_and_union_claims(tmp_path: Path, ca
     assert data["unattested"] == 1
     assert data["requirements_traced"] == 4  # REQ-001 is traced by both projects and counted once
     assert data["clean"] is False
+    assert "claims_by_id" not in data
     assert [Path(p["intent_path"]) for p in data["projects"]] == [
         (root / "intent.yaml").resolve(),
         (nested / "intent.yaml").resolve(),
     ]
-    assert data["projects"][1]["claims"] == 1
-    assert data["projects"][1]["requirements_traced"] == 2
-    assert data["projects"][1]["clean"] is True
-    assert set(data["claims_by_id"]) == {"INT-001", "INT-002", "INT-003", "INT-004", "INT-005", "INT-FE-001"}
+    assert sum(len(p["claims_by_id"]) for p in data["projects"]) == data["claims"]
+    assert data["projects"][0]["claims_by_id"]["INT-001"]["derived_from"] == ["REQ-001", "REQ-002"]
+    assert data["projects"][1] == {
+        "intent_path": str((nested / "intent.yaml").resolve()),
+        "claims": 1,
+        "attested": 1,
+        "unattested": 0,
+        "draft": 0,
+        "active": 1,
+        "deprecated": 0,
+        "violations": 0,
+        "requirements_traced": 2,
+        "clean": True,
+        "claims_by_id": {
+            "INT-001": {
+                "status": "active",
+                "attested": True,
+                "scope": "unit",
+                "derived_from": ["REQ-001", "REQ-009"],
+            }
+        },
+    }

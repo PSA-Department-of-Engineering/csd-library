@@ -7,6 +7,8 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 from .schema import (
     DuplicateKeyError,
     check_schema,
@@ -124,10 +126,14 @@ def audit(
     # A repeated key resolves last-wins in YAML itself, so the earlier claim is gone
     # before any check runs and its markers now attest the survivor. Nothing further
     # in this audit would be true of the spec its author wrote, so stop here (#12).
+    # A file YAML cannot parse at all has no claims to audit either, and it is reported
+    # the same way: every caller gets a report, so `--json` always prints its object
+    # and an empty stdout never reads as a failed gate (#30).
     try:
         claims = parse_intent_yaml(intent_path)
-    except DuplicateKeyError as exc:
-        report.violations.append(AuditViolation(ViolationKind.SCHEMA, None, str(exc)))
+    except (DuplicateKeyError, yaml.YAMLError) as exc:
+        message = " ".join(str(exc).split())
+        report.violations.append(AuditViolation(ViolationKind.SCHEMA, None, message))
         return report
 
     report.claim_count = len(claims)
