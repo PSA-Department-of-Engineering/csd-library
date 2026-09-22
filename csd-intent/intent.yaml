@@ -116,7 +116,7 @@ INT-CSD-010:
 INT-CSD-011:
   version: 1.0.0
   status: active
-  statement: "With --json the CLI prints the audit as one JSON object on stdout and nothing else: claims, attested, unattested, draft, active, deprecated, violations, requirements_traced (distinct derived_from ids), generated_at (ISO-8601 UTC), clean, projects, and claims_by_id carrying each claim's status, attested, scope, and derived_from; attested is the same count the report prints, and the exit code follows --fail-on as it does for the report."
+  statement: "With --json the CLI prints the audit as one JSON object on stdout and nothing else, whatever the audit found: claims, attested, unattested, draft, active, deprecated, violations, requirements_traced (distinct derived_from ids), generated_at (ISO-8601 UTC), clean, and projects, each with its own counts and a claims_by_id carrying every claim's status, attested, scope, and derived_from; attested is the same count the report prints, and the exit code follows --fail-on as it does for the report."
   rationale: "A delivery postflight records the attestation count in the phase record and an analytics reader consumes it. A number parsed out of the human report drifts the moment its wording changes, and a stray line on stdout breaks the consumer's parse, so the summary is its own output with the same meaning as the audit (issue #30)."
   test:
     scope: integration

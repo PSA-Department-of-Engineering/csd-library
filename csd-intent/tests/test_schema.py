@@ -7,13 +7,27 @@ from pathlib import Path
 import pytest
 from pytest_intent import intent
 
-from csd_intent.schema import DuplicateKeyError, check_schema, parse_intent_yaml, top_level_keys
+from csd_intent.schema import (
+    DuplicateKeyError,
+    check_schema,
+    effective_status,
+    parse_intent_yaml,
+    top_level_keys,
+)
 
 
 def _write(tmp_path: Path, body: str) -> Path:
     p = tmp_path / "intent.yaml"
     p.write_text(body, encoding="utf-8")
     return p
+
+
+def test_effective_status_reads_an_absent_or_empty_status_as_active() -> None:
+    """`status:` with no value parses to None; the audit treats that claim as active, so the reader says so."""
+    assert effective_status({}) == "active"
+    assert effective_status({"status": None}) == "active"
+    assert effective_status({"status": "draft"}) == "draft"
+    assert effective_status({"status": "deprecated"}) == "deprecated"
 
 
 @intent('INT-CSD-001')

@@ -97,17 +97,17 @@ on it.
       "deprecated": 1,
       "violations": 2,
       "requirements_traced": 17,
-      "clean": false
+      "clean": false,
+      "claims_by_id": {
+        "INT-SB-001": {
+          "status": "active",
+          "attested": true,
+          "scope": "unit",
+          "derived_from": ["REQ-003"]
+        }
+      }
     }
-  ],
-  "claims_by_id": {
-    "INT-SB-001": {
-      "status": "active",
-      "attested": true,
-      "scope": "unit",
-      "derived_from": ["REQ-003"]
-    }
-  }
+  ]
 }
 ```
 
@@ -121,13 +121,14 @@ on it.
 | `requirements_traced` | distinct ids across every claim's `derived_from` annotation |
 | `clean` | `true` when there is no violation of any kind |
 | `generated_at` | when the audit ran, ISO-8601 UTC |
-| `projects` | one entry per audited project, root first, with its `intent_path` and its own counts |
-| `claims_by_id` | every claim's `status`, `attested`, `scope`, and `derived_from` |
+| `projects` | one entry per audited project, root first, with its `intent_path`, its own counts, and its `claims_by_id` |
+| `claims_by_id` | in each `projects[]` entry: that project's claims by id, each with `status`, `attested`, `scope`, and `derived_from` |
 
 Draft, deprecated, and unmarked `llm` claims are neither attested nor unattested, so
 those two counts do not sum to `claims`. A tree of nested projects sums its counts into
-the top-level keys, keeps `requirements_traced` distinct across projects, and unions
-the claims into `claims_by_id`.
+the top-level keys and keeps `requirements_traced` distinct across projects; a claim id
+is scoped to the project that declares it, so an id two projects both declare is
+reported under each.
 
 ## What it scans
 
