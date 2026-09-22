@@ -5,11 +5,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+from typing import Any
 
 from .schema import (
     DuplicateKeyError,
     check_schema,
     effective_scope,
+    effective_status,
     parse_intent_yaml,
     top_level_keys,
 )
@@ -48,6 +50,8 @@ class AuditReport:
 
     intent_path: Path
     claim_count: int
+    # The claims the audit ran over, by id; empty when intent.yaml is absent or refused.
+    claims: dict[str, dict[str, Any]] = field(default_factory=dict)
     attested_claims: set[str] = field(default_factory=set)
     orphan_refs: dict[str, list[str]] = field(default_factory=dict)
     violations: list[AuditViolation] = field(default_factory=list)
@@ -127,6 +131,7 @@ def audit(
         return report
 
     report.claim_count = len(claims)
+    report.claims = claims
 
     # A file present with nothing the parser recognises is schema drift, not an
     # empty-but-valid project: report it loudly rather than a silent CLEAN (#5).
@@ -186,7 +191,7 @@ def audit(
     # placeholders (tests may not yet exist) - surface as informational but don't
     # treat as a failing violation.
     for cid in sorted(claim_ids - attested_ids):
-        status = str(claims[cid].get("status", "active"))
+        status = effective_status(claims[cid])
         if status == "deprecated":
             continue
         if status == "draft":

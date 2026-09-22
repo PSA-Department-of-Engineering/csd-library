@@ -50,6 +50,9 @@ csd-intent --tests-dir backend/tests --tests-dir frontend/src --tests-dir e2e
 
 # Quiet summary only:
 csd-intent --quiet
+
+# The same audit as one JSON object on stdout, for a script or a dashboard:
+csd-intent --json
 ```
 
 Exit code is `0` on a clean audit, `1` when any violation falls into the
@@ -64,6 +67,67 @@ UNATTESTED (2):
   [unattested] INT-SB-018: no @intent / intent() marker references this claim
   [unattested] INT-SB-029: no @intent / intent() marker references this claim
 ```
+
+### JSON output
+
+`--json` prints the same audit as one JSON object on stdout and nothing else. The
+exit code still follows `--fail-on`, so one run both records the summary and gates
+on it.
+
+```json
+{
+  "generated_at": "2026-09-22T09:41:07Z",
+  "claims": 24,
+  "attested": 20,
+  "unattested": 2,
+  "draft": 1,
+  "active": 22,
+  "deprecated": 1,
+  "violations": 2,
+  "requirements_traced": 17,
+  "clean": false,
+  "projects": [
+    {
+      "intent_path": "/path/to/project/intent.yaml",
+      "claims": 24,
+      "attested": 20,
+      "unattested": 2,
+      "draft": 1,
+      "active": 22,
+      "deprecated": 1,
+      "violations": 2,
+      "requirements_traced": 17,
+      "clean": false
+    }
+  ],
+  "claims_by_id": {
+    "INT-SB-001": {
+      "status": "active",
+      "attested": true,
+      "scope": "unit",
+      "derived_from": ["REQ-003"]
+    }
+  }
+}
+```
+
+| Key | Meaning |
+| --- | ------- |
+| `claims` | claims declared in `intent.yaml` |
+| `attested` | claims at least one marker references: the report's "N attested" |
+| `unattested` | claims the report lists under `UNATTESTED`: active, runner-scoped, and unmarked |
+| `draft`, `active`, `deprecated` | claims by status |
+| `violations` | violations of every kind: the report's "N violation(s)" |
+| `requirements_traced` | distinct ids across every claim's `derived_from` annotation |
+| `clean` | `true` when there is no violation of any kind |
+| `generated_at` | when the audit ran, ISO-8601 UTC |
+| `projects` | one entry per audited project, root first, with its `intent_path` and its own counts |
+| `claims_by_id` | every claim's `status`, `attested`, `scope`, and `derived_from` |
+
+Draft, deprecated, and unmarked `llm` claims are neither attested nor unattested, so
+those two counts do not sum to `claims`. A tree of nested projects sums its counts into
+the top-level keys, keeps `requirements_traced` distinct across projects, and unions
+the claims into `claims_by_id`.
 
 ## What it scans
 

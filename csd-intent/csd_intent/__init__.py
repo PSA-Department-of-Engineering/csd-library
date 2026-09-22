@@ -17,6 +17,7 @@ Public API:
     check_schema(claims)
     collect_attestations(test_dirs)
     find_nested_intent_projects(root)
+    summarize(reports)  # the object `csd-intent --json` prints
 """
 
 from __future__ import annotations
@@ -25,6 +26,7 @@ from importlib.metadata import PackageNotFoundError, version
 
 from .audit import AuditReport, AuditViolation, audit, audit_tree
 from .schema import DuplicateKeyError, check_schema, parse_intent_yaml
+from .summary import summarize
 from .walker import collect_attestations, find_nested_intent_projects
 
 try:
@@ -43,4 +45,5 @@ __all__ = [
     "collect_attestations",
     "find_nested_intent_projects",
     "parse_intent_yaml",
+    "summarize",
 ]

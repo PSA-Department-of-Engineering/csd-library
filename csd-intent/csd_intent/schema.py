@@ -36,6 +36,7 @@ __all__ = [
     "DuplicateKeyError",
     "check_schema",
     "effective_scope",
+    "effective_status",
     "parse_intent_yaml",
     "top_level_keys",
 ]
@@ -137,6 +138,15 @@ def effective_scope(claim: dict[str, Any]) -> str | None:
     guards below and traceback on a malformed `test:` value instead of reporting it.
     """
     return _scope_and_test(claim)[0]
+
+
+def effective_status(claim: dict[str, Any]) -> str:
+    """The claim's status as the audit reads it: the declared value, or `active` when absent.
+
+    The single reader of a claim's status, shared by the coverage check and the
+    summary, so a claim is never active to one and something else to the other.
+    """
+    return str(claim.get("status", "active"))
 
 
 def _scope_and_test(claim: dict[str, Any]) -> tuple[str | None, dict[str, Any] | None]:
