@@ -127,7 +127,7 @@ INT-CSD-011:
 INT-CSD-012:
   version: 1.0.0
   status: active
-  statement: "A per-claim review has a PASS or FAIL verdict, full Git commit id, unique repository-relative evidence files and a non-empty reason, and binds only at llm scope."
+  statement: "A per-claim review has a PASS or FAIL verdict, full Git commit id, and binds only at llm scope."
   rationale: "Readers share a validated judgement record in the specification."
   test: {scope: unit, component: SchemaValidator, type: contract}
   criticality: high
@@ -135,7 +135,7 @@ INT-CSD-012:
 INT-CSD-013:
   version: 1.0.0
   status: active
-  statement: "An active llm claim is attested only by a current PASS whose claim and named evidence match the reviewed commit; missing, failed, stale and unreadable judgements are unattested."
-  rationale: "An audit can check recorded evidence without making a model call."
+  statement: "An active llm claim is attested only by a current PASS whose repository content matches the reviewed commit; missing, failed, stale and unreadable judgements are unattested."
+  rationale: "An audit can compare reviewed Git content without making a model call."
   test: {scope: integration, component: ReviewReader, type: invariant}
   criticality: critical

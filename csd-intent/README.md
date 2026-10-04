@@ -162,31 +162,29 @@ The scope can also be declared as a top-level `scope` field.
 
 ### Repository review
 
-An `llm` claim carries its latest judgement in `review`:
+An `llm` claim carries only its latest verdict and reviewed commit:
 
 ```yaml
 review:
-  verdict: PASS
   commit: 0123456789abcdef0123456789abcdef01234567
-  evidence: [docs/errors.md, src/errors.py]
-  reason: "The documented errors identify their cause and recovery action."
+  verdict: PASS
 ```
 
-The four fields are required. The commit is a full lowercase Git object ID and
-names the revision the reviewer read. Evidence paths name distinct files inside
-the repository. The record is committed after that revision.
+The commit is a full lowercase Git object ID naming the revision the reviewer
+read. A new review replaces this mapping; Git preserves its history. Reasons and
+findings belong to the reviewer's PR or delivery record.
 
-The auditor compares every claim field except `review` and `status`, plus each
-named file, against the reviewed revision. When the specification itself is
-named as evidence, review metadata and the reviewed claim's lifecycle status are
-excluded from that comparison. Unrelated files do not invalidate the review.
-An active `llm` claim requires a current PASS. Missing, FAIL, stale and unreadable
-reviews are unattested; test markers on `llm` claims are mismarked.
+An active `llm` claim requires a current PASS. The auditor compares repository
+content with the reviewed commit. It excludes `review` and `status` fields from
+specification comparisons, so recording a review and activating a claim preserve
+freshness. Other content changes make the review stale, including unrelated
+files. Working-tree reads include untracked files that Git does not ignore.
+Missing, failed, stale and unreadable reviews are unattested; markers on `llm`
+claims are mismarked. CI checks the record without invoking a model.
 
-`claims_by_id` includes each `llm` claim's `review` projection: `state`, `reason`,
-`verdict`, `commit`, `evidence`, and `judgement`. The public `read_review` helper
-reads a working tree or a pinned commit; `evaluate_review` accepts a file-reader
-callback for repository adapters. Neither helper calls a model or stores state.
+The public `read_review` helper accepts a working tree or an explicit pinned
+commit. JSON summaries expose `state`, a derived freshness `reason`, `commit`
+and `verdict` for each `llm` claim.
 
 ### Duplicate keys are refused
 
