@@ -13,8 +13,7 @@ Validates the canonical claim shape:
         type: invariant | behavior | contract
       criticality: critical | high | medium | low
 
-The legacy flat shape (top-level `scope:` instead of nested `test.scope`) is
-accepted with a warning so projects can migrate incrementally.
+Scopes can be declared in `test.scope` or the top-level `scope` field.
 """
 
 from __future__ import annotations
@@ -51,7 +50,7 @@ VERSION_PATTERN = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
 
 VALID_STATUS = {"draft", "active", "deprecated"}
 # `llm` is CSD-INTENT-01 section 3.3's judged scope: a claim a runner cannot decide,
-# attested by a reviewer's recorded verdict in its review record rather than by a test.
+# attested by a current PASS in the claim's repository review record.
 VALID_SCOPE = {"unit", "integration", "e2e", "llm"}
 VALID_TYPE = {"invariant", "behavior", "contract"}
 VALID_CRITICALITY = {"critical", "high", "medium", "low"}
