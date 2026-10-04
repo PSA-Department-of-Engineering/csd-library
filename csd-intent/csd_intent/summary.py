@@ -50,6 +50,16 @@ def summarize(reports: list[AuditReport], now: datetime | None = None) -> dict[s
                 "scope": effective_scope(claim),
                 "derived_from": derived,
             }
+            if cid in report.reviews:
+                review = report.reviews[cid]
+                claims_by_id[cid]["review"] = {
+                    "state": review.state,
+                    "reason": review.reason,
+                    "verdict": review.verdict,
+                    "commit": review.commit,
+                    "evidence": list(review.evidence),
+                    "judgement": review.judgement,
+                }
         requirements.update(traced)
         projects.append(
             {

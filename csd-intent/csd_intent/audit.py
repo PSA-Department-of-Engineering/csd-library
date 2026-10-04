@@ -9,6 +9,8 @@ from typing import Any
 
 import yaml
 
+from .review_result import ReviewResult
+from .reviews import read_review
 from .schema import (
     DuplicateKeyError,
     check_schema,
@@ -57,6 +59,7 @@ class AuditReport:
     attested_claims: set[str] = field(default_factory=set)
     orphan_refs: dict[str, list[str]] = field(default_factory=dict)
     violations: list[AuditViolation] = field(default_factory=list)
+    reviews: dict[str, ReviewResult] = field(default_factory=dict)
 
     @property
     def ok(self) -> bool:
@@ -162,7 +165,15 @@ def audit(
     attestations = collect_attestations(test_dirs)
     claim_ids = set(claims.keys())
     attested_ids = set(attestations.keys())
-    report.attested_claims = claim_ids & attested_ids
+    report.attested_claims = {
+        cid for cid in claim_ids & attested_ids if effective_scope(claims[cid]) != "llm"
+    }
+    for cid, claim in claims.items():
+        if effective_scope(claim) == "llm":
+            review = read_review(project_dir, intent_path, cid, claim)
+            report.reviews[cid] = review
+            if review.state == "pass":
+                report.attested_claims.add(cid)
 
     # Mismarked: a marker on an `llm` claim. Such a claim is attested by a
     # reviewer's recorded verdict (CSD-INTENT-01 section 3.3), so a marker means a
@@ -196,16 +207,20 @@ def audit(
     # that no longer holds (no tests expected). Draft claims are pre-implementation
     # placeholders (tests may not yet exist) - surface as informational but don't
     # treat as a failing violation.
-    for cid in sorted(claim_ids - attested_ids):
+    for cid in sorted(claim_ids - report.attested_claims):
         status = effective_status(claims[cid])
         if status == "deprecated":
             continue
         if status == "draft":
             continue
-        # `llm` scope carries no marker by construction (CSD-INTENT-01 section 3.3):
-        # a reviewer judges the claim and records the verdict in its review record,
-        # so there is no test file for the walker to find and none is owed.
         if effective_scope(claims[cid]) == "llm":
+            review = report.reviews[cid]
+            report.violations.append(
+                AuditViolation(
+                    ViolationKind.UNATTESTED, cid,
+                    f"review {review.state}: {review.reason}",
+                )
+            )
             continue
         report.violations.append(
             AuditViolation(

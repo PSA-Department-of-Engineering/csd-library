@@ -2,7 +2,7 @@
 
 Cross-runtime audit tool for CSD intent specifications. Validates `intent.yaml`
 against [CSD-INTENT-01](https://github.com/PSA-Department-of-Engineering/cognitive-software-delivery) and confirms every
-claim is attested by at least one test marker across **any** test runner -
+runner-bound claim is attested by at least one test marker across **any** test runner -
 pytest, vitest, Playwright, Jest, or anything that uses the standard `intent()`
 / `@intent()` marker shape.
 
@@ -21,7 +21,7 @@ project (Python via AST, TS/JS via regex), reads `intent.yaml`, and answers:
 
 1. **Schema** - does every claim match CSD-INTENT-01?
 2. **Orphan** - does every test marker reference a real claim?
-3. **Coverage** - does every claim have at least one attesting test, anywhere?
+3. **Coverage** - does every active claim have an attesting test or a current `llm` review?
 
 ## Install
 
@@ -114,8 +114,8 @@ on it.
 | Key | Meaning |
 | --- | ------- |
 | `claims` | claims declared in `intent.yaml` |
-| `attested` | claims at least one marker references: the report's "N attested" |
-| `unattested` | claims the report lists under `UNATTESTED`: active, runner-scoped, and unmarked |
+| `attested` | claims with a valid marker or a current PASS review |
+| `unattested` | claims the report lists under `UNATTESTED`: active and lacking a valid attestation |
 | `draft`, `active`, `deprecated` | claims by status |
 | `violations` | violations of every kind: the report's "N violation(s)" |
 | `requirements_traced` | distinct ids across every claim's `derived_from` annotation |
@@ -124,7 +124,7 @@ on it.
 | `projects` | one entry per audited project, root first, with its `intent_path`, its own counts, and its `claims_by_id` |
 | `claims_by_id` | in each `projects[]` entry: that project's claims by id, each with `status`, `attested`, `scope`, and `derived_from` |
 
-Draft, deprecated, and unmarked `llm` claims are neither attested nor unattested, so
+Unattested draft and deprecated claims are excluded from the coverage gate, so
 those two counts do not sum to `claims`. A tree of nested projects sums its counts into
 the top-level keys and keeps `requirements_traced` distinct across projects; a claim id
 is scoped to the project that declares it, so an id two projects both declare is
@@ -160,6 +160,34 @@ INT-NNN:
 
 For projects still on the legacy flat-`scope:` shape, the tool accepts it (with
 no warning) - that's a migration concession, not a recommendation.
+
+### Repository review
+
+An `llm` claim carries its latest judgement in `review`:
+
+```yaml
+review:
+  verdict: PASS
+  commit: 0123456789abcdef0123456789abcdef01234567
+  evidence: [docs/errors.md, src/errors.py]
+  reason: "The documented errors identify their cause and recovery action."
+```
+
+The four fields are required. The commit is a full lowercase Git object ID and
+names the revision the reviewer read. Evidence paths name distinct files inside
+the repository. The record is committed after that revision.
+
+The auditor compares every claim field except `review` and `status`, plus each
+named file, against the reviewed revision. When the specification itself is
+named as evidence, review metadata and the reviewed claim's lifecycle status are
+excluded from that comparison. Unrelated files do not invalidate the review.
+An active `llm` claim requires a current PASS. Missing, FAIL, stale and unreadable
+reviews are unattested; test markers on `llm` claims are mismarked.
+
+`claims_by_id` includes each `llm` claim's `review` projection: `state`, `reason`,
+`verdict`, `commit`, `evidence`, and `judgement`. The public `read_review` helper
+reads a working tree or a pinned commit; `evaluate_review` accepts a file-reader
+callback for repository adapters. Neither helper calls a model or stores state.
 
 ### Duplicate keys are refused
 

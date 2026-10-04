@@ -26,6 +26,8 @@ from typing import Any
 
 import yaml
 
+from .review_schema import check_review
+
 __all__ = [
     "ID_PATTERN",
     "VALID_CRITICALITY",
@@ -37,6 +39,7 @@ __all__ = [
     "check_schema",
     "effective_scope",
     "effective_status",
+    "parse_intent_text",
     "parse_intent_yaml",
     "top_level_keys",
 ]
@@ -113,7 +116,12 @@ def parse_intent_yaml(path: Path) -> dict[str, dict[str, Any]]:
     Raises `DuplicateKeyError` when the file declares the same key twice: dropping
     one of them silently is never the right answer (issue #12).
     """
-    data = _load(path) or {}
+    return parse_intent_text(path.read_text(encoding="utf-8"))
+
+
+def parse_intent_text(text: str) -> dict[str, dict[str, Any]]:
+    """Read claims from text using the same unique-key parser as a specification file."""
+    data = yaml.load(text, Loader=_UniqueKeySafeLoader) or {}
     if not isinstance(data, dict):
         return {}
     out: dict[str, dict[str, Any]] = {}
@@ -196,6 +204,8 @@ def check_schema(claims: dict[str, dict[str, Any]]) -> list[str]:
             violations.append(f"{cid}: statement must be a string of >=10 characters")
 
         scope, test = _scope_and_test(claim)
+        if "review" in claim:
+            violations.extend(f"{cid}: {problem}" for problem in check_review(claim["review"], scope))
         if scope is None:
             violations.append(f"{cid}: missing scope (must appear as `test.scope` or top-level `scope`)")
         elif scope not in VALID_SCOPE:
