@@ -25,7 +25,10 @@ from __future__ import annotations
 from importlib.metadata import PackageNotFoundError, version
 
 from .audit import AuditReport, AuditViolation, audit, audit_tree
-from .schema import DuplicateKeyError, check_schema, parse_intent_yaml
+from .review_result import ReviewResult
+from .review_schema import check_review
+from .reviews import evaluate_review, read_review
+from .schema import DuplicateKeyError, check_schema, parse_intent_text, parse_intent_yaml
 from .summary import summarize
 from .walker import collect_attestations, find_nested_intent_projects
 
@@ -38,12 +41,17 @@ __all__ = [
     "AuditReport",
     "AuditViolation",
     "DuplicateKeyError",
+    "ReviewResult",
     "__version__",
     "audit",
     "audit_tree",
+    "check_review",
     "check_schema",
     "collect_attestations",
+    "evaluate_review",
     "find_nested_intent_projects",
+    "parse_intent_text",
     "parse_intent_yaml",
+    "read_review",
     "summarize",
 ]

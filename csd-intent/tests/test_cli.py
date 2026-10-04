@@ -200,11 +200,11 @@ def test_cli_json_summary_counts_the_audit(tmp_path: Path, capsys) -> None:
 
     assert data["claims"] == 5
     assert data["attested"] == 1
-    assert data["unattested"] == 1
+    assert data["unattested"] == 2
     assert data["draft"] == 1
     assert data["active"] == 3
     assert data["deprecated"] == 1
-    assert data["violations"] == 1
+    assert data["violations"] == 2
     assert data["requirements_traced"] == 3
     assert data["clean"] is False
     assert datetime.strptime(data["generated_at"], "%Y-%m-%dT%H:%M:%SZ")
@@ -215,11 +215,11 @@ def test_cli_json_summary_counts_the_audit(tmp_path: Path, capsys) -> None:
     assert {k: v for k, v in entry.items() if k not in ("intent_path", "claims_by_id")} == {
         "claims": 5,
         "attested": 1,
-        "unattested": 1,
+        "unattested": 2,
         "draft": 1,
         "active": 3,
         "deprecated": 1,
-        "violations": 1,
+        "violations": 2,
         "requirements_traced": 3,
         "clean": False,
     }
@@ -245,26 +245,28 @@ def test_cli_json_summary_counts_the_audit(tmp_path: Path, capsys) -> None:
         "attested": False,
         "scope": "llm",
         "derived_from": ["REQ-001"],
+        "review": {"state": "unreviewed", "reason": "no review recorded on the claim",
+                   "verdict": "", "commit": "", "evidence": [], "judgement": ""},
     }
 
 
 @intent("INT-CSD-011")
 def test_cli_json_attested_means_what_the_report_means(tmp_path: Path, capsys) -> None:
-    """The count a postflight records is the report's own attested set, a mismarked claim included."""
+    """The JSON summary counts only valid attestation bindings."""
     project = _summary_project(tmp_path)
     (project / "tests" / "test_y.py").write_text(
         "from pytest_intent import intent\n@intent('INT-005')\ndef test_judged(): pass\n",
         encoding="utf-8",
     )
     report = audit(project)
-    assert report.attested_claims == {"INT-001", "INT-005"}
+    assert report.attested_claims == {"INT-001"}
 
     main([str(project), "--json"])
     data = json.loads(capsys.readouterr().out)
-    assert data["attested"] == len(report.attested_claims) == 2
-    assert data["unattested"] == len(report.unattested) == 1
-    assert data["violations"] == len(report.violations) == 2  # INT-002 unattested, INT-005 mismarked
-    assert data["projects"][0]["claims_by_id"]["INT-005"]["attested"] is True
+    assert data["attested"] == len(report.attested_claims) == 1
+    assert data["unattested"] == len(report.unattested) == 2
+    assert data["violations"] == len(report.violations) == 3
+    assert data["projects"][0]["claims_by_id"]["INT-005"]["attested"] is False
 
 
 @intent("INT-CSD-011")
@@ -334,7 +336,7 @@ def test_cli_json_exit_code_follows_fail_on(tmp_path: Path, capsys) -> None:
     out_any = capsys.readouterr().out
     assert rc_none == 0
     assert rc_any == 1
-    assert json.loads(out_none)["unattested"] == json.loads(out_any)["unattested"] == 1
+    assert json.loads(out_none)["unattested"] == json.loads(out_any)["unattested"] == 2
 
 
 @intent("INT-CSD-011")
@@ -361,7 +363,7 @@ def test_cli_json_nested_projects_sum_counts_and_keep_claims_apart(tmp_path: Pat
     assert rc == 1
     assert data["claims"] == 6
     assert data["attested"] == 2
-    assert data["unattested"] == 1
+    assert data["unattested"] == 2
     assert data["requirements_traced"] == 4  # REQ-001 is traced by both projects and counted once
     assert data["clean"] is False
     assert "claims_by_id" not in data
