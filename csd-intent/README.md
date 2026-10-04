@@ -158,8 +158,7 @@ INT-NNN:
   criticality: critical         # critical | high | medium | low
 ```
 
-For projects still on the legacy flat-`scope:` shape, the tool accepts it (with
-no warning) - that's a migration concession, not a recommendation.
+The scope can also be declared as a top-level `scope` field.
 
 ### Repository review
 
