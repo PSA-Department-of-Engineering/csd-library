@@ -246,7 +246,7 @@ def test_cli_json_summary_counts_the_audit(tmp_path: Path, capsys) -> None:
         "scope": "llm",
         "derived_from": ["REQ-001"],
         "review": {"state": "unreviewed", "reason": "no review recorded on the claim",
-                   "verdict": "", "commit": "", "evidence": [], "judgement": ""},
+                   "verdict": "", "commit": ""},
     }
 
 
