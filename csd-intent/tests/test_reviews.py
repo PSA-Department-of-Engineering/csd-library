@@ -140,3 +140,12 @@ def test_runner_claim_cannot_carry_review(reviewed):
     _root, claim = reviewed
     claim["test"]["scope"] = "unit"
     assert any("llm" in error for error in check_schema({_ID: claim}))
+
+
+@intent("INT-CSD-013")
+@pytest.mark.parametrize("annotation", ["policy: changed policy\n", "INT-BROKEN: []\n"])
+def test_specification_content_outside_claim_fields_is_compared(reviewed, annotation):
+    root, claim = reviewed
+    with (root / "intent.yaml").open("a", encoding="utf-8") as stream:
+        stream.write(annotation)
+    assert read_review(root, root / "intent.yaml", _ID, claim).state == "stale"
