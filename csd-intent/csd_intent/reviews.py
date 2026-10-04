@@ -51,9 +51,11 @@ def read_review(
                  else None)
         if before.returncode or (after is not None and after.returncode):
             return result("unresolvable", "specification is unavailable")
-        original = parse_intent_text(before.stdout.decode("utf-8"))
-        current = parse_intent_text(after.stdout.decode("utf-8") if after is not None
-                                    else intent_path.read_text(encoding="utf-8"))
+        original_text = before.stdout.decode("utf-8")
+        current_text = (after.stdout.decode("utf-8") if after is not None
+                        else intent_path.read_text(encoding="utf-8"))
+        parse_intent_text(original_text)
+        current = parse_intent_text(current_text)
         if claim_id not in current or _meaning(current[claim_id]) != _meaning(claim):
             return result("stale", "the claim differs from the requested revision")
         compared = _git(root, "diff", "--name-only", "-z", sha,
@@ -64,7 +66,7 @@ def read_review(
         if commit == "HEAD":
             untracked = _git(root, "ls-files", "--others", "--exclude-standard", "-z")
             paths.update(set(untracked.stdout.decode("utf-8").split("\0")) - {""})
-        if paths - {spec} or _spec_meaning(original) != _spec_meaning(current):
+        if paths - {spec} or _spec_meaning(original_text) != _spec_meaning(current_text):
             return result("stale", "repository content differs from the reviewed commit")
         return result("pass" if verdict == "PASS" else "fail", "recorded " + verdict)
     except (OSError, ValueError, UnicodeError, yaml.YAMLError, subprocess.SubprocessError):
@@ -75,8 +77,15 @@ def _meaning(claim: Mapping[str, object]) -> dict[str, object]:
     return {key: value for key, value in claim.items() if key not in {"review", "status"}}
 
 
-def _spec_meaning(claims: Mapping[str, Mapping[str, object]]) -> dict[str, object]:
-    return {cid: _meaning(body) for cid, body in claims.items()}
+def _spec_meaning(text: str) -> object:
+    value = yaml.safe_load(text)
+    if not isinstance(value, Mapping):
+        return value
+    return {
+        key: _meaning(body) if isinstance(key, str) and key.startswith("INT-")
+             and isinstance(body, Mapping) else body
+        for key, body in value.items()
+    }
 
 
 def _git(root: Path, *args: str) -> subprocess.CompletedProcess[bytes]:
