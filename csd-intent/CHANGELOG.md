@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.6.0...csd-intent-v0.7.0) (2026-10-05)
+
+
+### Features
+
+* validate repository-owned claim reviews ([#34](https://github.com/PSA-Department-of-Engineering/csd-library/issues/34)) ([b253531](https://github.com/PSA-Department-of-Engineering/csd-library/commit/b2535314df4dd05d770966d87b7af443ce3b99c7))
+
+
+### Bug Fixes
+
+* compare complete specification content for review freshness ([#34](https://github.com/PSA-Department-of-Engineering/csd-library/issues/34)) ([f3b32c7](https://github.com/PSA-Department-of-Engineering/csd-library/commit/f3b32c77084276033974c26c5d67d5a23f125469))
+
+
+### Documentation
+
+* describe repository review attestation ([#34](https://github.com/PSA-Department-of-Engineering/csd-library/issues/34)) ([6d8494e](https://github.com/PSA-Department-of-Engineering/csd-library/commit/6d8494eb23b6e29d1a78c47c7907122b6147b493))
+
 ## [0.6.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.5.1...csd-intent-v0.6.0) (2026-09-22)
 
 
