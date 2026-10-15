@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.7.0...csd-intent-v1.0.0) (2026-10-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* **csd-intent:** a review record is exactly {claim, verdict}, and a record carrying commit is refused. read_review takes the claim alone. ReviewResult and the JSON summary's review object carry claim, the digest.
+
+### Features
+
+* **csd-intent:** a review names the digest of the claim it judged ([#37](https://github.com/PSA-Department-of-Engineering/csd-library/issues/37)) ([2aa948f](https://github.com/PSA-Department-of-Engineering/csd-library/commit/2aa948f2b8f1c1708063b1b6aa537ee6e7ed9972))
+
+
+### Documentation
+
+* **csd-intent:** describe claim-digest review records ([#37](https://github.com/PSA-Department-of-Engineering/csd-library/issues/37)) ([7f1c560](https://github.com/PSA-Department-of-Engineering/csd-library/commit/7f1c56037584bb7685cf2ee6eb208a19047947a9))
+
 ## [0.7.0](https://github.com/PSA-Department-of-Engineering/csd-library/compare/csd-intent-v0.6.0...csd-intent-v0.7.0) (2026-10-05)
 
 
