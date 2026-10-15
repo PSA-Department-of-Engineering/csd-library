@@ -1,93 +1,64 @@
-"""Read the latest judgement against the reviewed repository commit."""
+"""Read a claim's latest judgement against the claim as it reads."""
 from __future__ import annotations
 
-import subprocess
+import datetime
+import hashlib
+import json
 from collections.abc import Mapping
-from pathlib import Path
-from typing import Literal
-
-import yaml
 
 from .review_result import ReviewResult
 from .review_schema import check_review
-from .schema import parse_intent_text
 
-__all__ = ["read_review"]
+__all__ = ["claim_digest", "read_review"]
 
-def read_review(
-    project_dir: Path, intent_path: Path, claim_id: str, claim: Mapping[str, object],
-    *, commit: str = "HEAD",
-) -> ReviewResult:
-    """Compare Git content, excluding specification review and lifecycle metadata.
+def claim_digest(claim: Mapping[str, object]) -> str:
+    """SHA-256 of the claim's meaning: every field except its `review` and `status`.
 
-    HEAD reads the working tree. An explicit commit pins every compared file.
+    The digest covers parsed values as canonical JSON (sorted keys, no spaces, dates in
+    ISO 8601), so YAML layout and key order never change it. A value with no canonical
+    form, a non-string mapping key, a set or a cycle, raises ValueError.
     """
+    meaning = {key: value for key, value in claim.items() if key not in {"review", "status"}}
+    text = json.dumps(_canonical(meaning, ()), sort_keys=True, ensure_ascii=False,
+                      separators=(",", ":"))
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def read_review(claim: Mapping[str, object]) -> ReviewResult:
+    """Compare the recorded digest with the claim's digest as it reads now."""
+    try:
+        digest = claim_digest(claim)
+    except ValueError as exc:
+        return ReviewResult("unresolvable", f"the claim has no digest: {exc}")
     record = claim.get("review")
     if record is None:
-        return ReviewResult("unreviewed", "no review recorded on the claim")
+        return ReviewResult("unreviewed", f"no review recorded; the claim's digest is {digest}",
+                            claim=digest)
     problems = check_review(record, "llm")
     if problems:
-        return ReviewResult("unresolvable", "; ".join(problems))
+        return ReviewResult("unresolvable", "; ".join(problems), claim=digest)
     assert isinstance(record, Mapping)
-    sha = str(record["commit"])
     verdict = str(record["verdict"])
-    def result(state: Literal["pass", "fail", "stale", "unreviewed", "unresolvable"], reason: str) -> ReviewResult:
-        return ReviewResult(state, reason, verdict, sha)
-    try:
-        root_answer = _git(project_dir, "rev-parse", "--show-toplevel")
-        if root_answer.returncode:
-            return result("unresolvable", "repository history is unavailable")
-        root = Path(root_answer.stdout.decode("utf-8").strip()).resolve()
-        spec = intent_path.resolve().relative_to(root).as_posix()
-        if _git(root, "cat-file", "-t", sha).stdout.strip() != b"commit":
-            return result("unresolvable", "reviewed commit is unavailable")
-        if commit != "HEAD":
-            if check_review({"commit": commit, "verdict": "PASS"}, "llm"):
-                return result("unresolvable", "requested commit must be a full Git object ID")
-            if _git(root, "cat-file", "-t", commit).stdout.strip() != b"commit":
-                return result("unresolvable", "requested commit is unavailable")
-        before = _git(root, "show", f"{sha}:{spec}")
-        after = (_git(root, "show", f"{commit}:{spec}") if commit != "HEAD"
-                 else None)
-        if before.returncode or (after is not None and after.returncode):
-            return result("unresolvable", "specification is unavailable")
-        original_text = before.stdout.decode("utf-8")
-        current_text = (after.stdout.decode("utf-8") if after is not None
-                        else intent_path.read_text(encoding="utf-8"))
-        parse_intent_text(original_text)
-        current = parse_intent_text(current_text)
-        if claim_id not in current or _meaning(current[claim_id]) != _meaning(claim):
-            return result("stale", "the claim differs from the requested revision")
-        compared = _git(root, "diff", "--name-only", "-z", sha,
-                        *([commit] if commit != "HEAD" else []), "--")
-        if compared.returncode:
-            return result("unresolvable", "repository content cannot be compared")
-        paths = set(compared.stdout.decode("utf-8").split("\0")) - {""}
-        if commit == "HEAD":
-            untracked = _git(root, "ls-files", "--others", "--exclude-standard", "-z")
-            paths.update(set(untracked.stdout.decode("utf-8").split("\0")) - {""})
-        if paths - {spec} or _spec_meaning(original_text) != _spec_meaning(current_text):
-            return result("stale", "repository content differs from the reviewed commit")
-        return result("pass" if verdict == "PASS" else "fail", "recorded " + verdict)
-    except (OSError, ValueError, UnicodeError, yaml.YAMLError, subprocess.SubprocessError):
-        return result("unresolvable", "review basis cannot be read")
+    if record["claim"] != digest:
+        return ReviewResult("stale", f"the claim changed since its review; its digest is {digest}",
+                            verdict, digest)
+    return ReviewResult("pass" if verdict == "PASS" else "fail", "recorded " + verdict,
+                        verdict, digest)
 
 
-def _meaning(claim: Mapping[str, object]) -> dict[str, object]:
-    return {key: value for key, value in claim.items() if key not in {"review", "status"}}
-
-
-def _spec_meaning(text: str) -> object:
-    value = yaml.safe_load(text)
-    if not isinstance(value, Mapping):
+def _canonical(value: object, ancestors: tuple[int, ...]) -> object:
+    if isinstance(value, (Mapping, list)):
+        if id(value) in ancestors:
+            raise ValueError("a value contains itself")
+        inner = (*ancestors, id(value))
+        if isinstance(value, list):
+            return [_canonical(item, inner) for item in value]
+        keys = [key for key in value if not isinstance(key, str)]
+        if keys:
+            raise ValueError(f"mapping key {keys[0]!r} is not a string; quote it")
+        return {key: _canonical(item, inner) for key, item in value.items()}
+    if isinstance(value, (datetime.date, datetime.time)):
+        return value.isoformat()
+    if value is None or isinstance(value, (str, bool, int, float)):
         return value
-    return {
-        key: _meaning(body) if isinstance(key, str) and key.startswith("INT-")
-             and isinstance(body, Mapping) else body
-        for key, body in value.items()
-    }
-
-
-def _git(root: Path, *args: str) -> subprocess.CompletedProcess[bytes]:
-    return subprocess.run(["git", "-C", str(root), *args], capture_output=True,
-                          check=False, timeout=30)
+    raise ValueError(f"a {type(value).__name__} value has no canonical form")

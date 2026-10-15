@@ -56,7 +56,7 @@ def summarize(reports: list[AuditReport], now: datetime | None = None) -> dict[s
                     "state": review.state,
                     "reason": review.reason,
                     "verdict": review.verdict,
-                    "commit": review.commit,
+                    "claim": review.claim,
                 }
         requirements.update(traced)
         projects.append(
