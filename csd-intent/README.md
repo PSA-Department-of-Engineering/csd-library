@@ -160,31 +160,39 @@ INT-NNN:
 
 The scope can also be declared as a top-level `scope` field.
 
-### Repository review
+### Claim review
 
-An `llm` claim carries only its latest verdict and reviewed commit:
+An `llm` claim carries only its latest verdict and the digest of the claim it judged:
 
 ```yaml
 review:
-  commit: 0123456789abcdef0123456789abcdef01234567
+  claim: 0312c5160e2b65b48a48c7a42f6af83d3d2382a8bc6cc919db79fd6e37993401
   verdict: PASS
 ```
 
-The commit is a full lowercase Git object ID naming the revision the reviewer
-read. A new review replaces this mapping; Git preserves its history. Reasons and
-findings belong to the reviewer's PR or delivery record.
+`claim` is the lowercase SHA-256 of the claim's meaning: every field except
+`review` and `status`, as canonical JSON over the parsed values (sorted keys, no
+spaces, dates in ISO 8601), so YAML layout never changes it. A claim holding a
+value with no canonical form (a non-string mapping key such as an unquoted `on:`,
+a set, or a cycle) has no digest, and its review is unresolvable.
+A new review replaces this mapping; Git preserves its history. The commit the
+reviewer read, the reasons and the findings belong to the reviewer's PR or
+delivery record.
 
-An active `llm` claim requires a current PASS. The auditor compares repository
-content with the reviewed commit. It excludes `review` and `status` fields from
-specification comparisons, so recording a review and activating a claim preserve
-freshness. Other content changes make the review stale, including unrelated
-files. Working-tree reads include untracked files that Git does not ignore.
-Missing, failed, stale and unreadable reviews are unattested; markers on `llm`
-claims are mismarked. CI checks the record without invoking a model.
+An active `llm` claim requires a current PASS: the recorded digest equals the
+claim's digest as it reads. Editing the claim makes the review stale; nothing
+outside the claim does, so recording a review and activating a claim keep it
+current, and so does any change to other files or other claims. The audit reads
+no Git history, so a review stays current through rebase, squash and merge
+commits and in a shallow clone. Missing, failed, stale and malformed reviews are
+unattested; markers on `llm` claims are mismarked. CI checks the record without
+invoking a model.
 
-The public `read_review` helper accepts a working tree or an explicit pinned
-commit. JSON summaries expose `state`, a derived freshness `reason`, `commit`
-and `verdict` for each `llm` claim.
+The audit's report prints the digest a current record names on every active
+claim whose review is unreviewed or stale, and `--json` carries it for every `llm`
+claim, drafts included. The public `read_review(claim)` and `claim_digest(claim)` helpers read the
+same values, and JSON summaries expose `state`, a derived `reason`, `verdict` and
+`claim` (that digest) for each `llm` claim.
 
 ### Duplicate keys are refused
 
