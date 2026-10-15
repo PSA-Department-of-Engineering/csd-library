@@ -170,7 +170,7 @@ def audit(
     }
     for cid, claim in claims.items():
         if effective_scope(claim) == "llm":
-            review = read_review(project_dir, intent_path, cid, claim)
+            review = read_review(claim)
             report.reviews[cid] = review
             if review.state == "pass":
                 report.attested_claims.add(cid)

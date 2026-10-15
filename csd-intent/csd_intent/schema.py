@@ -50,7 +50,7 @@ VERSION_PATTERN = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
 
 VALID_STATUS = {"draft", "active", "deprecated"}
 # `llm` is CSD-INTENT-01 section 3.3's judged scope: a claim a runner cannot decide,
-# attested by a current PASS in the claim's repository review record.
+# attested by a current PASS in the claim's review record.
 VALID_SCOPE = {"unit", "integration", "e2e", "llm"}
 VALID_TYPE = {"invariant", "behavior", "contract"}
 VALID_CRITICALITY = {"critical", "high", "medium", "low"}

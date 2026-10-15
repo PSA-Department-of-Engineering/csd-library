@@ -8,6 +8,7 @@ from pathlib import Path
 
 from pytest_intent import intent
 
+from csd_intent import claim_digest, parse_intent_text
 from csd_intent.audit import audit
 from csd_intent.cli import main
 
@@ -227,6 +228,7 @@ def test_cli_json_summary_counts_the_audit(tmp_path: Path, capsys) -> None:
     # Claim ids are scoped to their project, so the object carries them there and nowhere else.
     assert "claims_by_id" not in data
     claims = entry["claims_by_id"]
+    digest = claim_digest(parse_intent_text(_SUMMARY_INTENT)["INT-005"])
     assert set(claims) == {"INT-001", "INT-002", "INT-003", "INT-004", "INT-005"}
     assert claims["INT-001"] == {
         "status": "active",
@@ -245,8 +247,9 @@ def test_cli_json_summary_counts_the_audit(tmp_path: Path, capsys) -> None:
         "attested": False,
         "scope": "llm",
         "derived_from": ["REQ-001"],
-        "review": {"state": "unreviewed", "reason": "no review recorded on the claim",
-                   "verdict": "", "commit": ""},
+        "review": {"state": "unreviewed",
+                   "reason": f"no review recorded; the claim's digest is {digest}",
+                   "verdict": "", "claim": digest},
     }
 
 
